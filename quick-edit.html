@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <title>Quick edit</title>
+  </head>
+  <body style="background-color:#a8a8a8;">
+    <div>
+      <h1 style="font-family: 'Ubuntu', sans-serif;">Quick edit</h1>
+      <div>
+        <!-- top nav -->
+        <button onclick="copy()">Copy</button>
+        <button onclick="savedoc()">Save</button>
+        <button onclick="tsave()">Test save</button>
+        <button onclick="cle()">Clear</button>
+        <input type="file" id="file-input" />
+        <input type="text" id="savebox" disabled placeholder="JS is stupid so this needed to save">
+      </div>
+      <div>
+        <!-- Text box -->
+        <textarea type="text" id="text" name="text" rows="36" cols="100%" placeholder="Edit text here" onchange="savetols()" autofocus></textarea>
+      </div>
+    </div>
+    <div id="snackbar">Copyed to clipboard</div>
+    <div id="del">Cleared</div>
+    <div id="sav">Downloaded</div>
+  </body>
+  <script>
+    var text = document.getElementById("text");
+    // localStorage.setItem("text", localStorage.text);
+    if (localStorage.getItem("text")) {
+      if (confirm("Do you want to load old changes") == true) {
+        text.value = localStorage.getItem("text");
+        let savcode = localStorage.getItem("text");
+        localStorage.removeItem("text");
+        localStorage.setItem("text", savcode)
+      }
+    }
+
+    function savetols() {
+      // localStorage.text = text.value;
+      localStorage.setItem("text", text.value);
+    }
+    if (typeof(Storage) !== "undefined") {
+      // Code for localStorage/sessionStorage.
+    } else {
+      alert("Cant save to local storge")
+    }
+
+    function tsave() {
+      text = document.getElementById("text");
+      var savebox = document.getElementById("savebox");
+      savebox.value = text.value
+      text.value = savebox.value
+    }
+
+    function cle() {
+      var y = document.getElementById("del");
+      text = document.getElementById("text");
+      text.value = "";
+      text.select();
+      y.className = "show";
+      setTimeout(function() {
+        y.className = y.className.replace("show", "");
+      }, 3000);
+    }
+
+    function savedoc() {
+      var filename = prompt("File name?\nex. filename.fileextension")
+      text = document.getElementById("text");
+      var savebox = document.getElementById("savebox");
+      savebox.value = text.value
+      if (confirm("You are saving the file as " + filename) == true) {
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(savebox.value));
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+        var x = document.getElementById("sav");
+        x.className = "show";
+        setTimeout(function() {
+          x.className = x.className.replace("show", "");
+        }, 3000);
+      } else {
+        alert("Canceled")
+      }
+    }
+
+    function readSingleFile(e) {
+      var file = e.target.files[0];
+      if (!file) {
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var contents = e.target.result;
+        displayContents(contents);
+      };
+      reader.readAsText(file);
+    }
+
+    function displayContents(contents) {
+      text = document.getElementById("text");
+      text.value = contents;
+    }
+    document.getElementById('file-input').addEventListener('change', readSingleFile, false);
+
+    function copy() {
+      var x = document.getElementById("snackbar");
+      text = document.getElementById("text");
+      text.select();
+      text.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(text.value);
+      x.className = "show";
+      setTimeout(function() {
+        x.className = x.className.replace("show", "");
+      }, 3000);
+    }
+  </script>
+  <style>
+    textarea {
+      width: 100%;
+      height: 100%;
+      font-family: 'Ubuntu', sans-serif;
+      background-color: #a8a8a8;
+    }
+
+    #snackbar {
+      visibility: hidden;
+      min-width: 200px;
+      margin-left: -125px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 17px;
+    }
+
+    #del {
+      visibility: hidden;
+      min-width: 100px;
+      margin-left: -100px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 17px;
+    }
+
+    #sav {
+      visibility: hidden;
+      min-width: 100px;
+      margin-left: -100px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 17px;
+    }
+
+    #snackbar.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    #del.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    #sav.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    @-webkit-keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @-webkit-keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+  </style>
+</html>
