@@ -23,7 +23,8 @@
       </div>
       <div>
         <!-- Text box -->
-        <textarea type="text" id="text" name="text" rows="36" cols="100%" placeholder="Edit text here" onchange="savetols()" autofocus></textarea>
+        <textarea type="text" id="text" name="text" placeholder="Edit text here" onchange="savetols()" autofocus></textarea>
+        <!-- <textarea type="text" id="text" name="text" rows="36" cols="100%" placeholder="Edit text here" onchange="savetols()" autofocus></textarea> -->
       </div>
     </div>
     <div id="snackbar">Copyed to clipboard</div>
@@ -134,11 +135,11 @@
   </script>
   <style>
     textarea {
-      textArea.style.position = 'absolute';
-      textArea.style.top = '0';
-      textArea.style.left = '0';
-      textArea.style.width = '99%';
-      textArea.style.height = '99%';
+      position: 'absolute';
+      top : '0';
+      left: '0';
+      width: '99%';
+      height: '99%';
       font-family: 'Ubuntu', sans-serif;
       background-color: #a8a8a8;
     }
