@@ -16,7 +16,7 @@
         <!-- top nav -->
         <button onclick="copy()">Copy</button>
         <button onclick="savedoc()">Save</button>
-        <button onclick="tsave()">Test save</button>
+        <!-- <button onclick="tsave()">Test save</button> -->
         <button onclick="cle()">Clear</button>
         <input type="file" id="file-input" />
         <input type="text" id="savebox" disabled placeholder="JS is stupid so this needed to save">
@@ -80,25 +80,63 @@
 
     function savedoc() {
       var filename = prompt("File name?\nex. filename.fileextension")
-      text = document.getElementById("text");
-      var savebox = document.getElementById("savebox");
-      savebox.value = text.value
+      let t = document.getElementById("text");
       if (confirm("You are saving the file as " + filename) == true) {
-        var element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(savebox.value));
-        element.setAttribute('download', filename);
-        element.style.display = 'none';
-        document.body.appendChild(element);
-        element.click();
-        document.body.removeChild(element);
-        var x = document.getElementById("sav");
+      var textFileAsBlob = new Blob([t.value], {type:'text/plain'}); 
+    	var downloadLink = document.createElement("a");
+    	downloadLink.download = filename;
+    	downloadLink.innerHTML = "Download File";
+    	if (window.webkitURL != null)
+    	{
+    		// Chrome allows the link to be clicked
+    		// without actually adding it to the DOM.
+    		downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+    	}
+    	else
+    	{
+    		// Firefox requires the link to be added to the DOM
+    		// before it can be clicked.
+    		downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+    		downloadLink.onclick = destroyClickedElement;
+    		downloadLink.style.display = "none";
+    		document.body.appendChild(downloadLink);
+    	}
+    
+    	downloadLink.click();
+      var x = document.getElementById("sav");
+      x.innerHTML = "Downloaded"
         x.className = "show";
         setTimeout(function() {
           x.className = x.className.replace("show", "");
         }, 3000);
-      } else {
-        alert("Canceled")
-      }
+    } else {
+      var x = document.getElementById("sav");
+      x.innerHTML = "Cancelled"
+        x.className = "show";
+        setTimeout(function() {
+          x.className = x.className.replace("show", "");
+        }, 3000);
+    }
+      // var filename = prompt("File name?\nex. filename.fileextension")
+      // text = document.getElementById("text");
+      // var savebox = document.getElementById("savebox");
+      // savebox.value = text.value
+      // if (confirm("You are saving the file as " + filename) == true) {
+      //   var element = document.createElement('a');
+      //   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(savebox.value));
+      //   element.setAttribute('download', filename);
+      //   element.style.display = 'none';
+      //   document.body.appendChild(element);
+      //   element.click();
+      //   document.body.removeChild(element);
+      //   var x = document.getElementById("sav");
+      //   x.className = "show";
+      //   setTimeout(function() {
+      //     x.className = x.className.replace("show", "");
+      //   }, 3000);
+      // } else {
+      //   alert("Canceled")
+      // }
     }
 
     function readSingleFile(e) {
