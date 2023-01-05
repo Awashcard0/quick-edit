@@ -6,18 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
     <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon"><link href="/favicon.ico" type="image/x-icon" rel="icon">
-    <title>Downloads</title>
+    <title>404</title>
 </head>
-<body style="background-color:#a8a8a8;">
-    <h1>Downloads</h1>
-    <br><a href="/">Back to editor</a>
-    <br><a href="/quick edit.bat">Chrome app mode (Windows)</a>
-    <br><a href="view-source:https://quickedit.ga/">Offline (No local storage)</a>
+<body>
+    <h1>404</h1>
+    <br><p>How are you here</p>
+    <br><p id="text">No file was found on the server</p>
 </body>
+<script>
+    document.getElementById("text").innerHTML =
+window.location.pathname + " does not exist";
+</script>
 <style>
     body {
         text-align: center;
         font-family: 'Ubuntu', sans-serif;
+        background-color:#a8a8a8;
     }
 </style>
 </html>
