@@ -22,7 +22,7 @@
         <!-- top nav -->
         <button onclick="copy()">Copy</button>
         <button onclick="savedoc()">Save</button>
-        <input type="button" onclick="print()" value="Print"/>
+        <button onclick="print()">Print</button>
         <button onclick="cle()">Clear</button>
         <input type="file" id="file-input" />
       </div>
@@ -39,7 +39,7 @@
     var text = document.getElementById("text");
     // localStorage.setItem("text", localStorage.text);
     if (localStorage.getItem("text")) {
-      if (confirm("Do you want to load old changes") == true) {
+      if (confirm("Do you want to load old changes?") == true) {
         text.value = localStorage.getItem("text");
         let savcode = localStorage.getItem("text");
         localStorage.removeItem("text");
@@ -58,7 +58,7 @@
     function print() {
         childWindow = window.open('','childWindow','location=yes, menubar=yes, toolbar=yes');
         childWindow.document.open();
-        childWindow.document.write('<html><head></head><body style="background-color:#a8a8a8;">');
+        childWindow.document.write('<html><head><title>Print</title><link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet"></head><body style="background-color:#a8a8a8;">');
         childWindow.document.write(document.getElementById('text').value.replace(/\n/gi,'<br>'));
         childWindow.document.write('</body></html>');
         childWindow.print();
