@@ -34,8 +34,18 @@
     <div id="snackbar">Copyed to clipboard</div>
     <div id="del">Cleared</div>
     <div id="sav">Downloaded</div>
+    <div id="welcome">Welcome to quick edit</div>
   </body>
   <script>
+    setTimeout(function() {
+      var x = document.getElementById("welcome");
+        x.className = "show";
+        setTimeout(function() {
+          x.className = x.className.replace("show", "");
+        }, 3000);
+    }, 100);
+    
+
     var text = document.getElementById("text");
     // localStorage.setItem("text", localStorage.text);
     if (localStorage.getItem("text")) {
@@ -227,6 +237,22 @@
       font-size: 35px;
     }
 
+    #welcome {
+      visibility: hidden;
+      min-width: 100px;
+      margin-left: -100px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 35px;
+    }
+
     #snackbar.show {
       border-radius: 25px;
       visibility: visible;
@@ -242,6 +268,13 @@
     }
 
     #sav.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    #welcome.show {
       border-radius: 25px;
       visibility: visible;
       -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
