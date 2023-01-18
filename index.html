@@ -68,12 +68,14 @@
     function print() {
         childWindow = window.open('','childWindow','location=yes, menubar=yes, toolbar=yes');
         childWindow.document.open();
-        childWindow.document.write('<html><head><title>Print</title><link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet"></head><body style="background-color:#a8a8a8;">');
+        childWindow.document.write('<html><head><title>Print</title><link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet"></head><body style="background-color:#a8a8a8; font-family: %27Ubuntu%27, sans-serif;">');
         childWindow.document.write(document.getElementById('text').value.replace(/\n/gi,'<br>'));
         childWindow.document.write('</body></html>');
+        setTimeout(function() {
         childWindow.print();
         childWindow.document.close();
         childWindow.close();
+      }, 1000);
       }
 
     function savetols() {
