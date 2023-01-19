@@ -71,11 +71,11 @@
         childWindow.document.write('<html><head><title>Print - Quick edit - quickedit.ga</title></head><body>');
         childWindow.document.write(document.getElementById('text').value.replace(/\n/gi,'<br>'));
         childWindow.document.write('</body></html>');
-        setTimeout(function() {
         childWindow.print();
+        setTimeout(function() {
         childWindow.document.close();
         childWindow.close();
-      }, 1000);
+      }, 1500);
       }
 
     function savetols() {
