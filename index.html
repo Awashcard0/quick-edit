@@ -7,13 +7,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
-    <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon"><link href="/favicon.ico" type="image/x-icon" rel="icon">
+    <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
+    <link href="/favicon.ico" type="image/x-icon" rel="icon">
     <title>Quick edit</title>
   </head>
   <body style="background-color:#a8a8a8;">
     <div>
       <h1 style="font-family: 'Ubuntu', sans-serif;">Quick edit</h1>
-      <a href="/download">Downloads   |</a><a href="https://github.com/Awashcard0/quick-edit">|   Github</a>
+      <a href="/download">Downloads |</a>
+      <a href="https://github.com/Awashcard0/quick-edit">| Github</a>
       <noscript>
         <h1>Where are your maners?</h1>
         <h2>You need javascript to use this</h2>
@@ -39,13 +41,11 @@
   <script>
     setTimeout(function() {
       var x = document.getElementById("welcome");
-        x.className = "show";
-        setTimeout(function() {
-          x.className = x.className.replace("show", "");
-        }, 3000);
+      x.className = "show";
+      setTimeout(function() {
+        x.className = x.className.replace("show", "");
+      }, 3000);
     }, 100);
-    
-
     var text = document.getElementById("text");
     // localStorage.setItem("text", localStorage.text);
     if (localStorage.getItem("text")) {
@@ -61,122 +61,119 @@
       }
     } else {
       let savcode = localStorage.getItem("text");
-        localStorage.removeItem("text");
-        localStorage.setItem("text", savcode)
+      localStorage.removeItem("text");
+      localStorage.setItem("text", savcode)
     }
 
     function print() {
-        childWindow = window.open('','childWindow','location=yes, menubar=yes, toolbar=yes');
-        childWindow.document.open();
-        childWindow.document.write('<html><head><title>Print - Quick edit - quickedit.ga</title></head><body>');
-        childWindow.document.write(document.getElementById('text').value.replace(/\n/gi,'<br>'));
-        childWindow.document.write('</body></html>');
-        childWindow.print();
-        setTimeout(function() {
-        childWindow.document.close();
-        childWindow.close();
-      }, 1500);
-      }
+      childWindow = window.open('', 'childWindow', 'location=yes, menubar=yes, toolbar=yes');
+      childWindow.document.open();
+      childWindow.document.write(' < html > < head > < title > Print - Quick edit - quickedit.ga < /title> < /head> < body > ');
+          childWindow.document.write(document.getElementById('text').value.replace(/\n/gi, ' < br > '));
+              childWindow.document.write(' < /body> < /html>');
+                childWindow.print(); setTimeout(function() {
+                  childWindow.document.close();
+                  childWindow.close();
+                }, 1500);
+              }
 
-    function savetols() {
-      // localStorage.text = text.value;
-      localStorage.setItem("text", text.value);
-    }
-    if (typeof(Storage) !== "undefined") {
-      // Code for localStorage/sessionStorage.
-    } else {
-      alert("Cant save to local storge")
-    }
+              function savetols() {
+                // localStorage.text = text.value;
+                localStorage.setItem("text", text.value);
+              }
+              if (typeof(Storage) !== "undefined") {
+                // Code for localStorage/sessionStorage.
+              } else {
+                alert("Cant save to local storge")
+              }
 
-    function tsave() {
-      text = document.getElementById("text");
-      var savebox = document.getElementById("savebox");
-      savebox.value = text.value
-      text.value = savebox.value
-    }
+              function tsave() {
+                text = document.getElementById("text");
+                var savebox = document.getElementById("savebox");
+                savebox.value = text.value
+                text.value = savebox.value
+              }
 
-    function cle() {
-      var y = document.getElementById("del");
-      text = document.getElementById("text");
-      text.value = "";
-      text.select();
-      y.className = "show";
-      setTimeout(function() {
-        y.className = y.className.replace("show", "");
-      }, 3000);
-    }
+              function cle() {
+                var y = document.getElementById("del");
+                text = document.getElementById("text");
+                text.value = "";
+                text.select();
+                y.className = "show";
+                setTimeout(function() {
+                  y.className = y.className.replace("show", "");
+                }, 3000);
+              }
 
-    function savedoc() {
-      var filename = prompt("File name?\nex. filename.fileextension")
-      let t = document.getElementById("text");
-      if (confirm("You are saving the file as " + filename) == true) {
-      var textFileAsBlob = new Blob([t.value], {type:'text/plain'}); 
-    	var downloadLink = document.createElement("a");
-    	downloadLink.download = filename;
-    	downloadLink.innerHTML = "Download File";
-    	if (window.webkitURL != null)
-    	{
-    		// Chrome allows the link to be clicked
-    		// without actually adding it to the DOM.
-    		downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
-    	}
-    	else
-    	{
-    		// Firefox requires the link to be added to the DOM
-    		// before it can be clicked.
-    		downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-    		downloadLink.onclick = destroyClickedElement;
-    		downloadLink.style.display = "none";
-    		document.body.appendChild(downloadLink);
-    	}
-    
-    	downloadLink.click();
-      var x = document.getElementById("sav");
-      x.innerHTML = "Downloaded"
-        x.className = "show";
-        setTimeout(function() {
-          x.className = x.className.replace("show", "");
-        }, 3000);
-    } else {
-      var x = document.getElementById("sav");
-      x.innerHTML = "Cancelled"
-        x.className = "show";
-        setTimeout(function() {
-          x.className = x.className.replace("show", "");
-        }, 3000);
-    }
-  }
+              function savedoc() {
+                var filename = prompt("File name?\nex. filename.fileextension")
+                let t = document.getElementById("text");
+                if (confirm("You are saving the file as " + filename) == true) {
+                  var textFileAsBlob = new Blob([t.value], {
+                    type: 'text/plain'
+                  });
+                  var downloadLink = document.createElement("a");
+                  downloadLink.download = filename;
+                  downloadLink.innerHTML = "Download File";
+                  if (window.webkitURL != null) {
+                    // Chrome allows the link to be clicked
+                    // without actually adding it to the DOM.
+                    downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+                  } else {
+                    // Firefox requires the link to be added to the DOM
+                    // before it can be clicked.
+                    downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+                    downloadLink.onclick = destroyClickedElement;
+                    downloadLink.style.display = "none";
+                    document.body.appendChild(downloadLink);
+                  }
+                  downloadLink.click();
+                  var x = document.getElementById("sav");
+                  x.innerHTML = "Downloaded"
+                  x.className = "show";
+                  setTimeout(function() {
+                    x.className = x.className.replace("show", "");
+                  }, 3000);
+                } else {
+                  var x = document.getElementById("sav");
+                  x.innerHTML = "Cancelled"
+                  x.className = "show";
+                  setTimeout(function() {
+                    x.className = x.className.replace("show", "");
+                  }, 3000);
+                }
+              }
 
-    function readSingleFile(e) {
-      var file = e.target.files[0];
-      if (!file) {
-        return;
-      }
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        var contents = e.target.result;
-        displayContents(contents);
-      };
-      reader.readAsText(file);
-    }
+              function readSingleFile(e) {
+                var file = e.target.files[0];
+                if (!file) {
+                  return;
+                }
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                  var contents = e.target.result;
+                  displayContents(contents);
+                };
+                reader.readAsText(file);
+              }
 
-    function displayContents(contents) {
-      text = document.getElementById("text");
-      text.value = contents;
-    }
-    document.getElementById('file-input').addEventListener('change', readSingleFile, false);
+              function displayContents(contents) {
+                text = document.getElementById("text");
+                text.value = contents;
+              }
+              document.getElementById('file-input').addEventListener('change', readSingleFile, false);
 
-    function copy() {
-      var x = document.getElementById("snackbar");
-      text = document.getElementById("text");
-      text.select();
-      text.setSelectionRange(0, 99999);
-      navigator.clipboard.writeText(text.value);
-      x.className = "show";
-      setTimeout(function() {
-        x.className = x.className.replace("show", "");
-      }, 3000);
-    }
+              function copy() {
+                var x = document.getElementById("snackbar");
+                text = document.getElementById("text");
+                text.select();
+                text.setSelectionRange(0, 99999);
+                navigator.clipboard.writeText(text.value);
+                x.className = "show";
+                setTimeout(function() {
+                  x.className = x.className.replace("show", "");
+                }, 3000);
+              }
   </script>
   <style>
     body {
