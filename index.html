@@ -50,8 +50,10 @@
       }, 1500);
     }, 100);
 // check for external file
-let url = window.location
-let externalFile = url.includes("?")
+var url = window.location
+var externalFile = url.includes("?")
+
+alert(url + externalFile)
 
 if (externalFile == true) {
   // is external file
