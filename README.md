@@ -1,4 +1,4 @@
 # quick-edit
 
-Last up date: 1/11
-Fixed font in print menu
+Last up date: 2/21
+external files
