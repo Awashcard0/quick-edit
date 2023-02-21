@@ -47,13 +47,11 @@
       x.className = "show";
       setTimeout(function() {
         x.className = x.className.replace("show", "");
-      }, 1500);
+      }, 1900);
     }, 100);
 // check for external file
 var url = window.location.href
 var externalFile = url.includes("?")
-
-alert(url + externalFile)
 
 if (externalFile == true) {
   // is external file
@@ -76,7 +74,7 @@ if (externalFile == true) {
         xhr.open('get', externalFileUrl[1], true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         xhr.send();
-    }, 2000);
+    }, 2300);
 } else {
   // not external file
 
