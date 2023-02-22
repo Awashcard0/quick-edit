@@ -17,7 +17,7 @@
       <h1 style="font-family: 'Ubuntu', sans-serif;">Quick edit</h1>
       <a href="/download">Downloads |</a>
       <a href="https://github.com/Awashcard0/quick-edit">| Github  |</a>
-      <a href="#" onclick="alert(`https://quickedit/?Your url`)">| How to use external files</a>
+      <a href="#" onclick="urlhelp()">| How to use external files</a>
       <noscript>
         <h1>Where are your maners?</h1>
         <h2>You need javascript to use this</h2>
@@ -206,6 +206,19 @@ if (externalFile == true) {
                 setTimeout(function() {
                   x.className = x.className.replace("show", "");
                 }, 3000);
+              }
+
+              function urlhelp() {
+                if (confirm("https://quickedit.ga?your url\nwould you like to start to the url config wizard")) {
+	            	var askurl = prompt("Enter the url to the file");
+		            if (askurl.includes("http", "https")) {
+	              	prompt("Here is your url\nCopy it now", "https://quickedit.ga/?" + askurl)
+	              } else {
+	            	if (confirm("Make sure the URL has the protocol in it\nWould you like to make the URL anyway")) {
+		              prompt ("Here is your url\nCopy it now\nWarning: No protocol may result in a 404 ", "https://quickedit.ga/?" + askurl)
+              	}
+                }    
+                }
               }
   </script>
   <style>
