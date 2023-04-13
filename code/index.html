@@ -59,7 +59,14 @@
     }, 100);
 
 var e = ace.edit("editor");
-e.session.setMode("ace/mode/"+"html");
+e.session.setMode("ace/mode/html");
+e.setTheme("ace/theme/tomorrow");
+    // enable autocompletion and snippets
+    e.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: false
+    });
 
   </script>
   <style>
