@@ -38,7 +38,7 @@
       </div>
       <div>
         <!-- Text box -->
-        <div class="e" id="editor"></div>
+        <div id="editor" style="height: fit-content; width: fit-content">Welcome</div>
         <!-- <textarea type="text" id="text" name="text" rows="27" cols="100%" placeholder="Edit text here" onchange="savetols()" autofocus></textarea> -->
       </div>
     </div>
@@ -58,23 +58,8 @@
       }, 1900);
     }, 100);
 
-    var e = ace.edit("editor");      
-    e.setTheme("ace/theme/gob");     
-    ace.require("ace/ext/language_tools");      
-    e.setOptions({
-       	highlightActiveLine: true,
-       	cursorStyle: 'slim',
-       	animatedScroll: true,
-       	showGutter: true,
-       	displayIndentGuides: true,
-       	useWorker: true,
-       	scrollPastEnd: .5,
-       	enableBasicAutocompletion: true,
-       	enableSnippets: true,
-       	enableLiveAutocompletion: true
-       });
-
-       e.getSession().setMode("ace/mode/"+"html");
+var e = ace.edit("editor");
+e.getSession().setMode("ace/mode/"+"html");
   </script>
   <style>
     body {
