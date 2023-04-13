@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "cf90fc61d0d64d3cb6c7ea91712fc5ed"}'></script><!-- End Cloudflare Web Analytics -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Home thing -->
+    <link rel="stylesheet" href="https://awashcard0.pages.dev/home-thing/style.css">
+    <script src='https://awashcard0.pages.dev/home-thing/script.js'></script>
+    <!-- End home thing -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
+    <link href="/favicon.ico" type="image/x-icon" rel="icon">
+    <title>Quick edit code</title>
+  </head>
+  <body style="background-color:#a8a8a8;">
+    <div>
+      <h1 style="font-family: 'Ubuntu', sans-serif;">Quick edit code</h1>
+      <p>Quick edit IDE for html</p>
+      <a href="/download">Downloads |</a>
+      <a href="https://github.com/Awashcard0/quick-edit">| Github  |</a>
+      <a href="#" onclick="urlhelp()">| How to use external files |</a>
+      <a href="#" onclick="alert('This is quick edit code a IDE for html')">| What is this</a>
+      <noscript>
+        <h1>Where are your maners?</h1>
+        <h2>You need javascript to use this</h2>
+      </noscript>
+      <div>
+        <!-- top nav -->
+        <button onclick="copy()">Copy</button>
+        <button onclick="savedoc()">Save</button>
+        <button onclick="open()">Open in new window</button>
+        <button onclick="cle()">Clear</button>
+        <input type="file" id="file-input" />
+      </div>
+      <div>
+        <!-- Text box -->
+        <div class="e" id="editor"></div>
+        <!-- <textarea type="text" id="text" name="text" rows="27" cols="100%" placeholder="Edit text here" onchange="savetols()" autofocus></textarea> -->
+      </div>
+    </div>
+    <div id="snackbar">Copyed to clipboard</div>
+    <div id="del">Cleared</div>
+    <div id="sav">Downloaded</div>
+    <div id="welcome">Welcome to quick edit code</div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" type="text/javascript" charset="utf-8"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.min.js" type="text/javascript" charset="utf-8"></script>
+  <script>
+// welcome
+    setTimeout(function() {
+      var x = document.getElementById("welcome");
+      x.className = "show";
+      setTimeout(function() {
+        x.className = x.className.replace("show", "");
+      }, 1900);
+    }, 100);
+
+    var e = ace.edit("editor");      
+    e.setTheme("ace/theme/gob");     
+    ace.require("ace/ext/language_tools");      
+    e.setOptions({
+       	highlightActiveLine: true,
+       	cursorStyle: 'slim',
+       	animatedScroll: true,
+       	showGutter: true,
+       	displayIndentGuides: true,
+       	useWorker: true,
+       	scrollPastEnd: .5,
+       	enableBasicAutocompletion: true,
+       	enableSnippets: true,
+       	enableLiveAutocompletion: true
+       });
+
+       e.getSession().setMode("ace/mode/"+"html");
+  </script>
+  <style>
+    body {
+      font-family: 'Ubuntu', sans-serif;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100%;
+      font-family: 'Ubuntu', sans-serif;
+      background-color: #a8a8a8;
+      font-size: 17px;
+    }
+
+    #snackbar {
+      visibility: hidden;
+      min-width: 200px;
+      margin-left: -125px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 35px;
+    }
+
+    #del {
+      visibility: hidden;
+      min-width: 100px;
+      margin-left: -100px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 35px;
+    }
+
+    #sav {
+      visibility: hidden;
+      min-width: 100px;
+      margin-left: -100px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 35px;
+    }
+
+    #welcome {
+      visibility: hidden;
+      min-width: 100px;
+      margin-left: -100px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 35px;
+    }
+
+    #snackbar.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    #del.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    #sav.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    #welcome.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    .e {          
+        position: absolute;          
+        top: 0;          
+        right: 0;          
+        bottom: 0;          
+        left: 0;      
+    }
+
+    @-webkit-keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @-webkit-keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+  </style>
+</html>
