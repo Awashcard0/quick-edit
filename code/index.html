@@ -38,8 +38,7 @@
       </div>
       <div>
         <!-- Text box -->
-        <div id="editor" style="height: fit-content; width: fit-content">Welcome</div>
-        <!-- <textarea type="text" id="text" name="text" rows="27" cols="100%" placeholder="Edit text here" onchange="savetols()" autofocus></textarea> -->
+        <div id="editor"></div>
       </div>
     </div>
     <div id="snackbar">Copyed to clipboard</div>
@@ -47,7 +46,7 @@
     <div id="sav">Downloaded</div>
     <div id="welcome">Welcome to quick edit code</div>
   </body>
-  <script src="https://ajaxorg.github.io/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.min.js" type="text/javascript" charset="utf-8"></script>
   <script>
 // welcome
     setTimeout(function() {
@@ -58,15 +57,15 @@
       }, 1900);
     }, 100);
 
-var e = ace.edit("editor");
-e.session.setMode("ace/mode/html");
-e.setTheme("ace/theme/tomorrow");
+    var editor = ace.edit("editor");
+  editor.setTheme("ace/theme/monokai");
+  editor.session.setMode("ace/mode/html");
     // enable autocompletion and snippets
-    e.setOptions({
-        enableBasicAutocompletion: true,
-        enableSnippets: true,
-        enableLiveAutocompletion: false
-    });
+    // editor.setOptions({
+    //     enableBasicAutocompletion: true,
+    //     enableSnippets: true,
+    //     enableLiveAutocompletion: false
+    // });
 
   </script>
   <style>
