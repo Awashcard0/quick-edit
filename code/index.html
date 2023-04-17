@@ -18,7 +18,7 @@
   </head>
   <body style="background-color:#a8a8a8;">
     <div>
-      <h1 style="font-family: 'Ubuntu', sans-serif;">Quick edit code</h1>
+      <h1 style="font-family: 'Ubuntu', sans-serif;"><a href="/editers">Quick edit code</a></h1>
       <p>Quick edit IDE for html</p>
       <a href="/download">Downloads |</a>
       <a href="https://github.com/Awashcard0/quick-edit">| Github  |</a>
@@ -87,21 +87,21 @@ if (externalFile == true) {
 
     var text = document.getElementById("text");
     // localStorage.setItem("text", localStorage.text);
-    if (localStorage.getItem("text")) {
+    if (localStorage.getItem("code")) {
       if (confirm("Do you want to load old changes?") == true) {
-        text.value = localStorage.getItem("text");
-        let savcode = localStorage.getItem("text");
-        localStorage.removeItem("text");
-        localStorage.setItem("text", savcode)
+        text.value = localStorage.getItem("code");
+        let savcode = localStorage.getItem("code");
+        localStorage.removeItem("code");
+        localStorage.setItem("code", savcode)
       } else {
-        let savcode = localStorage.getItem("text");
-        localStorage.removeItem("text");
-        localStorage.setItem("text", savcode)
+        let savcode = localStorage.getItem("code");
+        localStorage.removeItem("code");
+        localStorage.setItem("code", savcode)
       }
     } else {
-      let savcode = localStorage.getItem("text");
-      localStorage.removeItem("text");
-      localStorage.setItem("text", savcode)
+      let savcode = localStorage.getItem("code");
+      localStorage.removeItem("code");
+      localStorage.setItem("code", savcode)
     }
   }
 
@@ -113,7 +113,7 @@ if (externalFile == true) {
 
       function savetols() {
                 // localStorage.text = text.value;
-                localStorage.setItem("text", text.value);
+                localStorage.setItem("code", text.value);
               }
               if (typeof(Storage) !== "undefined") {
                 // Code for localStorage/sessionStorage.
