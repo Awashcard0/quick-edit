@@ -32,7 +32,7 @@
         <!-- top nav -->
         <button onclick="copy()">Copy</button>
         <button onclick="savedoc()">Save</button>
-        <button onclick="open()">Open in new window</button>
+        <button onclick="openfile()">Open in new window</button>
         <button onclick="cle()">Clear</button>
         <input type="file" id="file-input" />
       </div>
@@ -105,7 +105,7 @@ if (externalFile == true) {
     }
   }
 
-  function open() {
+  function openfile() {
       childWindow = window.open('', 'childWindow', 'location=yes, menubar=yes, toolbar=yes');
       childWindow.document.open();
       childWindow.document.write(document.getElementById('text').value);
