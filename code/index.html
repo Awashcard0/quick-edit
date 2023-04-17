@@ -38,7 +38,7 @@
       </div>
       <div>
         <!-- Text box -->
-        <div id="editor"></div>
+        <textarea type="text" id="text" name="text" rows="27" cols="100%" placeholder="Edit html here (This would use ace IDE but I coudnt get it to work. If you know how to make it work make a PR.)" onchange="savetols()" autofocus></textarea>
       </div>
     </div>
     <div id="snackbar">Copyed to clipboard</div>
@@ -46,7 +46,6 @@
     <div id="sav">Downloaded</div>
     <div id="welcome">Welcome to quick edit code</div>
   </body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.min.js" type="text/javascript" charset="utf-8"></script>
   <script>
 // welcome
     setTimeout(function() {
@@ -57,16 +56,171 @@
       }, 1900);
     }, 100);
 
-    var editor = ace.edit("editor");
-  editor.setTheme("ace/theme/monokai");
-  editor.session.setMode("ace/mode/html");
-    // enable autocompletion and snippets
-    // editor.setOptions({
-    //     enableBasicAutocompletion: true,
-    //     enableSnippets: true,
-    //     enableLiveAutocompletion: false
-    // });
+    // check for external file
+var url = window.location.href
+var externalFile = url.includes("?")
 
+if (externalFile == true) {
+  // is external file
+  setTimeout(function() {
+      var x = document.getElementById("welcome");
+      x.innerHTML = "Getting external url..."
+      x.className = "show";
+      setTimeout(function() {
+        x.className = x.className.replace("show", "");
+      }, 3000);
+      let externalFileUrl = url.split("?");
+      var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                //alert(xhr.response);
+                var text = document.getElementById("text");
+                text.value = xhr.response
+            }
+        }
+        xhr.open('get', externalFileUrl[1], true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        xhr.send();
+    }, 2300);
+} else {
+  // not external file
+
+    var text = document.getElementById("text");
+    // localStorage.setItem("text", localStorage.text);
+    if (localStorage.getItem("text")) {
+      if (confirm("Do you want to load old changes?") == true) {
+        text.value = localStorage.getItem("text");
+        let savcode = localStorage.getItem("text");
+        localStorage.removeItem("text");
+        localStorage.setItem("text", savcode)
+      } else {
+        let savcode = localStorage.getItem("text");
+        localStorage.removeItem("text");
+        localStorage.setItem("text", savcode)
+      }
+    } else {
+      let savcode = localStorage.getItem("text");
+      localStorage.removeItem("text");
+      localStorage.setItem("text", savcode)
+    }
+  }
+
+  function open() {
+      childWindow = window.open('', 'childWindow', 'location=yes, menubar=yes, toolbar=yes');
+      childWindow.document.open();
+      childWindow.document.write(document.getElementById('text').value);
+      }
+
+      function savetols() {
+                // localStorage.text = text.value;
+                localStorage.setItem("text", text.value);
+              }
+              if (typeof(Storage) !== "undefined") {
+                // Code for localStorage/sessionStorage.
+              } else {
+                // alert("Cant save to local storge")
+              }
+
+              function tsave() {
+                text = document.getElementById("text");
+                var savebox = document.getElementById("savebox");
+                savebox.value = text.value
+                text.value = savebox.value
+              }
+
+              function cle() {
+                var y = document.getElementById("del");
+                text = document.getElementById("text");
+                text.value = "";
+                text.select();
+                y.className = "show";
+                setTimeout(function() {
+                  y.className = y.className.replace("show", "");
+                }, 3000);
+              }
+
+              function savedoc() {
+                var filename = prompt("File name?\nex. filename.fileextension")
+                let t = document.getElementById("text");
+                if (confirm("You are saving the file as " + filename) == true) {
+                  var textFileAsBlob = new Blob([t.value], {
+                    type: 'text/plain'
+                  });
+                  var downloadLink = document.createElement("a");
+                  downloadLink.download = filename;
+                  downloadLink.innerHTML = "Download File";
+                  if (window.webkitURL != null) {
+                    // Chrome allows the link to be clicked
+                    // without actually adding it to the DOM.
+                    downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+                  } else {
+                    // Firefox requires the link to be added to the DOM
+                    // before it can be clicked.
+                    downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+                    downloadLink.onclick = destroyClickedElement;
+                    downloadLink.style.display = "none";
+                    document.body.appendChild(downloadLink);
+                  }
+                  downloadLink.click();
+                  var x = document.getElementById("sav");
+                  x.innerHTML = "Downloaded"
+                  x.className = "show";
+                  setTimeout(function() {
+                    x.className = x.className.replace("show", "");
+                  }, 3000);
+                } else {
+                  var x = document.getElementById("sav");
+                  x.innerHTML = "Cancelled"
+                  x.className = "show";
+                  setTimeout(function() {
+                    x.className = x.className.replace("show", "");
+                  }, 3000);
+                }
+              }
+
+              function readSingleFile(e) {
+                var file = e.target.files[0];
+                if (!file) {
+                  return;
+                }
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                  var contents = e.target.result;
+                  displayContents(contents);
+                };
+                reader.readAsText(file);
+              }
+
+              function displayContents(contents) {
+                text = document.getElementById("text");
+                text.value = contents;
+              }
+              document.getElementById('file-input').addEventListener('change', readSingleFile, false);
+
+              function copy() {
+                var x = document.getElementById("snackbar");
+                text = document.getElementById("text");
+                text.select();
+                text.setSelectionRange(0, 99999);
+                navigator.clipboard.writeText(text.value);
+                x.className = "show";
+                setTimeout(function() {
+                  x.className = x.className.replace("show", "");
+                }, 3000);
+              }
+
+              function urlhelp() {
+                if (confirm("https://quickedit.ga?your url\nwould you like to start to the url config wizard")) {
+	            	var askurl = prompt("Enter the url to the file");
+		            if (askurl.includes("http", "https")) {
+	              	prompt("Here is your url\nCopy it now", "https://quickedit.ga/?" + askurl)
+	              } else {
+	            	if (confirm("Make sure the URL has the protocol in it\nWould you like to make the URL anyway")) {
+		              prompt ("Here is your url\nCopy it now\nWarning: No protocol may result in a 404 ", "https://quickedit.ga/?" + askurl)
+              	}
+                }    
+                }
+              }
   </script>
   <style>
     body {
