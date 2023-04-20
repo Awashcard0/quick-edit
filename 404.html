@@ -1,3 +1,13 @@
+<p id="r">If you're messing with HTTP requests something is broken</p>
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,13 +24,14 @@
 </head>
 <body>
     <h1>404</h1>
-    <p>How are you here?</p>
+    <p>How are you here? If you're using quick edit code something's probably wrong</p>
     <p id="text">File was found on the server</p>
     <a href="/">Take me home</a>
 </body>
 <script>
     document.getElementById("text").innerHTML =
 window.location.pathname + " was found on the server";
+document.getElementById("r").innerHTML = " ";
 </script>
 <style>
     body {
