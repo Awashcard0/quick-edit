@@ -43,7 +43,7 @@
         <textarea type="text" id="text" name="text" rows="27" cols="100%" placeholder="Edit html here (This would use ace IDE but I coudnt get it to work. If you know how to make it work make a PR.)" onchange="savetols()" autofocus></textarea>
       </div>
     </div>
-    <div id="snackbar">Copyed to clipboard</div>
+    <div id="snackbar">Copied to clipboard</div>
     <div id="del">Cleared</div>
     <div id="sav">Downloaded</div>
     <div id="welcome">Welcome to quick edit code</div>
@@ -223,6 +223,15 @@ if (externalFile == true) {
               	}
                 }    
                 }
+              }
+
+              function notification(notaName, notaTime) {
+                var x = document.getElementById("notification");
+                x.innerHTML = notaName
+                x.className = "show";
+                setTimeout(function() {
+                  x.className = x.className.replace("show", "");
+                  }, notaTime);
               }
   </script>
   <style>
