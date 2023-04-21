@@ -17,6 +17,7 @@
     <title>Quick edit</title>
   </head>
   <body style="background-color:#a8a8a8;">
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <div>
       <h1 style="font-family: 'Ubuntu', sans-serif;"><a href="/editers">Quick edit</a></h1>
       <a href="/download">Downloads |</a>
@@ -45,6 +46,10 @@
     <div id="welcome">Welcome to quick edit</div>
   </body>
   <script>
+    tinymce.init({
+  selector: 'textarea#text'
+});
+
 // welcome
     setTimeout(function() {
       var x = document.getElementById("welcome");
