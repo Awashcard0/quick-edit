@@ -131,13 +131,16 @@ function readFile(file) {
 function setSelectedFile() {
   const selectBox = document.getElementById('json-file-names');
   selectedFile = selectBox.value;
+  const selectedName = selectBox.options[selectBox.selectedIndex].text;
+
+  const itemToUpdate = selectedData.find(item => item.name === selectedName);
   notification(`Selected page: ${selectedFile}`, 3000);
 
   if (selectedData) {
     const lastItem = selectedData[selectedData.length - 1];
     const lastId = lastItem.id;
     document.getElementById('name-input').value = '';
-    document.getElementById('text').value = '';
+    document.getElementById('text').value = itemToUpdate.text;
   }
 }
 
@@ -192,7 +195,7 @@ function updateSelectedItem() {
   const itemToUpdate = selectedData.find(item => item.name === selectedName);
 
   if (itemToUpdate) {
-    const newName = prompt('Enter a new name', itemToUpdate.name);
+    const newName = itemToUpdate.name
     const newText = text.value;
 
     if (newName && newText) {
