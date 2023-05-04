@@ -236,7 +236,7 @@ function renameSelectedItem() {
   const itemToUpdate = selectedData.find(item => item.name === selectedName);
 
   if (itemToUpdate) {
-    const newName = nameInput;
+    const newName = nameInput.value;
     const newText = itemToUpdate.text;
 
     if (newName && newText) {
