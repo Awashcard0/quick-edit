@@ -21,7 +21,7 @@
       <h1 style="font-family: 'Ubuntu', sans-serif;"><a href="/editers">Quick edit notebook</a></h1>
       <a href="/download">Downloads |</a>
       <a href="https://github.com/Awashcard0/quick-edit">| Github  |</a>
-      <a href="#" onclick="urlhelp()">| How to use external files</a>
+      <a href="#" onclick="alert('Not scported')">| How to use external files</a>
       <noscript>
         <h1>Where are your maners?</h1>
         <h2>You need javascript to use this</h2>
@@ -264,6 +264,67 @@ function newnbp() {
 function nonewp() {
     newDiap.close();
 }
+
+function cle() {
+                text = document.getElementById("text");
+                text.value = "";
+                text.select();
+                notification("Cleared", 3000)
+              }
+
+              function savedoc() {
+                var filename = prompt("File name?\nex. filename.fileextension")
+                let t = document.getElementById("text");
+                if (confirm("You are saving the file as " + filename) == true) {
+                  var textFileAsBlob = new Blob([t.value], {
+                    type: 'text/plain'
+                  });
+                  var downloadLink = document.createElement("a");
+                  downloadLink.download = filename;
+                  downloadLink.innerHTML = "Download File";
+                  if (window.webkitURL != null) {
+                    // Chrome allows the link to be clicked
+                    // without actually adding it to the DOM.
+                    downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+                  } else {
+                    // Firefox requires the link to be added to the DOM
+                    // before it can be clicked.
+                    downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+                    downloadLink.onclick = destroyClickedElement;
+                    downloadLink.style.display = "none";
+                    document.body.appendChild(downloadLink);
+                  }
+                  downloadLink.click();
+                  notification("Downloaded", 3000)
+                } else {
+                  notification("Cancelled", 30000)
+                }
+              } 
+
+              function print() {
+      childWindow = window.open('', 'childWindow', 'location=yes, menubar=yes, toolbar=yes');
+      childWindow.document.open();
+      childWindow.document.write(' <html> <head> <title> Print - Quick edit - quickedit.ga </title> </head> <body> ');
+          childWindow.document.write(document.getElementById('text').value.replace(/\n/gi, ' <br> '));
+              childWindow.document.write(' </body> </html>');
+                childWindow.print(); 
+                setTimeout(function() {
+                  childWindow.document.close();
+                  childWindow.close();
+                }, 1500);
+              }
+
+              function copy() {
+                var x = document.getElementById("snackbar");
+                text = document.getElementById("text");
+                text.select();
+                text.setSelectionRange(0, 99999);
+                navigator.clipboard.writeText(text.value);
+                x.className = "show";
+                setTimeout(function() {
+                  x.className = x.className.replace("show", "");
+                }, 3000);
+              }
   </script>
   <style>
     body {
