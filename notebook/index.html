@@ -37,7 +37,7 @@
         <select id="json-file-names" onchange="setSelectedFile()">
             <option value="" disabled selected>Select a page</option>
         </select>
-        <button onclick="deleteSelectedItem()">Delete Page</button>
+        <button onclick="pageTools.showModal()">Page tools</button>
         <button onclick="newnbp();">New Page</button>
         <button onclick="updateSelectedItem()">Update Page</button>
         <button onclick="downloadFile()">Export</button>
@@ -71,11 +71,22 @@
         <p>Third click new page and name is somthing you will know</p>
         <button onclick="Readme.close();">Close</button>
     </dialog>
+    <dialog id="PageTools" style="text-align: center;">
+      <h1>Page tools</h1>
+      <h2>Rename</h2>
+      <input type="text" id="rename-input" placeholder="Name of page">
+      <button onclick="renameSelectedItem();">Rename</button>
+      <h2>Delete</h2>
+      <button onclick="deleteSelectedItem();">Delete Page</button>
+      <br>
+      <button onclick="pageTools.close();">Close</button>
+  </dialog>
   </body>
   <script>
     const newDia = document.getElementById("newNotebook");
     const newDiap = document.getElementById("Newp");
     const Readme = document.getElementById("Rm");
+    const pageTools = document.getElementById("PageTools");
     const text = document.getElementById("text");
 // welcome
     setTimeout(function() {
@@ -176,6 +187,7 @@ function addItem() {
 
 function deleteSelectedItem() {
     if (confirm("This action cannot be undone!")) {
+      pageTools.close();
   const selectBox = document.getElementById('json-file-names');
   const selectedName = selectBox.options[selectBox.selectedIndex].text;
   const index = selectedData.findIndex(item => item.name === selectedName);
@@ -200,6 +212,32 @@ function updateSelectedItem() {
   if (itemToUpdate) {
     const newName = itemToUpdate.name
     const newText = text.value;
+
+    if (newName && newText) {
+      itemToUpdate.name = newName;
+      itemToUpdate.text = newText;
+      nameInput.value = newName;
+      textInput.value = newText;
+      updateItemNames();
+    }
+  } else {
+    error('Error: Page not found', 3000);
+  }
+}
+
+function renameSelectedItem() {
+  pageTools.close();
+  const selectBox = document.getElementById('json-file-names');
+  const selectedName = selectBox.options[selectBox.selectedIndex].text;
+  const nameInput = document.getElementById('rename-input');
+  const textInput = document.getElementById('text');
+
+
+  const itemToUpdate = selectedData.find(item => item.name === selectedName);
+
+  if (itemToUpdate) {
+    const newName = nameInput;
+    const newText = itemToUpdate.text;
 
     if (newName && newText) {
       itemToUpdate.name = newName;
