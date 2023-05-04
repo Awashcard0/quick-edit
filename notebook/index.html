@@ -1,1 +1,319 @@
-<h1>Note to self <b>MAKE THIS</b></h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "cf90fc61d0d64d3cb6c7ea91712fc5ed"}'></script><!-- End Cloudflare Web Analytics -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Home thing -->
+    <link rel="stylesheet" href="https://awashcard0.pages.dev/home-thing/style.css">
+    <script src='https://awashcard0.pages.dev/home-thing/script.js'></script>
+    <!-- End home thing -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
+    <link href="/favicon.ico" type="image/x-icon" rel="icon">
+    <title>Quick edit</title>
+  </head>
+  <body style="background-color:#a8a8a8;">
+    <div>
+      <h1 style="font-family: 'Ubuntu', sans-serif;"><a href="/editers">Quick edit</a></h1>
+      <a href="/download">Downloads |</a>
+      <a href="https://github.com/Awashcard0/quick-edit">| Github  |</a>
+      <a href="#" onclick="urlhelp()">| How to use external files</a>
+      <noscript>
+        <h1>Where are your maners?</h1>
+        <h2>You need javascript to use this</h2>
+      </noscript>
+      <div>
+        <!-- top nav -->
+        <button onclick="copy()">Copy</button>
+        <button onclick="savedoc()">Save</button>
+        <button onclick="print()">Print</button>
+        <button onclick="cle()">Clear</button>
+        <input type="file" id="file-input" />
+      </div>
+      <div>
+        <!-- Text box -->
+        <textarea type="text" id="text" name="text" rows="27" cols="100%" placeholder="Edit text here" onchange="savetols()" autofocus></textarea>
+      </div>
+    </div>
+    <div id="notification"></div>
+    <div id="error"></div>
+
+  </body>
+  <script>
+// welcome
+    setTimeout(function() {
+      notification("Welcom to quick edit notebook", 3000)
+    }, 100);
+
+    function notification(notaName, notaTime) {
+  var x = document.getElementById("notification");
+  x.innerHTML = notaName
+  x.className = "show";
+  setTimeout(function() {
+    x.className = x.className.replace("show", "");
+  }, notaTime);
+}
+
+function error(notaName, notaTime) {
+  var x = document.getElementById("error");
+  x.innerHTML = notaName
+  x.className = "show";
+  setTimeout(function() {
+    x.className = x.className.replace("show", "");
+  }, notaTime);
+}
+
+let selectedFile = null;
+let selectedData = [];
+
+function readJSONFile(file) {
+  const reader = new FileReader();
+
+  reader.onload = event => {
+    const data = JSON.parse(event.target.result);
+    const name = file.name;
+    console.log(`Loaded file: ${name}`);
+
+    const selectBox = document.getElementById('json-file-names');
+    const option = document.createElement('option');
+    option.text = name;
+    option.value = name;
+    selectBox.add(option);
+
+    if (!selectedData || selectedData.length < data.length) {
+      selectedData = data;
+      updateItemNames();
+    }
+  };
+
+  reader.onerror = error => console.error(error);
+
+  reader.readAsText(file);
+}
+
+function setSelectedFile() {
+  const selectBox = document.getElementById('json-file-names');
+  selectedFile = selectBox.value;
+  console.log(`Selected file: ${selectedFile}`);
+
+  if (selectedData) {
+    const lastItem = selectedData[selectedData.length - 1];
+    const lastId = lastItem.id;
+    document.getElementById('name-input').value = '';
+    document.getElementById('text-input').value = '';
+  }
+}
+
+function createNewFile() {
+  const filename = document.getElementById('new-file-name').value;
+  const name = document.getElementById('name-input').value;
+  const text = document.getElementById('text-input').value;
+  const id = selectedData ? selectedData[selectedData.length - 1].id + 1 : 1;
+  const data = selectedData ? [...selectedData, {id, name, text}] : [{id, name, text}];
+  const json = JSON.stringify(data);
+  const blob = new Blob([json], {type: 'application/json'});
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `${filename}.json`;
+  link.click();
+}
+
+function addItem() {
+  const name = document.getElementById('name-input').value;
+  const text = document.getElementById('text-input').value;
+  const id = selectedData ? selectedData[selectedData.length - 1].id + 1 : 1;
+  const newItem = {id, name, text};
+  selectedData.push(newItem);
+  document.getElementById('name-input').value = '';
+  document.getElementById('text-input').value = '';
+  updateItemNames();
+}
+
+function deleteSelectedItem() {
+  const selectBox = document.getElementById('json-file-names');
+  const selectedName = selectBox.options[selectBox.selectedIndex].text;
+  const index = selectedData.findIndex(item => item.name === selectedName);
+
+  if (index >= 0) {
+    selectedData.splice(index, 1);
+    updateItemNames();
+  } else {
+    console.log('Item not found');
+  }
+}
+
+function updateSelectedItem() {
+  const selectBox = document.getElementById('json-file-names');
+  const selectedName = selectBox.options[selectBox.selectedIndex].text;
+  const nameInput = document.getElementById('name-input');
+  const textInput = document.getElementById('text-input');
+
+  const itemToUpdate = selectedData.find(item => item.name === selectedName);
+
+  if (itemToUpdate) {
+    const newName = prompt('Enter a new name', itemToUpdate.name);
+    const newText = prompt('Enter new text', itemToUpdate.text);
+
+    if (newName && newText) {
+      itemToUpdate.name = newName;
+      itemToUpdate.text = newText;
+      nameInput.value = newName;
+      textInput.value = newText;
+      updateItemNames();
+    }
+  } else {
+    console.log('Item not found');
+  }
+}
+
+function updateItemNames() {
+const names = selectedData.map(item => item.name);
+const selectBox = document.getElementById('json-file-names');
+selectBox.options.length = 1;
+
+for (let i = 0; i < names.length; i++) {
+const option = document.createElement('option');
+option.text = names[i];
+option.value = names[i];
+selectBox.add(option);
+}
+}
+
+function setItemSelectedData() {
+  const selectBox = document.getElementById('json-file-names');
+  const selectedName = selectBox.options[selectBox.selectedIndex].text;
+  const item = selectedData.find(item => item.name === selectedName);
+
+  if (item) {
+    document.getElementById('name-input').value = item.name;
+    document.getElementById('text-input').value = item.text;
+  } else {
+    console.log('Item not found');
+  }
+}
+
+function downloadJSONFile() {
+  const jsonData = JSON.stringify(selectedData);
+  const blob = new Blob([jsonData], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.download = 'data.json';
+  a.href = url;
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+  </script>
+  <style>
+    body {
+      font-family: 'Ubuntu', sans-serif;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100%;
+      font-family: 'Ubuntu', sans-serif;
+      background-color: #a8a8a8;
+      font-size: 17px;
+    }
+
+    @-webkit-keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @-webkit-keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+
+    #notification {
+      visibility: hidden;
+      min-width: 100px;
+      margin-left: -100px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 35px;
+    }
+
+    #notification.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    #error {
+      visibility: hidden;
+      min-width: 100px;
+      margin-left: -100px;
+      background-color: #ff0000;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 35px;
+    }
+
+    #error.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+  </style>
+</html>
