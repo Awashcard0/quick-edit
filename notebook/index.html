@@ -14,11 +14,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
     <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
     <link href="/favicon.ico" type="image/x-icon" rel="icon">
-    <title>Quick edit</title>
+    <title>Quick edit notebook</title>
   </head>
   <body style="background-color:#a8a8a8;">
     <div>
-      <h1 style="font-family: 'Ubuntu', sans-serif;"><a href="/editers">Quick edit</a></h1>
+      <h1 style="font-family: 'Ubuntu', sans-serif;"><a href="/editers">Quick edit notebook</a></h1>
       <a href="/download">Downloads |</a>
       <a href="https://github.com/Awashcard0/quick-edit">| Github  |</a>
       <a href="#" onclick="urlhelp()">| How to use external files</a>
@@ -32,7 +32,11 @@
         <button onclick="savedoc()">Save</button>
         <button onclick="print()">Print</button>
         <button onclick="cle()">Clear</button>
-        <input type="file" id="file-input" />
+        <input accept=".qenotebook" type="file" id="json-file-input" onchange="readJSONFile(event.target.files[0])">
+        <select id="json-file-names" onchange="setSelectedFile()">
+            <option value="" disabled selected>Select a page</option>
+        </select>
+        <button onclick="newNb();">New</button>
       </div>
       <div>
         <!-- Text box -->
@@ -41,9 +45,14 @@
     </div>
     <div id="notification"></div>
     <div id="error"></div>
-
+    <dialog id="newNotebook">
+        <input type="text" id="new-file-name" placeholder="New file name">
+        <br><button onclick="createNewFile()">Create new notebook</button>
+        <button onclick="nonew();">Close</button>
+    </dialog>
   </body>
   <script>
+    const newDia = document.getElementById("newNotebook");
 // welcome
     setTimeout(function() {
       notification("Welcom to quick edit notebook", 3000)
@@ -76,7 +85,7 @@ function readJSONFile(file) {
   reader.onload = event => {
     const data = JSON.parse(event.target.result);
     const name = file.name;
-    console.log(`Loaded file: ${name}`);
+    notification(`Loaded file: ${name}`, 3000);
 
     const selectBox = document.getElementById('json-file-names');
     const option = document.createElement('option');
@@ -118,7 +127,7 @@ function createNewFile() {
   const blob = new Blob([json], {type: 'application/json'});
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = `${filename}.json`;
+  link.download = `${filename}.qenotebook`;
   link.click();
 }
 
@@ -202,11 +211,19 @@ function downloadJSONFile() {
   const url = URL.createObjectURL(blob);
 
   const a = document.createElement('a');
-  a.download = 'data.json';
+  a.download = 'data.qenotebook';
   a.href = url;
   a.click();
 
   URL.revokeObjectURL(url);
+}
+
+function newNb() {
+    newDia.showModal();
+}
+
+function nonew() {
+    newDia.close();
 }
   </script>
   <style>
