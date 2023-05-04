@@ -50,22 +50,24 @@
     </div>
     <div id="notification"></div>
     <div id="error"></div>
-    <dialog id="newNotebook">
+    <dialog id="newNotebook" style="text-align: center;">
+        <h1>New notebook</h1>
         <input type="text" id="new-file-name" placeholder="New file name">
         <br><button onclick="createNewFile()">Create new notebook</button>
         <button onclick="nonew();">Close</button>
     </dialog>
-    <dialog id="Newp">
+    <dialog id="Newp" style="text-align: center;">
+        <h1>New page</h1>
         <input type="text" id="name-input" placeholder="Name of page">
         <br><button onclick="addItem()">Add page</button>
         <button onclick="nonewp();">Close</button>
     </dialog>
-    <dialog id="Rm">
+    <dialog id="Rm" style="text-align: center;">
+        <h1>Read me</h1>
         <p>This is very much a beta version and errors <b>will</b> occur.</p>
         <p>If this is your first time you may want to look at how to use quick edit notebook.</p>
         <p>First start by clicking the new button. This will create a new file and save it to your computer. (If you care and it's just a JSON file )</p>
         <p>Second click on choose file and select the file that was just download.</p>
-        <>
         <button onclick="Readme.close();">Close</button>
     </dialog>
   </body>
