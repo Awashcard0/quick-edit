@@ -67,7 +67,8 @@
         <p>This is very much a beta version and errors <b>will</b> occur.</p>
         <p>If this is your first time you may want to look at how to use quick edit notebook.</p>
         <p>First start by clicking the new button. This will create a new file and save it to your computer. (If you care and it's just a JSON file )</p>
-        <p>Second click on choose file and select the file that was just download.</p>
+        <p>Second click on choose file and select the file that was just download. This will load the file.</p>
+        <p>Third click new page and name is somthing you will know</p>
         <button onclick="Readme.close();">Close</button>
     </dialog>
   </body>
@@ -317,15 +318,11 @@ function cle() {
               }
 
               function copy() {
-                var x = document.getElementById("snackbar");
                 text = document.getElementById("text");
                 text.select();
                 text.setSelectionRange(0, 99999);
                 navigator.clipboard.writeText(text.value);
-                x.className = "show";
-                setTimeout(function() {
-                  x.className = x.className.replace("show", "");
-                }, 3000);
+                notification("Copyed to clipbord")
               }
   </script>
   <style>
