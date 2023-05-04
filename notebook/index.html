@@ -161,7 +161,7 @@ function createNewFile() {
 
 function addItem() {
   const name = document.getElementById('name-input').value;
-  const text = document.getElementById('text').value;
+  const text = ""
   const id = selectedData ? selectedData[selectedData.length - 1].id + 1 : 1;
   const newItem = {id, name, text};
   selectedData.push(newItem);
