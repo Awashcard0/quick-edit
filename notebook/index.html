@@ -32,15 +32,20 @@
         <button onclick="savedoc()">Save</button>
         <button onclick="print()">Print</button>
         <button onclick="cle()">Clear</button>
-        <input accept=".qenotebook" type="file" id="json-file-input" onchange="readJSONFile(event.target.files[0])">
+        <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
+        <button onclick="newNb();">New</button>
         <select id="json-file-names" onchange="setSelectedFile()">
             <option value="" disabled selected>Select a page</option>
         </select>
-        <button onclick="newNb();">New</button>
+        <button onclick="deleteSelectedItem()">Delete Page</button>
+        <button onclick="newnbp();">New Page</button>
+        <button onclick="updateSelectedItem()">Update Page</button>
+        <button onclick="downloadFile()">Export</button>
+        <button onclick="Readme.showModal();">Read me</button>
       </div>
       <div>
         <!-- Text box -->
-        <textarea type="text" id="text" name="text" rows="27" cols="100%" placeholder="Edit text here" onchange="savetols()" autofocus></textarea>
+        <textarea type="text" id="text" name="text" rows="27" cols="100%" placeholder="Edit text here" autofocus></textarea>
       </div>
     </div>
     <div id="notification"></div>
@@ -50,9 +55,25 @@
         <br><button onclick="createNewFile()">Create new notebook</button>
         <button onclick="nonew();">Close</button>
     </dialog>
+    <dialog id="Newp">
+        <input type="text" id="name-input" placeholder="Name of page">
+        <br><button onclick="addItem()">Add page</button>
+        <button onclick="nonewp();">Close</button>
+    </dialog>
+    <dialog id="Rm">
+        <p>This is very much a beta version and errors <b>will</b> occur.</p>
+        <p>If this is your first time you may want to look at how to use quick edit notebook.</p>
+        <p>First start by clicking the new button. This will create a new file and save it to your computer. (If you care and it's just a JSON file )</p>
+        <p>Second click on choose file and select the file that was just download.</p>
+        <>
+        <button onclick="Readme.close();">Close</button>
+    </dialog>
   </body>
   <script>
     const newDia = document.getElementById("newNotebook");
+    const newDiap = document.getElementById("Newp");
+    const Readme = document.getElementById("Rm");
+    const text = document.getElementById("text");
 // welcome
     setTimeout(function() {
       notification("Welcom to quick edit notebook", 3000)
@@ -68,6 +89,7 @@
 }
 
 function error(notaName, notaTime) {
+console.error(notaName)
   var x = document.getElementById("error");
   x.innerHTML = notaName
   x.className = "show";
@@ -78,13 +100,15 @@ function error(notaName, notaTime) {
 
 let selectedFile = null;
 let selectedData = [];
+let fileName = ""
 
-function readJSONFile(file) {
+function readFile(file) {
   const reader = new FileReader();
 
   reader.onload = event => {
     const data = JSON.parse(event.target.result);
     const name = file.name;
+    fileName = name.split(".")[0];
     notification(`Loaded file: ${name}`, 3000);
 
     const selectBox = document.getElementById('json-file-names');
@@ -99,7 +123,7 @@ function readJSONFile(file) {
     }
   };
 
-  reader.onerror = error => console.error(error);
+  reader.onerror = error => error(`Error with reader: ${error}`);
 
   reader.readAsText(file);
 }
@@ -107,21 +131,21 @@ function readJSONFile(file) {
 function setSelectedFile() {
   const selectBox = document.getElementById('json-file-names');
   selectedFile = selectBox.value;
-  console.log(`Selected file: ${selectedFile}`);
+  notification(`Selected page: ${selectedFile}`, 3000);
 
   if (selectedData) {
     const lastItem = selectedData[selectedData.length - 1];
     const lastId = lastItem.id;
     document.getElementById('name-input').value = '';
-    document.getElementById('text-input').value = '';
+    document.getElementById('text').value = '';
   }
 }
 
 function createNewFile() {
   const filename = document.getElementById('new-file-name').value;
-  const name = document.getElementById('name-input').value;
-  const text = document.getElementById('text-input').value;
-  const id = selectedData ? selectedData[selectedData.length - 1].id + 1 : 1;
+  const id = 0;
+  const name = "Do not delete"
+  const text = "This is a placeholder"
   const data = selectedData ? [...selectedData, {id, name, text}] : [{id, name, text}];
   const json = JSON.stringify(data);
   const blob = new Blob([json], {type: 'application/json'});
@@ -129,20 +153,23 @@ function createNewFile() {
   link.href = URL.createObjectURL(blob);
   link.download = `${filename}.qenotebook`;
   link.click();
+  newDia.close();
 }
 
 function addItem() {
   const name = document.getElementById('name-input').value;
-  const text = document.getElementById('text-input').value;
+  const text = document.getElementById('text').value;
   const id = selectedData ? selectedData[selectedData.length - 1].id + 1 : 1;
   const newItem = {id, name, text};
   selectedData.push(newItem);
   document.getElementById('name-input').value = '';
-  document.getElementById('text-input').value = '';
+  document.getElementById('text').value = '';
   updateItemNames();
+  newDiap.close();
 }
 
 function deleteSelectedItem() {
+    if (confirm("This action cannot be undone!")) {
   const selectBox = document.getElementById('json-file-names');
   const selectedName = selectBox.options[selectBox.selectedIndex].text;
   const index = selectedData.findIndex(item => item.name === selectedName);
@@ -151,21 +178,22 @@ function deleteSelectedItem() {
     selectedData.splice(index, 1);
     updateItemNames();
   } else {
-    console.log('Item not found');
+    error('Error: Page not found', 3000);
   }
+}
 }
 
 function updateSelectedItem() {
   const selectBox = document.getElementById('json-file-names');
   const selectedName = selectBox.options[selectBox.selectedIndex].text;
   const nameInput = document.getElementById('name-input');
-  const textInput = document.getElementById('text-input');
+  const textInput = document.getElementById('text');
 
   const itemToUpdate = selectedData.find(item => item.name === selectedName);
 
   if (itemToUpdate) {
     const newName = prompt('Enter a new name', itemToUpdate.name);
-    const newText = prompt('Enter new text', itemToUpdate.text);
+    const newText = text.value;
 
     if (newName && newText) {
       itemToUpdate.name = newName;
@@ -175,7 +203,7 @@ function updateSelectedItem() {
       updateItemNames();
     }
   } else {
-    console.log('Item not found');
+    error('Error: Page not found', 3000);
   }
 }
 
@@ -199,19 +227,19 @@ function setItemSelectedData() {
 
   if (item) {
     document.getElementById('name-input').value = item.name;
-    document.getElementById('text-input').value = item.text;
+    document.getElementById('text').value = item.text;
   } else {
-    console.log('Item not found');
+    error('Error: Page not found', 3000);
   }
 }
 
-function downloadJSONFile() {
+function downloadFile() {
   const jsonData = JSON.stringify(selectedData);
   const blob = new Blob([jsonData], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
 
   const a = document.createElement('a');
-  a.download = 'data.qenotebook';
+  a.download = `${fileName}.qenotebook`;
   a.href = url;
   a.click();
 
@@ -224,6 +252,14 @@ function newNb() {
 
 function nonew() {
     newDia.close();
+}
+
+function newnbp() {
+    newDiap.showModal();
+}
+
+function nonewp() {
+    newDiap.close();
 }
   </script>
   <style>
