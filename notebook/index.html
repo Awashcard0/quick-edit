@@ -150,8 +150,8 @@ function setSelectedFile() {
 function createNewFile() {
   const filename = document.getElementById('new-file-name').value;
   const id = 0;
-  const name = "Do not delete"
-  const text = "This is a placeholder"
+  const name = "Placeholder"
+  const text = "Do not delete. This is a placeholder."
   const data = selectedData ? [...selectedData, {id, name, text}] : [{id, name, text}];
   const json = JSON.stringify(data);
   const blob = new Blob([json], {type: 'application/json'});
