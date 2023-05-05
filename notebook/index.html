@@ -99,9 +99,8 @@
 // welcome
     setTimeout(function() {
       notification("Welcome to quick edit notebook", 3000)
-    }, 100);
 
-    if (localStorage.getItem("AutosaveBox")) {
+      if (localStorage.getItem("AutosaveBox")) {
       let Asavebox = document.getElementById("autosave");
       Asavebox.checked = localStorage.getItem("AutosaveBox");
       UpdateSetting();
@@ -112,6 +111,7 @@
       saveToLocal.checked = localStorage.getItem("saveToLocalBox");
       UpdateSetting();
     }
+    }, 250);
 
     function UpdateSetting() {
       let Asavebox = document.getElementById("autosave");
