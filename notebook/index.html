@@ -40,7 +40,7 @@
         </select>
         <button onclick="pageTools.showModal()">Page tools</button>
         <button onclick="newnbp();">New Page</button>
-        <button onclick="updateSelectedItem()">Update Page</button>
+        <button onclick="updateSelectedItem()" id="normSave">Update Page</button>
         <button onclick="downloadFile()">Export</button>
         <button onclick="Readme.showModal();">Read me</button>
       </div>
@@ -84,7 +84,7 @@
   </dialog>
   <dialog id="Setting" style="text-align: center;">
     <h1>Settings</h1>
-    <input type="checkbox" id="autosave"><label for="autosave"> Autosave</label>
+    <input onclick="UpdateAutoSave();" type="checkbox" id="autosave"><label for="autosave"> Autosave</label>
     <br><input type="checkbox" id="saveToLocal"><label for="saveToLocal"> Save to local storage</label>
     <br><button onclick="settingsPage.close();">Close</button>
 </dialog>
@@ -100,6 +100,16 @@
     setTimeout(function() {
       notification("Welcom to quick edit notebook", 3000)
     }, 100);
+
+    function UpdateAutoSave() {
+      let Asavebox = document.getElementById("autosave");
+      let normSave = document.getElementById("normSave");
+      if (Asavebox.checked) {
+        normSave.style.display = "none";
+      } else {
+        normSave.style.display = "";
+      }
+    }
 
     function notification(notaName, notaTime) {
   var x = document.getElementById("notification");
