@@ -32,6 +32,7 @@
         <button onclick="savedoc()">Save</button>
         <button onclick="print()">Print</button>
         <button onclick="cle()">Clear</button>
+        <button onclick="settingsPage.showModal()">Settings</button>
         <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
         <button onclick="newNb();">New</button>
         <select id="json-file-names" onchange="setSelectedFile()">
@@ -39,7 +40,6 @@
         </select>
         <button onclick="pageTools.showModal()">Page tools</button>
         <button onclick="newnbp();">New Page</button>
-        <input type="checkbox" id="autosave"><label for="autosave"> Autosave</label>
         <button onclick="updateSelectedItem()">Update Page</button>
         <button onclick="downloadFile()">Export</button>
         <button onclick="Readme.showModal();">Read me</button>
@@ -82,12 +82,18 @@
       <br>
       <button onclick="pageTools.close();">Close</button>
   </dialog>
+  <dialog id="Setting" style="text-align: center;">
+    <h1>Settings</h1>
+    <input type="checkbox" id="autosave"><label for="autosave"> Autosave</label>
+    <button onclick="settingsPage.close();">Close</button>
+</dialog>
   </body>
   <script>
     const newDia = document.getElementById("newNotebook");
     const newDiap = document.getElementById("Newp");
     const Readme = document.getElementById("Rm");
     const pageTools = document.getElementById("PageTools");
+    const settingsPage = document.getElementById("Setting");
     var text = document.getElementById("text");
 // welcome
     setTimeout(function() {
