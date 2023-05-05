@@ -98,8 +98,8 @@
     var text = document.getElementById("text");
 // welcome
     setTimeout(function() {
-      notification("Welcome to quick edit notebook", 3000)
-
+      // notification("Welcome to quick edit notebook", 3000);
+      notification(localStorage.getItem("AutosaveBox"), 3000);
       if (localStorage.getItem("AutosaveBox")) {
       let Asavebox = document.getElementById("autosave");
       Asavebox.checked = localStorage.getItem("AutosaveBox");
