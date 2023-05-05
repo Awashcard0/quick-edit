@@ -279,6 +279,7 @@ function setItemSelectedData() {
 }
 
 function downloadFile() {
+  updateSelectedItem()
   const jsonData = JSON.stringify(selectedData);
   const blob = new Blob([jsonData], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
