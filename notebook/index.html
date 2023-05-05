@@ -46,7 +46,7 @@
       </div>
       <div>
         <!-- Text box -->
-        <textarea type="text" id="text" name="text" rows="27" cols="100%" placeholder="Edit text here" autofocus></textarea>
+        <textarea type="text" id="text" name="text" rows="27" cols="100%" placeholder="Edit text here" onkeyup="autoSave();" autofocus></textarea>
       </div>
     </div>
     <div id="notification"></div>
@@ -84,8 +84,8 @@
   </dialog>
   <dialog id="Setting" style="text-align: center;">
     <h1>Settings</h1>
-    <input onclick="UpdateAutoSave();" type="checkbox" id="autosave"><label for="autosave"> Autosave</label>
-    <br><input type="checkbox" id="saveToLocal"><label for="saveToLocal"> Save to local storage</label>
+    <input onclick="UpdateSetting();" type="checkbox" id="autosave"><label for="autosave"> Autosave</label>
+    <br><input onclick="UpdateSetting();" type="checkbox" id="saveToLocal"><label for="saveToLocal"> Save to local storage</label>
     <br><button onclick="settingsPage.close();">Close</button>
 </dialog>
   </body>
@@ -101,13 +101,24 @@
       notification("Welcom to quick edit notebook", 3000)
     }, 100);
 
-    function UpdateAutoSave() {
+    function UpdateSetting() {
       let Asavebox = document.getElementById("autosave");
       let normSave = document.getElementById("normSave");
+      let saveToLocal = document.getElementById("saveToLocal");
       if (Asavebox.checked) {
         normSave.style.display = "none";
       } else {
         normSave.style.display = "";
+      }
+    }
+
+    function autoSave() {
+      let Asavebox = document.getElementById("autosave");
+      let normSave = document.getElementById("normSave");
+      if (Asavebox.checked) {
+        updateSelectedItem();
+      } else {
+        // not auto save
       }
     }
 
