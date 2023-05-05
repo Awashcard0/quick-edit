@@ -123,7 +123,7 @@ function readFile(file) {
   reader.onload = event => {
     const data = JSON.parse(event.target.result);
     const name = file.name;
-    fileName = name.split(".")[0];
+    fileName = name.split(".")[0].split(" (")[0];
     notification(`Loaded file: ${name}`, 3000);
 
     const selectBox = document.getElementById('json-file-names');
