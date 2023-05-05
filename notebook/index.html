@@ -104,11 +104,13 @@
     if (localStorage.getItem("AutosaveBox")) {
       let Asavebox = document.getElementById("autosave");
       Asavebox.checked = localStorage.getItem("AutosaveBox");
+      UpdateSetting();
     }
 
     if (localStorage.getItem("saveToLocalBox")) {
       let saveToLocal = document.getElementById("saveToLocal");
       saveToLocal.checked = localStorage.getItem("saveToLocalBox");
+      UpdateSetting();
     }
 
     function UpdateSetting() {
