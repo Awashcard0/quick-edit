@@ -211,15 +211,15 @@ function updateSelectedItem() {
   const itemToUpdate = selectedData.find(item => item.name === selectedName);
 
   if (itemToUpdate) {
-    const newName = itemToUpdate.name
+    // const newName = itemToUpdate.name
     const newText = text.value;
 
-    if (newName && newText) {
-      itemToUpdate.name = newName;
+    if (newText) {
+      // itemToUpdate.name = newName;
       itemToUpdate.text = newText;
-      nameInput.value = newName;
+      // nameInput.value = newName;
       textInput.value = newText;
-      updateItemNames();
+      // updateItemNames();
     }
   } else {
     error('Error: Page not found', 3000);
