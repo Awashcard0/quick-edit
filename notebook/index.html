@@ -101,10 +101,22 @@
       notification("Welcome to quick edit notebook", 3000)
     }, 100);
 
+    if (localStorage.getItem("AutosaveBox")) {
+      let Asavebox = document.getElementById("autosave");
+      Asavebox.checked = localStorage.getItem("AutosaveBox");
+    }
+
+    if (localStorage.getItem("saveToLocalBox")) {
+      let saveToLocal = document.getElementById("saveToLocal");
+      saveToLocal.checked = localStorage.getItem("saveToLocalBox");
+    }
+
     function UpdateSetting() {
       let Asavebox = document.getElementById("autosave");
       let normSave = document.getElementById("normSave");
       let saveToLocal = document.getElementById("saveToLocal");
+      localStorage.setItem("AutosaveBox", Asavebox.checked);
+      localStorage.setItem("saveToLocalBox", saveToLocal.checked);
       if (Asavebox.checked) {
         normSave.style.display = "none";
       } else {
