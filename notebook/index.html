@@ -106,6 +106,7 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
       Asavebox.checked = localStorage.getItem("AutosaveBox");
       console.log("Setting:", localStorage.getItem("saveToLocalBox"), "chexhed:", document.getElementById("saveToLocal").checked);
       document.getElementById("saveToLocal").checked = localStorage.getItem("saveToLocalBox");
+      console.log("After setting Ls:", localStorage.getItem("saveToLocalBox"), "chexhed:", document.getElementById("saveToLocal").checked);
       UpdateSetting();
     }, 250);
 
