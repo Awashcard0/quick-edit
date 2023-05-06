@@ -97,6 +97,7 @@
     const settingsPage = document.getElementById("Setting");
     var text = document.getElementById("text");
 // welcome
+console.log("crunt:", document.getElementById("saveToLocal").checked);
     setTimeout(function() {
       // notification("Welcome to quick edit notebook", 3000);
       notification(localStorage.getItem("saveToLocalBox"), 3000);
