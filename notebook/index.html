@@ -104,7 +104,7 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
 
       let Asavebox = document.getElementById("autosave");
       Asavebox.checked = localStorage.getItem("AutosaveBox");
-      console.log("Setting:", localStorage.getItem("saveToLocalBox"));
+      console.log("Setting:", localStorage.getItem("saveToLocalBox"), "chexhed:", document.getElementById("saveToLocal").checked);
       document.getElementById("saveToLocal").checked = localStorage.getItem("saveToLocalBox");
       UpdateSetting();
     }, 250);
@@ -114,7 +114,7 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
       let normSave = document.getElementById("normSave");
       let saveToLocal = document.getElementById("saveToLocal");
       localStorage.setItem("AutosaveBox", Asavebox.checked);
-      console.log("Updating Ls:", localStorage.getItem("saveToLocalBox"));
+      console.log("Updating Ls:", localStorage.getItem("saveToLocalBox"), "chexhed:", document.getElementById("saveToLocal").checked);
       localStorage.setItem("saveToLocalBox", saveToLocal.checked);
       if (Asavebox.checked) {
         normSave.style.display = "none";
