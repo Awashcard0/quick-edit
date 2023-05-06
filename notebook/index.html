@@ -103,8 +103,7 @@
 
       let Asavebox = document.getElementById("autosave");
       Asavebox.checked = localStorage.getItem("AutosaveBox");
-      let saveToLocal = document.getElementById("saveToLocal");
-      saveToLocal.checked = localStorage.getItem("saveToLocalBox");
+      document.getElementById("saveToLocal").checked = localStorage.getItem("saveToLocalBox");
       UpdateSetting();
     }, 250);
 
