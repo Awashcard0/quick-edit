@@ -20,7 +20,7 @@
     <div>
       <h1 style="font-family: 'Ubuntu', sans-serif;"><a href="/editers">Quick edit notebook</a></h1>
       <a href="/download">Downloads |</a>
-      <a href="https://github.com/Awashcard0/quick-edit">| Github  |</a>
+      <a href="https://github.com/Awashcard0/quick-edit">| Github |</a>
       <a href="#" onclick="alert('Not available')">| How to use external files</a>
       <noscript>
         <h1>Where are your maners?</h1>
@@ -103,6 +103,7 @@
 
       let Asavebox = document.getElementById("autosave");
       Asavebox.checked = localStorage.getItem("AutosaveBox");
+      console.log("Setting:", localStorage.getItem("saveToLocalBox"));
       document.getElementById("saveToLocal").checked = localStorage.getItem("saveToLocalBox");
       UpdateSetting();
     }, 250);
@@ -112,6 +113,7 @@
       let normSave = document.getElementById("normSave");
       let saveToLocal = document.getElementById("saveToLocal");
       localStorage.setItem("AutosaveBox", Asavebox.checked);
+      console.log("Updating Ls:", localStorage.getItem("saveToLocalBox"));
       localStorage.setItem("saveToLocalBox", saveToLocal.checked);
       if (Asavebox.checked) {
         normSave.style.display = "none";
