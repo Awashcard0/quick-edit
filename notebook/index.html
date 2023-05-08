@@ -163,7 +163,8 @@ function readFile(file) {
     const data = JSON.parse(event.target.result);
     const name = file.name;
     fileName = name.split(".")[0].split(" (")[0];
-    notification(`Loaded file: ${name}`, 3000);
+    notification(`Loaded file: ${name}, To load a new reload the page`, 3000);
+    document.getElementById("json-file-input").style.display = "none";
 
     const selectBox = document.getElementById('json-file-names');
     const option = document.createElement('option');
