@@ -275,6 +275,7 @@ function updateSelectedItem() {
 
 function renameSelectedItem() {
   pageTools.close();
+  let saveToLocal = document.getElementById("saveToLocal");
   const selectBox = document.getElementById('json-file-names');
   const selectedName = selectBox.options[selectBox.selectedIndex].text;
   const nameInput = document.getElementById('rename-input');
@@ -293,6 +294,10 @@ function renameSelectedItem() {
       nameInput.value = newName;
       textInput.value = newText;
       updateItemNames();
+
+      if (saveToLocal.checked) {
+        localStorage.setItem("nbSave", selectedData)
+      }
     }
   } else {
     error('Error: Page not found', 3000);
