@@ -108,10 +108,11 @@ if (externalFile == true) {
       childWindow.document.write(' <html> <head> <title> Print - Quick edit - quickedit.ga </title> </head> <body> ');
           childWindow.document.write(document.getElementById('text').value.replace(/\n/gi, ' <br> '));
               childWindow.document.write(' </body> </html>');
-                childWindow.print(); setTimeout(function() {
+                setTimeout(function() {
+                  childWindow.print(); 
                   childWindow.document.close();
                   childWindow.close();
-                }, 1500);
+                }, 2500);
               }
 
               function savetols() {
@@ -214,13 +215,13 @@ if (externalFile == true) {
               }
 
               function urlhelp() {
-                if (confirm("https://quickedit.ga?your url\nwould you like to start to the url config wizard")) {
+                if (confirm("https://quick-edit.pages.dev/?your url\nwould you like to start to the url config wizard")) {
 	            	var askurl = prompt("Enter the url to the file");
 		            if (askurl.includes("http", "https")) {
-	              	prompt("Here is your url\nCopy it now", "https://quickedit.ga/?" + askurl)
+	              	prompt("Here is your url\nCopy it now", "https://quick-edit.pages.dev/?" + askurl)
 	              } else {
 	            	if (confirm("Make sure the URL has the protocol in it\nWould you like to make the URL anyway")) {
-		              prompt ("Here is your url\nCopy it now\nWarning: No protocol may result in a 404 ", "https://quickedit.ga/?" + askurl)
+		              prompt ("Here is your url\nCopy it now\nWarning: No protocol may result in a 404 ", "https://quick-edit.pages.dev/?" + askurl)
               	}
                 }    
                 }

@@ -1,1 +1,1 @@
-start chrome --app="https://quickedit.ga/"
+start chrome --app="https://quick-edit.pages.dev/"
