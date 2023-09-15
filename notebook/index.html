@@ -412,7 +412,7 @@ function cle() {
               function print() {
       childWindow = window.open('/print', 'childWindow', 'location=yes, menubar=yes, toolbar=yes');
       childWindow.document.open();
-      childWindow.document.write(' <html> <head> <title> Print - Quick edit - quickedit.ga </title> </head> <body> ');
+      childWindow.document.write(' <html> <head> <title> Print - Quick edit - quick-edit.pages.dev </title> </head> <body> ');
           childWindow.document.write(document.getElementById('text').value.replace(/\n/gi, ' <br> '));
               
                 childWindow.print(); 
