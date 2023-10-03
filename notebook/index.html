@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "cf90fc61d0d64d3cb6c7ea91712fc5ed"}'></script><!-- End Cloudflare Web Analytics -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,54 +15,167 @@
     <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
     <link href="/favicon.ico" type="image/x-icon" rel="icon">
     <title>Quick edit notebook</title>
-  </head>
-  <body style="background-color:#a8a8a8;">
-    <div>
-      <div class="menubar">
-        <a href="/editers">Quick edit notebook</a>
-        <button onclick="copy()">Copy</button>
-        <button onclick="savedoc()">Save</button>
-        <button onclick="print()">Print</button>
-        <button onclick="cle()">Clear</button>
-        <button onclick="settingsPage.showModal()">Settings</button>
-        <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
-        <button onclick="newNb();">New</button>
-        <select id="json-file-names" onchange="setSelectedFile()">
-            <option value="" disabled selected>Select a page</option>
-        </select>
-        <button onclick="pageTools.showModal()">Page tools</button>
-        <button onclick="newnbp();">New Page</button>
-        <button onclick="updateSelectedItem()" id="normSave">Update Page</button>
-        <button onclick="downloadFile()">Export</button>
-        <button onclick="Readme.showModal();">Read me</button>
+    <style>
+        body {
+            font-family: 'Ubuntu', sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: #777777;
+        }
+
+        main {
+          display: flex;
+          flex-direction: row;
+          height: 97%;
+        }
+
+        #sidebar {
+            width: 200px;
+            background-color: #8d8d8d;
+            border-right: 2px solid #707070;
+            padding: 10px;
+        }
+
+        #page-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        #page-list li {
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        #page-list li:hover {
+            background-color: #cacaca;
+        }
+
+        #editor {
+            flex: 1;
+        }
+
+        .menubar {
+            background-color: #616161;
+            padding: 5px 15px;
+        }
+
+        .menubar button, 
+        .menubar input {
+            margin-left: 2.5px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+            font-family: 'Ubuntu', sans-serif;
+            background-color: #a1a1a1;
+            font-size: 17px;
+            border: none;
+            outline: none;
+        }
+        
+        @keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+
+    #notification {
+      visibility: hidden;
+      min-width: 100px;
+      margin-left: -100px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 30%;
+      bottom: 30px;
+      font-size: 35px;
+    }
+
+    #notification.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    #error {
+      visibility: hidden;
+      min-width: 100px;
+      margin-left: -100px;
+      background-color: #fd2a2a;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 35px;
+    }
+
+    #error.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+    </style>
+</head>
+<body>
+    <div class="menubar">
+            <a href="/editers">Quick edit notebook</a>
+            <button onclick="copy()">Copy</button>
+            <button onclick="savedoc()">Save</button>
+            <button onclick="print()">Print</button>
+            <button onclick="cle()">Clear</button>
+            <button onclick="settingsPage.showModal()">Settings</button>
+            <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
+            <button onclick="newNb();">New</button>
+            <button onclick="pageTools.showModal()">Page tools</button>
+            <button onclick="newnbp();">New Page</button>
+            <button onclick="updateSelectedItem()" id="normSave">Update Page</button>
+            <button onclick="downloadFile()">Export</button>
+            <button onclick="Readme.showModal();">Read me</button>
+        </div>
+        <main>
+        <div id="sidebar">
+        <ul id="page-list">
+            <li>Open a file to begin</li>
+        </ul>  
       </div>
-      <noscript>
-        <h1>Where are your maners?</h1>
-        <h2>You need javascript to use this</h2>
-      </noscript>
-      <div>
-        <!-- top nav -->
-        <!-- <button onclick="copy()">Copy</button>
-        <button onclick="savedoc()">Save</button>
-        <button onclick="print()">Print</button>
-        <button onclick="cle()">Clear</button>
-        <button onclick="settingsPage.showModal()">Settings</button>
-        <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
-        <button onclick="newNb();">New</button>
-        <select id="json-file-names" onchange="setSelectedFile()">
-            <option value="" disabled selected>Select a page</option>
-        </select>
-        <button onclick="pageTools.showModal()">Page tools</button>
-        <button onclick="newnbp();">New Page</button>
-        <button onclick="updateSelectedItem()" id="normSave">Update Page</button>
-        <button onclick="downloadFile()">Export</button>
-        <button onclick="Readme.showModal();">Read me</button> -->
-      </div>
-      <div>
-        <!-- Text box -->
-        <textarea type="text" id="text" name="text" rows="27" cols="100%" placeholder="Edit text here" onkeyup="autoSave();" autofocus></textarea>
-      </div>
+    <div id="editor">
+        <textarea type="text" id="text" name="text" placeholder="Edit text here" onkeyup="autoSave();" autofocus></textarea>
+        <noscript>
+            <h1>Where are your manners?</h1>
+            <h2>You need javascript to use this</h2>
+        </noscript>
     </div>
+    </main>
+  
     <div id="notification"></div>
     <div id="error"></div>
     <dialog id="newNotebook" style="text-align: center;">
@@ -80,34 +193,33 @@
     <dialog id="Rm" style="text-align: center;">
         <h1>Read me</h1>
         <h2>This is very much a beta version and errors <b>will</b> occur. If you find any make a report <a href="https://github.com/Awashcard0/quick-edit/issues/new">here</a></h2>
-        <h2>Knowen bugs</h2>
+        <h2>Known bugs</h2>
         <p>Settings in the setting menu don't save and always our checked</p>
         <h2>How to</h2>
         <p>If this is your first time you may want to look at how to use quick edit notebook.</p>
         <p>First start by clicking the new button. This will create a new file and save it to your computer. (If you care and it's just a JSON file )</p>
-        <p>Second click on choose file and select the file that was just download. This will load the file.</p>
-        <p>Third click new page and name is somthing you will know</p>
+        <p>Second click on choose file and select the file that was just downloaded. This will load the file.</p>
+        <p>Third click new page and name it something you will know</p>
         <button onclick="Readme.close();">Close</button>
     </dialog>
     <dialog id="PageTools" style="text-align: center;">
-      <h1>Page tools</h1>
-      <h2>Rename</h2>
-      <input type="text" id="rename-input" placeholder="Name of page">
-      <button onclick="renameSelectedItem();">Rename</button>
-      <h2>Delete</h2>
-      <button onclick="deleteSelectedItem();">Delete Page</button>
-      <br>
-      <button onclick="pageTools.close();">Close</button>
-  </dialog>
-  <dialog id="Setting" style="text-align: center;">
-    <h1>Settings</h1>
-    <input onclick="UpdateSetting();" type="checkbox" id="autosave"><label for="autosave"> Autosave</label>
-    <br><input onclick="UpdateSetting();" type="checkbox" id="saveToLocal"><label for="saveToLocal"> Save to local storage</label>
-    <br><button onclick="settingsPage.close();">Close</button>
-</dialog>
-  </body>
-  <script>
-    const newDia = document.getElementById("newNotebook");
+        <h1>Page tools</h1>
+        <h2>Rename</h2>
+        <input type="text" id="rename-input" placeholder="Name of page">
+        <button onclick="renameSelectedItem();">Rename</button>
+        <h2>Delete</h2>
+        <button onclick="deleteSelectedItem();">Delete Page</button>
+        <br>
+        <button onclick="pageTools.close();">Close</button>
+    </dialog>
+    <dialog id="Setting" style="text-align: center;">
+        <h1>Settings</h1>
+        <input onclick="UpdateSetting();" type="checkbox" id="autosave"><label for="autosave"> Autosave</label>
+        <br><input onclick="UpdateSetting();" type="checkbox" id="saveToLocal"><label for="saveToLocal"> Save to local storage</label>
+        <br><button onclick="settingsPage.close();">Close</button>
+    </dialog>
+    <script>
+     const newDia = document.getElementById("newNotebook");
     const newDiap = document.getElementById("Newp");
     const Readme = document.getElementById("Rm");
     const pageTools = document.getElementById("PageTools");
@@ -171,6 +283,7 @@ console.error(notaName)
 let selectedFile = null;
 let selectedData = [];
 let fileName = ""
+let selectedName = ""
 
 function readFile(file) {
   const reader = new FileReader();
@@ -179,14 +292,8 @@ function readFile(file) {
     const data = JSON.parse(event.target.result);
     const name = file.name;
     fileName = name.split(".")[0].split(" (")[0];
-    notification(`Loaded file: ${name}, To load a new reload the page`, 5000);
+    notification(`Loaded file: ${fileName}, To load a new reload the page`, 5000);
     document.getElementById("json-file-input").style.display = "none";
-
-    const selectBox = document.getElementById('json-file-names');
-    const option = document.createElement('option');
-    option.text = name;
-    option.value = name;
-    selectBox.add(option);
 
     if (!selectedData || selectedData.length < data.length) {
       selectedData = data;
@@ -197,22 +304,6 @@ function readFile(file) {
   reader.onerror = error => error(`Error with reader: ${error}`);
 
   reader.readAsText(file);
-}
-
-function setSelectedFile() {
-  const selectBox = document.getElementById('json-file-names');
-  selectedFile = selectBox.value;
-  const selectedName = selectBox.options[selectBox.selectedIndex].text;
-
-  const itemToUpdate = selectedData.find(item => item.name === selectedName);
-  notification(`Selected page: ${selectedFile}`, 3000);
-
-  if (selectedData) {
-    const lastItem = selectedData[selectedData.length - 1];
-    const lastId = lastItem.id;
-    document.getElementById('name-input').value = '';
-    document.getElementById('text').value = itemToUpdate.text;
-  }
 }
 
 function createNewFile() {
@@ -245,8 +336,6 @@ function addItem() {
 function deleteSelectedItem() {
     if (confirm("This action cannot be undone!")) {
       pageTools.close();
-  const selectBox = document.getElementById('json-file-names');
-  const selectedName = selectBox.options[selectBox.selectedIndex].text;
   const index = selectedData.findIndex(item => item.name === selectedName);
 
   if (index >= 0) {
@@ -260,8 +349,6 @@ function deleteSelectedItem() {
 
 function updateSelectedItem() {
   let saveToLocal = document.getElementById("saveToLocal");
-  const selectBox = document.getElementById('json-file-names');
-  const selectedName = selectBox.options[selectBox.selectedIndex].text;
   const nameInput = document.getElementById('name-input');
   const textInput = document.getElementById('text');
 
@@ -289,8 +376,6 @@ function updateSelectedItem() {
 function renameSelectedItem() {
   pageTools.close();
   let saveToLocal = document.getElementById("saveToLocal");
-  const selectBox = document.getElementById('json-file-names');
-  const selectedName = selectBox.options[selectBox.selectedIndex].text;
   const nameInput = document.getElementById('rename-input');
   const textInput = document.getElementById('text');
 
@@ -319,25 +404,27 @@ function renameSelectedItem() {
 
 function updateItemNames() {
 const names = selectedData.map(item => item.name);
-const selectBox = document.getElementById('json-file-names');
-selectBox.options.length = 1;
+const selectBox = document.getElementById('page-list');
+
+selectBox.innerHTML = ""
 
 for (let i = 0; i < names.length; i++) {
-const option = document.createElement('option');
-option.text = names[i];
-option.value = names[i];
-selectBox.add(option);
+let option = document.createElement('li');
+option.innerHTML = names[i];
+option.setAttribute("onclick", `setItemSelectedData("${names[i]}");`);
+console.log(option)
+selectBox.appendChild(option);
 }
 }
 
-function setItemSelectedData() {
-  const selectBox = document.getElementById('json-file-names');
-  const selectedName = selectBox.options[selectBox.selectedIndex].text;
+function setItemSelectedData(name) {
+  selectedName = name;
   const item = selectedData.find(item => item.name === selectedName);
 
   if (item) {
-    document.getElementById('name-input').value = item.name;
+    document.getElementById('rename-input').value = item.name;
     document.getElementById('text').value = item.text;
+    notification(`Selected page: ${name}`, 3000);
   } else {
     error('Error: Page not found', 3000);
   }
@@ -412,7 +499,7 @@ function cle() {
               function print() {
       childWindow = window.open('/print', 'childWindow', 'location=yes, menubar=yes, toolbar=yes');
       childWindow.document.open();
-      childWindow.document.write(' <html> <head> <title> Print - Quick edit - quickedit.ga </title> </head> <body> ');
+      childWindow.document.write(' <html> <head> <title> Print - Quick edit - quick-edit.pages.dev </title> </head> <body> ');
           childWindow.document.write(document.getElementById('text').value.replace(/\n/gi, ' <br> '));
               
                 childWindow.print(); 
@@ -429,130 +516,6 @@ function cle() {
                 navigator.clipboard.writeText(text.value);
                 notification("Copied to clipboard", 3000)
               }
-  </script>
-  <style>
-    body {
-      font-family: 'Ubuntu', sans-serif;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-      background-color: #888888;
-    }
-
-    textarea {
-      width: 99.58%;
-      height: 95.7vh;
-      /* height: 95.7vh;
-      width: 99.58vw; */
-      font-family: 'Ubuntu', sans-serif;
-      background-color: #888888;
-      font-size: 17px;
-    }
-
-    @-webkit-keyframes fadein {
-      from {
-        bottom: 0;
-        opacity: 0;
-      }
-
-      to {
-        bottom: 30px;
-        opacity: 1;
-      }
-    }
-
-    @keyframes fadein {
-      from {
-        bottom: 0;
-        opacity: 0;
-      }
-
-      to {
-        bottom: 30px;
-        opacity: 1;
-      }
-    }
-
-    @-webkit-keyframes fadeout {
-      from {
-        bottom: 30px;
-        opacity: 1;
-      }
-
-      to {
-        bottom: 0;
-        opacity: 0;
-      }
-    }
-
-    @keyframes fadeout {
-      from {
-        bottom: 30px;
-        opacity: 1;
-      }
-
-      to {
-        bottom: 0;
-        opacity: 0;
-      }
-    }
-
-    #notification {
-      visibility: hidden;
-      min-width: 100px;
-      margin-left: -100px;
-      background-color: #333;
-      color: #fff;
-      text-align: center;
-      border-radius: 2px;
-      padding: 16px;
-      position: fixed;
-      z-index: 1;
-      left: 50%;
-      bottom: 30px;
-      font-size: 35px;
-    }
-
-    #notification.show {
-      border-radius: 25px;
-      visibility: visible;
-      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-      animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    }
-
-    #error {
-      visibility: hidden;
-      min-width: 100px;
-      margin-left: -100px;
-      background-color: #ff0000;
-      color: #fff;
-      text-align: center;
-      border-radius: 2px;
-      padding: 16px;
-      position: fixed;
-      z-index: 1;
-      left: 50%;
-      bottom: 30px;
-      font-size: 35px;
-    }
-
-    #error.show {
-      border-radius: 25px;
-      visibility: visible;
-      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-      animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    }
-
-    .menubar {
-  background-color: #616161;
-  padding: 5px 15px;
-  display: flex;
-  align-items: center;
-}
-
-.menubar button, 
-.menubar input {
-  margin-left: 2.5px;
-}
-  </style>
+    </script>
+</body>
 </html>
