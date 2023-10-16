@@ -178,6 +178,10 @@
   
     <div id="notification"></div>
     <div id="error"></div>
+    <dialog id="start" style="text-align: center;">
+      <h1>Welcome to Quick Edit Notebook</h1>
+      <p>Quick Edit Notebook is a notebook app powered by HTML 5</p>
+  </dialog>
     <dialog id="newNotebook" style="text-align: center;">
         <h1>New notebook</h1>
         <input type="text" id="new-file-name" placeholder="New file name">
@@ -224,6 +228,7 @@
     const Readme = document.getElementById("Rm");
     const pageTools = document.getElementById("PageTools");
     const settingsPage = document.getElementById("Setting");
+    const startPage = document.getElementById("start");
     var text = document.getElementById("text");
 // welcome
 console.log("crunt:", document.getElementById("saveToLocal").checked);
@@ -231,9 +236,9 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
       notification("Welcome to quick edit notebook beta (Read the read me in the tool bar)", 3000);
 
       let Asavebox = document.getElementById("autosave");
-      Asavebox.checked = localStorage.getItem("AutosaveBox");
+      Asavebox.checked = (localStorage.getItem("AutosaveBox") === "true")
       console.log("Setting:", localStorage.getItem("saveToLocalBox"), "chexhed:", document.getElementById("saveToLocal").checked);
-      document.getElementById("saveToLocal").checked = localStorage.getItem("saveToLocalBox");
+      document.getElementById("saveToLocal").checked = (localStorage.getItem("saveToLocalBox") === "true")
       console.log("After setting Ls:", localStorage.getItem("saveToLocalBox"), "chexhed:", document.getElementById("saveToLocal").checked);
       UpdateSetting();
     }, 250);
