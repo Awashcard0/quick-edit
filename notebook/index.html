@@ -153,8 +153,6 @@
             <button onclick="print()">Print</button>
             <button onclick="cle()">Clear</button>
             <button onclick="settingsPage.showModal()">Settings</button>
-            <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
-            <button onclick="newNb();">New</button>
             <button onclick="pageTools.showModal()">Page tools</button>
             <button onclick="newnbp();">New Page</button>
             <button onclick="updateSelectedItem()" id="normSave">Update Page</button>
@@ -181,6 +179,9 @@
     <dialog id="start" style="text-align: center;">
       <h1>Welcome to Quick Edit Notebook</h1>
       <p>Quick Edit Notebook is a notebook app powered by HTML 5</p>
+      <p>Open a file or make a new notebook to get started</p>
+      <button onclick="this.parentElement.close(); newNb();">New Notebook</button>
+      <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
   </dialog>
     <dialog id="newNotebook" style="text-align: center;">
         <h1>New notebook</h1>
@@ -230,6 +231,8 @@
     const settingsPage = document.getElementById("Setting");
     const startPage = document.getElementById("start");
     var text = document.getElementById("text");
+
+    startPage.showModal();
 // welcome
 console.log("crunt:", document.getElementById("saveToLocal").checked);
     setTimeout(function() {
@@ -309,13 +312,15 @@ function readFile(file) {
   reader.onerror = error => error(`Error with reader: ${error}`);
 
   reader.readAsText(file);
+
+  startPage.close();
 }
 
 function createNewFile() {
   const filename = document.getElementById('new-file-name').value;
   const id = 0;
-  const name = "Placeholder"
-  const text = "Do not delete. This is a placeholder."
+  const name = "First page (Use page tools to rename)"
+  const text = ""
   const data = selectedData ? [...selectedData, {id, name, text}] : [{id, name, text}];
   const json = JSON.stringify(data);
   const blob = new Blob([json], {type: 'application/json'});
@@ -324,6 +329,8 @@ function createNewFile() {
   link.download = `${filename}.qenotebook`;
   link.click();
   newDia.close();
+  startPage.showModal();
+  notification("Open the file to continue", 3000)
 }
 
 function addItem() {
