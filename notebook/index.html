@@ -182,7 +182,7 @@
       <p>Open a file or make a new notebook to get started</p>
       <button onclick="this.parentElement.close(); newNb();">New Notebook</button>
       <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
-      <button id="old">Use last notebook</button>
+      <button id="old" onclick="getOld()">Use last notebook</button>
   </dialog>
     <dialog id="newNotebook" style="text-align: center;">
         <h1>New notebook</h1>
@@ -459,6 +459,20 @@ function downloadFile() {
 
   const a = document.createElement('a');
   a.download = `${fileName}.qenotebook`;
+  a.href = url;
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+function getOld() {
+  let data = JSON.parse(localStorage.getItem("nbSave"));
+  const jsonData = JSON.stringify(data.data);
+  const blob = new Blob([jsonData], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.download = `${data.name}.qenotebook`;
   a.href = url;
   a.click();
 
