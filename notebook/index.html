@@ -222,6 +222,7 @@
         <h1>Settings</h1>
         <input onclick="UpdateSetting();" type="checkbox" id="autosave"><label for="autosave"> Autosave</label>
         <br><input onclick="UpdateSetting();" type="checkbox" id="saveToLocal"><label for="saveToLocal"> Save to local storage</label>
+        <br><button onclick="if (confirm('You sure?')) {localStorage.removeItem('nbSave')}">Clear local storage</button>
         <br><button onclick="settingsPage.close();">Close</button>
     </dialog>
     <script>
