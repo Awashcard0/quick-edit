@@ -182,6 +182,7 @@
       <p>Open a file or make a new notebook to get started</p>
       <button onclick="this.parentElement.close(); newNb();">New Notebook</button>
       <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
+      <button id="old" disabled>Use last notebook</button>
   </dialog>
     <dialog id="newNotebook" style="text-align: center;">
         <h1>New notebook</h1>
@@ -230,6 +231,7 @@
     const pageTools = document.getElementById("PageTools");
     const settingsPage = document.getElementById("Setting");
     const startPage = document.getElementById("start");
+    const oldButton = document.getElementById("old");
     var text = document.getElementById("text");
 
     startPage.showModal();
@@ -244,6 +246,10 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
       document.getElementById("saveToLocal").checked = (localStorage.getItem("saveToLocalBox") === "true")
       console.log("After setting Ls:", localStorage.getItem("saveToLocalBox"), "chexhed:", document.getElementById("saveToLocal").checked);
       UpdateSetting();
+
+      if (localStorage.getItem("nbSave")) {
+        oldButton.setAttribute("disabled", "false");
+      }
     }, 250);
 
     function UpdateSetting() {
@@ -377,7 +383,8 @@ function updateSelectedItem() {
       textInput.value = newText;
       // updateItemNames();
       if (saveToLocal.checked) {
-        localStorage.setItem("nbSave", selectedData)
+        const stuffToSave = {"name": name, "data": selectedData}
+        localStorage.setItem("nbSave", stuffToSave)
       }
     }
   } else {
