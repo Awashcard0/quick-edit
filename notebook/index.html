@@ -182,7 +182,7 @@
       <p>Open a file or make a new notebook to get started</p>
       <button onclick="this.parentElement.close(); newNb();">New Notebook</button>
       <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
-      <button id="old" disabled>Use last notebook</button>
+      <button id="old">Use last notebook</button>
   </dialog>
     <dialog id="newNotebook" style="text-align: center;">
         <h1>New notebook</h1>
@@ -247,8 +247,10 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
       console.log("After setting Ls:", localStorage.getItem("saveToLocalBox"), "chexhed:", document.getElementById("saveToLocal").checked);
       UpdateSetting();
 
-      if (localStorage.getItem("nbSave")) {
-        oldButton.setAttribute("disabled", "false");
+      if (JSON.parse(localStorage.getItem("nbSave"))) {
+        
+      } else {
+        oldButton.setAttribute("disabled", "true");
       }
     }, 250);
 
@@ -383,8 +385,8 @@ function updateSelectedItem() {
       textInput.value = newText;
       // updateItemNames();
       if (saveToLocal.checked) {
-        const stuffToSave = {"name": name, "data": selectedData}
-        localStorage.setItem("nbSave", stuffToSave)
+        const stuffToSave = {"name": fileName, "data": selectedData}
+        localStorage.setItem("nbSave", JSON.stringify(stuffToSave))
       }
     }
   } else {
