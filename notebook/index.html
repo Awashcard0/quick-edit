@@ -494,6 +494,8 @@ async function getTheFile() {
       console.log("Loaded", fileData)
       selectedData = fileData;
       updateItemNames();
+    } else {
+      console.log("No", selectedData.length, selectedData, fileData)
     }
 
     startPage.close();
