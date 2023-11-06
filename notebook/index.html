@@ -485,8 +485,6 @@ async function getTheFile() {
   const [fileHandle] = await window.showOpenFilePicker(pickerOpts);
   // get file contents
   const fileData = await fileHandle.getFile();
-  return fileData;
-
   
     fileName = fileHandle.name.split(".")[0].split(" (")[0];
     notification(`Loaded file: ${fileName}, To load a new reload the page`, 5000);
