@@ -181,7 +181,7 @@
       <p>Quick Edit Notebook is a notebook app powered by HTML 5</p>
       <p>Open a file or make a new notebook to get started</p>
       <button onclick="this.parentElement.close(); newNb();">New Notebook</button>
-      <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">getTheFile
+      <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
       <button id="old" onclick="getOld()">Use last notebook</button>
       <button onclick="getTheFile()">open (dont use)</button>
   </dialog>
@@ -473,7 +473,7 @@ async function getTheFile() {
       {
         description: "Quick edit notebook",
         accept: {
-          "/*": ".qenotebook",
+          'text/json': ['.qenotebook'],
         },
       },
     ],
