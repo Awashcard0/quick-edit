@@ -490,7 +490,7 @@ async function getTheFile() {
     notification(`Loaded file: ${fileName}, To load a new reload the page`, 5000);
     document.getElementById("json-file-input").style.display = "none";
 
-    if (!selectedData || selectedData.length < data.length) {
+    if (!selectedData || selectedData.length < fileData.length) {
       selectedData = fileData;
       updateItemNames();
     }
