@@ -181,8 +181,9 @@
       <p>Quick Edit Notebook is a notebook app powered by HTML 5</p>
       <p>Open a file or make a new notebook to get started</p>
       <button onclick="this.parentElement.close(); newNb();">New Notebook</button>
-      <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
+      <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">getTheFile
       <button id="old" onclick="getOld()">Use last notebook</button>
+      <button onclick="getTheFile()">open (dont use)</button>
   </dialog>
     <dialog id="newNotebook" style="text-align: center;">
         <h1>New notebook</h1>
@@ -465,6 +466,40 @@ function downloadFile() {
 
   URL.revokeObjectURL(url);
 }
+
+async function getTheFile() {
+  const pickerOpts = {
+    types: [
+      {
+        description: "Quick edit notebook",
+        accept: {
+          "/*": ".qenotebook",
+        },
+      },
+    ],
+    excludeAcceptAllOption: true,
+    multiple: false,
+  };
+
+  // open file picker
+  const [fileHandle] = await window.showOpenFilePicker(pickerOpts);
+  // get file contents
+  const fileData = await fileHandle.getFile();
+  return fileData;
+
+  
+    fileName = fileHandle.name.split(".")[0].split(" (")[0];
+    notification(`Loaded file: ${fileName}, To load a new reload the page`, 5000);
+    document.getElementById("json-file-input").style.display = "none";
+
+    if (!selectedData || selectedData.length < data.length) {
+      selectedData = fileData;
+      updateItemNames();
+    }
+
+    startPage.close();
+}
+
 
 function getOld() {
   let data = JSON.parse(localStorage.getItem("nbSave"));
