@@ -495,7 +495,7 @@ async function getTheFile() {
       selectedData = fileData;
       updateItemNames();
     } else {
-      console.log("No", selectedData.length, selectedData, fileData)
+      console.log("No", selectedData.length, selectedData, fileData, fileHandle.getFile())
     }
 
     startPage.close();
