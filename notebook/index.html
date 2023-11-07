@@ -236,6 +236,7 @@
     const oldButton = document.getElementById("old");
     var text = document.getElementById("text");
     let sync = false
+    var fileThing
 
     startPage.showModal();
 // welcome
@@ -395,7 +396,7 @@ function updateSelectedItem() {
     }
 
     if (sync) {
-      const writable = fileHandle.createWritable();
+      const writable = fileThing.createWritable();
 
       writable.write(selectedData);
       
@@ -452,7 +453,7 @@ selectBox.appendChild(option);
 }
 
 if (sync) {
-      const writable = fileHandle.createWritable();
+      const writable = fileThing.createWritable();
 
       writable.write(selectedData);
       
@@ -505,6 +506,8 @@ async function getTheFile() {
 
   // open file picker
   const [fileHandle] = await window.showOpenFilePicker(pickerOpts);
+
+  fileThing = fileHandle;
   // get file contents
   const fileData = await fileHandle.getFile();
   const textThatGot = await fileData.text();
