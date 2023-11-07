@@ -285,7 +285,7 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
     }
 
     setInterval(() => {
-      if (autoSaveTimer = 0) {
+      if (autoSaveTimer === 0) {
         saveText.innerHTML = "Saveing..."
         updateSelectedItem();
       } else if (autoSaveTimer > 0) {
