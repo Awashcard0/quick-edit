@@ -331,6 +331,7 @@ function readFile(file) {
     document.getElementById("json-file-input").style.display = "none";
 
     if (!selectedData || selectedData.length < data.length) {
+      autoSaveTimer = 5;
       selectedData = data;
       updateItemNames();
       sync = false
@@ -533,6 +534,7 @@ async function getTheFile() {
 
     if (!selectedData || selectedData.length < textThatGot.length) {
       selectedData = JSON.parse(textThatGot);
+      autoSaveTimer = 5;
       updateItemNames();
       sync = true;
       saveText.innerHTML = "Sync enabled";
