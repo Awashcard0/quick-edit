@@ -450,8 +450,10 @@ writeFile();
 async function writeFile() {
   if (sync) {
       const writable = await fileThing.createWritable();
+      const encoder = new TextEncoder();
+      const encodedData = encoder.encode(selectedData);
 
-      await writable.write(selectedData);
+      await writable.write(encodedData);
       
       // Close the file and write the contents to disk.
       await writable.close();
