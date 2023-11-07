@@ -288,7 +288,6 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
     }
 
     function AStimer() {
-      console.log("Tick", autoSaveTimer);
     if (autoSaveTimer === 0) {
         saveText.innerHTML = "Saveing..."
         autoSaveTimer = autoSaveTimer - 1
@@ -297,7 +296,7 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
         autoSaveTimer = autoSaveTimer - 1
         saveText.innerHTML = "Save in " + autoSaveTimer;
       } else {
-        console.log("Idk", autoSaveTimer);
+        // Wait
       }
       setTimeout(() => {
         AStimer();
