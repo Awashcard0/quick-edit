@@ -149,15 +149,16 @@
     <div class="menubar">
             <a href="/editers">Quick edit notebook</a>
             <button onclick="copy()">Copy</button>
-            <button onclick="savedoc()">Save</button>
+            <button onclick="savedoc()">Save page</button>
             <button onclick="print()">Print</button>
             <button onclick="cle()">Clear</button>
             <button onclick="settingsPage.showModal()">Settings</button>
             <button onclick="pageTools.showModal()">Page tools</button>
             <button onclick="newnbp();">New Page</button>
             <button onclick="updateSelectedItem()" id="normSave">Update Page</button>
-            <button onclick="downloadFile()">Export</button>
+            <button onclick="downloadFile()">Download</button>
             <button onclick="Readme.showModal();">Read me</button>
+            <span id="save">Not saved</span>
         </div>
         <main>
         <div id="sidebar">
@@ -234,6 +235,7 @@
     const settingsPage = document.getElementById("Setting");
     const startPage = document.getElementById("start");
     const oldButton = document.getElementById("old");
+    var saveText = document.getElementById("save");
     var text = document.getElementById("text");
     let sync = false
     var fileThing
@@ -319,6 +321,7 @@ function readFile(file) {
       selectedData = data;
       updateItemNames();
       sync = false
+      saveText.innerHTML = "Sync disabled";
     }
   };
 
@@ -518,6 +521,7 @@ async function getTheFile() {
       selectedData = JSON.parse(textThatGot);
       updateItemNames();
       sync = true;
+      saveText.innerHTML = "Sync enabled";
     }
 
     startPage.close();
