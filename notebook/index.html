@@ -237,8 +237,9 @@
     const oldButton = document.getElementById("old");
     var saveText = document.getElementById("save");
     var text = document.getElementById("text");
-    let sync = false
-    var fileThing
+    let sync = false;
+    var fileThing;
+    var autoSaveTimer = 5;
 
     startPage.showModal();
 // welcome
@@ -277,9 +278,23 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
     function autoSave() {
       let Asavebox = document.getElementById("autosave");
       if (Asavebox.checked) {
-        updateSelectedItem();
+          autoSaveTimer = 5
       } else {
         // not auto save
+      }
+    }
+
+    setInterval(tick(), 1000);
+
+    function tick() {
+      if (autoSaveTimer = 0) {
+        saveText.innerHTML = "Saveing..."
+        updateSelectedItem();
+      } else if (autoSaveTimer > 0) {
+        autoSaveTimer = autoSaveTimer - 1
+        saveText.innerHTML = "Save in " + autoSaveTimer
+      } else {
+        // Wait for next update
       }
     }
 
@@ -461,6 +476,7 @@ async function writeFile() {
       // Close the file and write the contents to disk.
       await writable.close();
       // Write the contents of the file to the stream.
+      saveText.innerHTML = "Saved to disk";
     }
 }
 
