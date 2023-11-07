@@ -294,9 +294,9 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
         updateSelectedItem();
       } else if (autoSaveTimer > 0) {
         autoSaveTimer = autoSaveTimer - 1
-        saveText.innerHTML = "Save in " + autoSaveTimer
+        saveText.innerHTML = "Save in " + autoSaveTimer;
       } else {
-        // Wait for next update
+        console.log("Idk", autoSaveTimer);
       }
     }
 
