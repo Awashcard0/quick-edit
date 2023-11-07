@@ -278,15 +278,19 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
     function autoSave() {
       let Asavebox = document.getElementById("autosave");
       if (Asavebox.checked) {
-          autoSaveTimer = 5;
+        if (!sync) {
+          updateSelectedItem();
+        }   
+        autoSaveTimer = 5;       
       } else {
         // not auto save
       }
     }
 
-    setInterval(() => {
-      if (autoSaveTimer === 0) {
+    function tick() {
+    if (autoSaveTimer === 0) {
         saveText.innerHTML = "Saveing..."
+        autoSaveTimer = autoSaveTimer - 1
         updateSelectedItem();
       } else if (autoSaveTimer > 0) {
         autoSaveTimer = autoSaveTimer - 1
@@ -294,7 +298,7 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
       } else {
         // Wait for next update
       }
-    }, 1000);
+    }
 
     function notification(notaName, notaTime) {
   var x = document.getElementById("notification");
@@ -336,6 +340,7 @@ function readFile(file) {
       updateItemNames();
       sync = false
       saveText.innerHTML = "Sync disabled";
+      
     }
   };
 
@@ -538,6 +543,7 @@ async function getTheFile() {
       updateItemNames();
       sync = true;
       saveText.innerHTML = "Sync enabled";
+      setInterval(tick(), 1000);
     }
 
     startPage.close();
