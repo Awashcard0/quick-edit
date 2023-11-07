@@ -492,11 +492,8 @@ async function getTheFile() {
     document.getElementById("json-file-input").style.display = "none";
 
     if (!selectedData || selectedData.length < textThatGot.length) {
-      console.log("Loaded", textThatGot) // kill this
-      selectedData = textThatGot;
+      selectedData = JSON.parse(textThatGot);
       updateItemNames();
-    } else {
-      console.log("No", selectedData.length, selectedData, fileData, await fileHandle.getFile(), textThatGot) // this too
     }
 
     startPage.close();
