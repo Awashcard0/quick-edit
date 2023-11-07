@@ -287,7 +287,7 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
       }
     }
 
-    function tick() {
+    function AStimer() {
       console.log("Tick", autoSaveTimer);
     if (autoSaveTimer === 0) {
         saveText.innerHTML = "Saveing..."
@@ -299,7 +299,9 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
       } else {
         console.log("Idk", autoSaveTimer);
       }
-      setTimeout(tick(), 1000);
+      setTimeout(() => {
+        AStimer();
+      }, 1000);
     }
 
     function notification(notaName, notaTime) {
@@ -545,9 +547,9 @@ async function getTheFile() {
       updateItemNames();
       sync = true;
       saveText.innerHTML = "Sync enabled";
-      tick();
+      
     }
-
+    AStimer();
     startPage.close();
 }
 
