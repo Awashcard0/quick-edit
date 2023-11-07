@@ -451,7 +451,7 @@ async function writeFile() {
   if (sync) {
       const writable = await fileThing.createWritable();
       const encoder = new TextEncoder();
-      const encodedData = encoder.encode(selectedData);
+      const encodedData = encoder.encode(JSON.stringify(selectedData));
 
       await writable.write(encodedData);
       
