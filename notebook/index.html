@@ -239,7 +239,7 @@
     var text = document.getElementById("text");
     let sync = false;
     var fileThing;
-    var autoSaveTimer = 5;
+    let autoSaveTimer = 5;
 
     startPage.showModal();
 // welcome
@@ -278,15 +278,13 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
     function autoSave() {
       let Asavebox = document.getElementById("autosave");
       if (Asavebox.checked) {
-          autoSaveTimer = 5
+          autoSaveTimer = 5;
       } else {
         // not auto save
       }
     }
 
-    setInterval(tick(), 1000);
-
-    function tick() {
+    setInterval(() => {
       if (autoSaveTimer = 0) {
         saveText.innerHTML = "Saveing..."
         updateSelectedItem();
@@ -296,7 +294,7 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
       } else {
         // Wait for next update
       }
-    }
+    }, 1000);
 
     function notification(notaName, notaTime) {
   var x = document.getElementById("notification");
