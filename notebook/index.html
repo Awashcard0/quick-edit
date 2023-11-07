@@ -235,6 +235,7 @@
     const startPage = document.getElementById("start");
     const oldButton = document.getElementById("old");
     var text = document.getElementById("text");
+    let sync = false
 
     startPage.showModal();
 // welcome
@@ -316,6 +317,7 @@ function readFile(file) {
     if (!selectedData || selectedData.length < data.length) {
       selectedData = data;
       updateItemNames();
+      sync = false
     }
   };
 
@@ -391,6 +393,16 @@ function updateSelectedItem() {
         localStorage.setItem("nbSave", JSON.stringify(stuffToSave))
       }
     }
+
+    if (sync) {
+      const writable = fileHandle.createWritable();
+
+      writable.write(selectedData);
+      
+      // Close the file and write the contents to disk.
+      writable.close();
+      // Write the contents of the file to the stream.
+    }
   } else {
     error('Error: Page not found', 3000);
   }
@@ -438,6 +450,16 @@ option.setAttribute("onclick", `setItemSelectedData("${names[i]}");`);
 console.log(option)
 selectBox.appendChild(option);
 }
+
+if (sync) {
+      const writable = fileHandle.createWritable();
+
+      writable.write(selectedData);
+      
+      // Close the file and write the contents to disk.
+      writable.close();
+      // Write the contents of the file to the stream.
+    }
 }
 
 function setItemSelectedData(name) {
@@ -494,6 +516,7 @@ async function getTheFile() {
     if (!selectedData || selectedData.length < textThatGot.length) {
       selectedData = JSON.parse(textThatGot);
       updateItemNames();
+      sync = true;
     }
 
     startPage.close();
