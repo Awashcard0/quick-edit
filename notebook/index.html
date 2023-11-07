@@ -381,6 +381,7 @@ function addItem() {
   document.getElementById('text').value = '';
   updateItemNames();
   newDiap.close();
+  autoSaveTimer = 5;   
 }
 
 function deleteSelectedItem() {
@@ -391,6 +392,7 @@ function deleteSelectedItem() {
   if (index >= 0) {
     selectedData.splice(index, 1);
     updateItemNames();
+    autoSaveTimer = 5;   
   } else {
     error('Error: Page not found', 3000);
   }
@@ -449,6 +451,8 @@ function renameSelectedItem() {
       if (saveToLocal.checked) {
         localStorage.setItem("nbSave", selectedData)
       }
+
+      autoSaveTimer = 5;
     }
   } else {
     error('Error: Page not found', 3000);
