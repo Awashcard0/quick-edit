@@ -288,6 +288,7 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
     }
 
     function tick() {
+      console.log("Tick", autoSaveTimer);
     if (autoSaveTimer === 0) {
         saveText.innerHTML = "Saveing..."
         autoSaveTimer = autoSaveTimer - 1
