@@ -181,9 +181,9 @@
       <p>Quick Edit Notebook is a notebook app powered by HTML 5</p>
       <p>Open a file or make a new notebook to get started</p>
       <button onclick="this.parentElement.close(); newNb();">New Notebook</button>
-      <button onclick="getTheFile()">Open with file syn</button>
+      <button onclick="getTheFile()">Open with file sync</button>
       <button id="old" onclick="getOld()">Use last notebook</button>
-      Only use this if nothing works: <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
+      Legacy: <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
   </dialog>
     <dialog id="newNotebook" style="text-align: center;">
         <h1>New notebook</h1>
