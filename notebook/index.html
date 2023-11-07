@@ -239,7 +239,7 @@
     var text = document.getElementById("text");
     let sync = false;
     var fileThing;
-    let autoSaveTimer = 5;
+    let autoSaveTimer = 6;
 
     startPage.showModal();
 // welcome
@@ -281,7 +281,7 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
         if (!sync) {
           updateSelectedItem();
         }   
-        autoSaveTimer = 5;       
+        autoSaveTimer = 6;       
       } else {
         // not auto save
       }
@@ -338,7 +338,7 @@ function readFile(file) {
     document.getElementById("json-file-input").style.display = "none";
 
     if (!selectedData || selectedData.length < data.length) {
-      autoSaveTimer = 5;
+      autoSaveTimer = 6;
       selectedData = data;
       updateItemNames();
       sync = false
@@ -381,7 +381,7 @@ function addItem() {
   document.getElementById('text').value = '';
   updateItemNames();
   newDiap.close();
-  autoSaveTimer = 5;   
+  autoSaveTimer = 6;   
 }
 
 function deleteSelectedItem() {
@@ -392,7 +392,7 @@ function deleteSelectedItem() {
   if (index >= 0) {
     selectedData.splice(index, 1);
     updateItemNames();
-    autoSaveTimer = 5;   
+    autoSaveTimer = 6;   
   } else {
     error('Error: Page not found', 3000);
   }
@@ -452,7 +452,7 @@ function renameSelectedItem() {
         localStorage.setItem("nbSave", selectedData)
       }
 
-      autoSaveTimer = 5;
+      autoSaveTimer = 6;
     }
   } else {
     error('Error: Page not found', 3000);
@@ -546,7 +546,7 @@ async function getTheFile() {
 
     if (!selectedData || selectedData.length < textThatGot.length) {
       selectedData = JSON.parse(textThatGot);
-      autoSaveTimer = 5;
+      autoSaveTimer = 6;
       updateItemNames();
       sync = true;
       saveText.innerHTML = "Sync enabled";
