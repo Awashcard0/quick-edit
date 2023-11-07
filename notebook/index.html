@@ -292,7 +292,7 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
         saveText.innerHTML = "Saveing..."
         autoSaveTimer = autoSaveTimer - 1
         updateSelectedItem();
-      } else if (autoSaveTimer > 0) {
+      } else if (autoSaveTimer < 0) {
         autoSaveTimer = autoSaveTimer - 1
         saveText.innerHTML = "Save in " + autoSaveTimer
       } else {
