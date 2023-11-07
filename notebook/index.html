@@ -299,6 +299,7 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
       } else {
         console.log("Idk", autoSaveTimer);
       }
+      setTimeout(tick(), 1000);
     }
 
     function notification(notaName, notaTime) {
@@ -544,7 +545,7 @@ async function getTheFile() {
       updateItemNames();
       sync = true;
       saveText.innerHTML = "Sync enabled";
-      setInterval(tick(), 1000);
+      tick();
     }
 
     startPage.close();
