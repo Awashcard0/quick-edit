@@ -395,15 +395,7 @@ function updateSelectedItem() {
       }
     }
 
-    if (sync) {
-      const writable = fileThing.createWritable();
-
-      writable.write(selectedData);
-      
-      // Close the file and write the contents to disk.
-      writable.close();
-      // Write the contents of the file to the stream.
-    }
+    writeFile()
   } else {
     error('Error: Page not found', 3000);
   }
@@ -452,13 +444,17 @@ console.log(option)
 selectBox.appendChild(option);
 }
 
-if (sync) {
-      const writable = fileThing.createWritable();
+writeFile();
+}
 
-      writable.write(selectedData);
+async function writeFile() {
+  if (sync) {
+      const writable = await fileThing.createWritable();
+
+      await writable.write(selectedData);
       
       // Close the file and write the contents to disk.
-      writable.close();
+      await writable.close();
       // Write the contents of the file to the stream.
     }
 }
