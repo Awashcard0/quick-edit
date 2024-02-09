@@ -149,16 +149,16 @@
     <div class="menubar">
             <a href="/editers">Quick edit notebook</a>
             <button onclick="copy()">Copy</button>
-            <button onclick="savedoc()">Save page</button>
+            <button onclick="savedoc()">Download page</button>
             <button onclick="print()">Print</button>
             <button onclick="cle()">Clear</button>
             <button onclick="settingsPage.showModal()">Settings</button>
             <button onclick="pageTools.showModal()">Page tools</button>
             <button onclick="newnbp();">New Page</button>
             <button onclick="updateSelectedItem()" id="normSave">Update Page</button>
-            <button onclick="downloadFile()">Download</button>
+            <button onclick="downloadFile()">Download file</button>
             <button onclick="Readme.showModal();">Read me</button>
-            <span id="save">Not saved</span>
+            <span id="file">No file</span><span> - </span><span id="save">Not saved</span>
         </div>
         <main>
         <div id="sidebar">
@@ -325,7 +325,7 @@ console.error(notaName)
 let selectedFile = null;
 let selectedData = [];
 let fileName = ""
-let selectedName = ""
+let selectedId = ""
 
 function readFile(file) {
   const reader = new FileReader();
@@ -381,13 +381,14 @@ function addItem() {
   document.getElementById('text').value = '';
   updateItemNames();
   newDiap.close();
+  setItemSelectedData(id);
   autoSaveTimer = 6;   
 }
 
 function deleteSelectedItem() {
     if (confirm("This action cannot be undone!")) {
       pageTools.close();
-  const index = selectedData.findIndex(item => item.name === selectedName);
+  const index = selectedData.findIndex(item => item.id === selectedId);
 
   if (index >= 0) {
     selectedData.splice(index, 1);
@@ -399,12 +400,12 @@ function deleteSelectedItem() {
 }
 }
 
-function updateSelectedItem() {
+async function updateSelectedItem() {
   let saveToLocal = document.getElementById("saveToLocal");
   const nameInput = document.getElementById('name-input');
   const textInput = document.getElementById('text');
 
-  const itemToUpdate = selectedData.find(item => item.name === selectedName);
+  const itemToUpdate = selectedData.find(item => item.id === selectedId);
 
   if (itemToUpdate) {
     // const newName = itemToUpdate.name
@@ -425,6 +426,7 @@ function updateSelectedItem() {
     writeFile()
   } else {
     error('Error: Page not found', 3000);
+    saveText.innerHTML = "Error";
   }
 }
 
@@ -435,7 +437,7 @@ function renameSelectedItem() {
   const textInput = document.getElementById('text');
 
 
-  const itemToUpdate = selectedData.find(item => item.name === selectedName);
+  const itemToUpdate = selectedData.find(item => item.id === selectedId);
 
   if (itemToUpdate) {
     const newName = nameInput.value;
@@ -460,16 +462,17 @@ function renameSelectedItem() {
 }
 
 function updateItemNames() {
+const ids = selectedData.map(item => item.id);
 const names = selectedData.map(item => item.name);
 const selectBox = document.getElementById('page-list');
 
 selectBox.innerHTML = ""
 
-for (let i = 0; i < names.length; i++) {
+for (let i = 0; i < ids.length; i++) {
 let option = document.createElement('li');
 option.innerHTML = names[i];
-option.setAttribute("onclick", `setItemSelectedData("${names[i]}");`);
-console.log(option)
+option.setAttribute("onclick", `setItemSelectedData(${ids[i]});`);
+// console.log(option)
 selectBox.appendChild(option);
 }
 
@@ -491,14 +494,16 @@ async function writeFile() {
     }
 }
 
-function setItemSelectedData(name) {
-  selectedName = name;
-  const item = selectedData.find(item => item.name === selectedName);
+async function setItemSelectedData(id) {
+  await updateSelectedItem()
+  selectedId = id;
+  const item = selectedData.find(item => item.id === selectedId);
 
   if (item) {
     document.getElementById('rename-input').value = item.name;
     document.getElementById('text').value = item.text;
-    notification(`Selected page: ${name}`, 3000);
+    document.getElementById('file').innerText = item.name;
+    notification(`Selected page: ${item.name}`, 3000);
   } else {
     error('Error: Page not found', 3000);
   }
