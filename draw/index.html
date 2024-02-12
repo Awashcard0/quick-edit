@@ -16,17 +16,14 @@
 <button onclick="clearCanvas()">Clear Canvas</button>
 <br>
 <label for="color">Color:</label>
-<select id="color" onchange="changeColor(this.value)">
-    <option value="black">Black</option>
-    <option value="red">Red</option>
-    <option value="green">Green</option>
-    <option value="blue">Blue</option>
-</select>
+<input type="color" id="color" name="" onchange="changeColor(this.value)">
 <label for="size">Size:</label>
 <select id="size" onchange="changeSize(this.value)">
     <option value="2">Small</option>
     <option value="5">Medium</option>
     <option value="10">Large</option>
+    <option value="20">Very Large</option>
+    <option value="30">Much Larger</option>
 </select>
 </body>
 <script>
@@ -81,5 +78,8 @@
     function changeSize(newSize) {
         size = newSize;
     }
+
+//     ctx.fillStyle = "blue";
+// ctx.fillRect(0, 0, canvas.width, canvas.height);
 </script>
 </html>
