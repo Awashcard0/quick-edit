@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick edit draw</title>
+    <style>
+        canvas {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="800" height="600"></canvas>
+<br>
+<button onclick="clearCanvas()">Clear Canvas</button>
+<br>
+<label for="color">Color:</label>
+<select id="color" onchange="changeColor(this.value)">
+    <option value="black">Black</option>
+    <option value="red">Red</option>
+    <option value="green">Green</option>
+    <option value="blue">Blue</option>
+</select>
+<label for="size">Size:</label>
+<select id="size" onchange="changeSize(this.value)">
+    <option value="2">Small</option>
+    <option value="5">Medium</option>
+    <option value="10">Large</option>
+</select>
+</body>
+<script>
+    var canvas = document.getElementById('myCanvas');
+    var context = canvas.getContext('2d');
+    var isPainting = false;
+    var lastX, lastY;
+    var color = 'black';
+    var size = 2;
+
+    canvas.addEventListener('mousedown', function(e) {
+        isPainting = true;
+        lastX = e.offsetX;
+        lastY = e.offsetY;
+    });
+
+    canvas.addEventListener('mousemove', function(e) {
+        if (isPainting) {
+            var x = e.offsetX;
+            var y = e.offsetY;
+
+            context.strokeStyle = color;
+            context.lineWidth = size;
+            context.lineCap = 'round';
+
+            context.beginPath();
+            context.moveTo(lastX, lastY);
+            context.lineTo(x, y);
+            context.stroke();
+
+            lastX = x;
+            lastY = y;
+        }
+    });
+
+    canvas.addEventListener('mouseup', function() {
+        isPainting = false;
+    });
+
+    canvas.addEventListener('mouseleave', function() {
+        isPainting = false;
+    });
+
+    function clearCanvas() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function changeColor(newColor) {
+        color = newColor;
+    }
+
+    function changeSize(newSize) {
+        size = newSize;
+    }
+</script>
+</html>

@@ -503,6 +503,7 @@ async function setItemSelectedData(id) {
     document.getElementById('rename-input').value = item.name;
     document.getElementById('text').value = item.text;
     document.getElementById('file').innerText = item.name;
+    document.title = item.name + " - " + fileName + " - Quick edit notebook"
     notification(`Selected page: ${item.name}`, 3000);
   } else {
     error('Error: Page not found', 3000);
