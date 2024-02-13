@@ -3,28 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
     <title>Quick edit draw</title>
     <style>
-        canvas {
-            border: 2px solid black;
-        }
+    body {
+      font-family: 'Ubuntu', sans-serif;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      background-color: #888888;
+    }
+
+    canvas {
+      width: 99.58%;
+      height: 95.7vh;
+      /* height: 95.7vh;
+      width: 99.58vw; */
+      border: 2px solid black;
+      font-family: 'Ubuntu', sans-serif;
+      background-color: #888888;
+      font-size: 17px;
+    }
+
+    #snackbar {
+      visibility: hidden;
+      min-width: 200px;
+      margin-left: -125px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 35px;
+    }
+
+    #del {
+      visibility: hidden;
+      min-width: 100px;
+      margin-left: -100px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 35px;
+    }
+
+    #sav {
+      visibility: hidden;
+      min-width: 100px;
+      margin-left: -100px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 35px;
+    }
+
+    #welcome {
+      visibility: hidden;
+      min-width: 100px;
+      margin-left: -100px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 35px;
+    }
+
+    #snackbar.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    #del.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    #sav.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    #welcome.show {
+      border-radius: 25px;
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    @-webkit-keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @-webkit-keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+
+    .menubar {
+  background-color: #616161;
+  padding: 5px 15px;
+  display: flex;
+  align-items: center;
+}
+
+.menubar button, 
+.menubar input {
+  margin-left: 2.5px;
+}
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="800" height="600"></canvas>
-<br>
-<button onclick="clearCanvas()">Clear Canvas</button>
-<br>
-<label for="color">Color:</label>
-<input type="color" id="color" name="" onchange="changeColor(this.value)">
-<label for="size">Size:</label>
-<select id="size" onchange="changeSize(this.value)">
-    <option value="2">Small</option>
-    <option value="5">Medium</option>
-    <option value="10">Large</option>
-    <option value="20">Very Large</option>
-    <option value="30">Much Larger</option>
-</select>
+    <div class="menubar">
+        <a href="/editers">Quick edit draw</a>
+        <button onclick="location.href = 'https://github.com/Awashcard0/quick-edit'">Github</button>
+        <button onclick="exportAsPNG()">Export PNG</button>
+        <button onclick="clearCanvas()">Clear Canvas</button>
+        <label for="color">&nbsp;Color:</label>
+        <input type="color" id="color" value="#000000" name="" onchange="changeColor(this.value)">
+        <label for="size">&nbsp;Size:</label>
+        <select id="size" value="2" onchange="changeSize(this.value)">
+            <option value="2">Small</option>
+            <option value="5">Medium</option>
+            <option value="10">Large</option>
+            <option value="20">Very Large</option>
+            <option value="30">Much Larger</option>
+        </select>
+        <button onclick="saveCanvas()">Save</button>
+        <button onclick="saveCanvasAsFile()">Save as file</button>
+        <button onclick="loadCanvas()">Load</button>
+        <input accept=".qedraw" type="file" id="file-input" />
+              </div>
+              <div>
+        <noscript>
+          <h1>Where are your maners?</h1>
+          <h2>You need javascript to use this</h2>
+        </noscript>
+        <div>
+    <canvas id="myCanvas" height="95.7vh" width="width: 99.58%"></canvas>
 </body>
 <script>
     var canvas = document.getElementById('myCanvas');
@@ -33,6 +214,20 @@
     var lastX, lastY;
     var color = 'black';
     var size = 2;
+
+    if (localStorage.getItem("savedCanvas")) {
+      if (confirm("Do you want to load old changes?") == true) {
+        loadCanvas();
+      } else {
+        let savcode = localStorage.getItem("savedCanvas");
+        localStorage.removeItem("savedCanvas");
+        localStorage.setItem("savedCanvas", savcode)
+      }
+    }
+
+    var computedStyle = window.getComputedStyle(canvas);
+    canvas.width = parseInt(computedStyle.getPropertyValue('width'), 10);
+    canvas.height = parseInt(computedStyle.getPropertyValue('height'), 10);
 
     canvas.addEventListener('mousedown', function(e) {
         isPainting = true;
@@ -61,10 +256,7 @@
 
     canvas.addEventListener('mouseup', function() {
         isPainting = false;
-    });
-
-    canvas.addEventListener('mouseleave', function() {
-        isPainting = false;
+        localStorage.setItem('savedCanvas', canvas.toDataURL());
     });
 
     function clearCanvas() {
@@ -78,8 +270,75 @@
     function changeSize(newSize) {
         size = newSize;
     }
+    
+    function exportAsPNG() {
+        var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        var link = document.createElement('a');
+        link.download = `${prompt("What should we name the file\n(Just the name not the .png)", "picture")}.png`;
+        link.href = image;
+        link.click();
+    }
 
-//     ctx.fillStyle = "blue";
-// ctx.fillRect(0, 0, canvas.width, canvas.height);
+    function saveCanvas() {
+        localStorage.setItem('savedCanvas', canvas.toDataURL());
+    }
+
+    function loadCanvas() {
+        var savedCanvasData = localStorage.getItem('savedCanvas');
+        if (savedCanvasData) {
+            var img = new Image();
+            img.onload = function() {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(img, 0, 0);
+            };
+            img.src = savedCanvasData;
+        } else {
+            alert("No saved canvas found.");
+        }
+    }
+
+    function saveCanvasAsFile() {
+        var data = canvas.toDataURL();
+        var filename = prompt("File name?\nex. filename") + ".qedraw"
+        if (confirm("You are saving the file as " + filename) == true) {
+          var textFileAsBlob = new Blob([data], {
+            type: 'text/plain'
+          });
+         
+        var link = document.createElement('a');
+        link.download = filename;
+        link.href = window.URL.createObjectURL(textFileAsBlob);;
+        link.click();
+        }
+    }
+
+    document.getElementById('file-input').addEventListener('change', loadCanvasAsFile, false);
+
+    function loadCanvasAsFile(e) {
+      var file = e.target.files[0];
+      if (!file) {
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var contents = e.target.result;
+        displayContents(contents);
+      };
+      reader.readAsText(file);
+    }
+
+    function displayContents(contents) {
+        var savedCanvasData = contents;
+        if (savedCanvasData) {
+            var img = new Image();
+            img.onload = function() {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(img, 0, 0);
+            };
+            img.src = savedCanvasData;
+        } else {
+            alert("No saved canvas found.");
+        }
+    }
 </script>
 </html>
