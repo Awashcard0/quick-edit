@@ -188,13 +188,16 @@
         <input type="color" id="color" value="#000000" name="" onchange="changeColor(this.value)">
         <label for="size">&nbsp;Size:</label>
         <select id="size" value="2" onchange="changeSize(this.value)">
-            <option value="2">Small</option>
-            <option value="5">Medium</option>
-            <option value="10">Large</option>
-            <option value="20">Very Large</option>
-            <option value="30">Much Larger</option>
+            <option value="2">Much Small</option>
+            <option value="5">Very Small</option>
+            <option value="7">Small</option>
+            <option value="10">Medium</option>
+            <option value="20">Large</option>
+            <option value="30">Very Large</option>
+            <option value="40">Much Larger</option>
+            <option value="me">I want control</option>
         </select>
-        <button onclick="saveCanvas()">Save</button>
+        <input type="number" id="num" min="1" width="10" style="display: none;" onchange="changeSizeInput(this.value)">
         <button onclick="saveCanvasAsFile()">Save as file</button>
         <button onclick="loadCanvas()">Load</button>
         <input accept=".qedraw" type="file" id="file-input" />
@@ -268,9 +271,19 @@
     }
 
     function changeSize(newSize) {
-        size = newSize;
+        console.log(newSize)
+        if (newSize == "me") {
+            document.getElementById("num").style.display = "";
+        } else {
+            document.getElementById("num").style.display = "none";
+            size = newSize;
+        }
     }
     
+    function changeSizeInput(newSize) {
+        size = newSize;
+    }
+
     function exportAsPNG() {
         var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
         var link = document.createElement('a');
