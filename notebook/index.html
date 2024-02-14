@@ -243,15 +243,12 @@
 
     startPage.showModal();
 // welcome
-console.log("crunt:", document.getElementById("saveToLocal").checked);
     setTimeout(function() {
       notification("Welcome to quick edit notebook beta (Read the read me in the tool bar)", 3000);
 
       let Asavebox = document.getElementById("autosave");
       Asavebox.checked = (localStorage.getItem("AutosaveBox") === "true")
-      console.log("Setting:", localStorage.getItem("saveToLocalBox"), "chexhed:", document.getElementById("saveToLocal").checked);
       document.getElementById("saveToLocal").checked = (localStorage.getItem("saveToLocalBox") === "true")
-      console.log("After setting Ls:", localStorage.getItem("saveToLocalBox"), "chexhed:", document.getElementById("saveToLocal").checked);
       UpdateSetting();
 
       if (JSON.parse(localStorage.getItem("nbSave"))) {
@@ -266,7 +263,6 @@ console.log("crunt:", document.getElementById("saveToLocal").checked);
       let normSave = document.getElementById("normSave");
       let saveToLocal = document.getElementById("saveToLocal");
       localStorage.setItem("AutosaveBox", Asavebox.checked);
-      console.log("Updating Ls:", localStorage.getItem("saveToLocalBox"), "chexhed:", document.getElementById("saveToLocal").checked);
       localStorage.setItem("saveToLocalBox", saveToLocal.checked);
       if (Asavebox.checked) {
         normSave.style.display = "none";

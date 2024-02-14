@@ -209,6 +209,8 @@
         </noscript>
         <div>
     <canvas id="myCanvas" height="95.7vh" width="width: 99.58%"></canvas>
+    <div id="notification"></div>
+    <div id="error"></div>
 </body>
 <script>
     var canvas = document.getElementById('myCanvas');
@@ -353,5 +355,25 @@
             alert("No saved canvas found.");
         }
     }
+
+    function notification(notaName, notaTime) {
+  var x = document.getElementById("notification");
+  x.innerHTML = notaName
+  x.className = "show";
+  setTimeout(function() {
+    x.className = x.className.replace("show", "");
+  }, notaTime);
+}
+
+function error(notaName, notaTime) {
+console.error(notaName)
+  var x = document.getElementById("error");
+  x.innerHTML = notaName
+  x.className = "show";
+  setTimeout(function() {
+    x.className = x.className.replace("show", "");
+  }, notaTime);
+}
+
 </script>
 </html>
