@@ -200,7 +200,8 @@
         <input type="number" id="num" min="1" width="10" style="display: none;" size="5" onchange="changeSizeInput(this.value)">
         <button onclick="saveCanvasAsFile()">Save as file</button>
         <button onclick="loadCanvas()">Load</button>
-        <input accept=".qedraw" type="file" id="file-input" />
+        Upload .qedraw:<input accept=".qedraw" type="file" id="file-input" />
+        Upload .png<input type="file" id="imageLoader" name="imageLoader" accept="image/png" onchange="uploadImage(event)">
               </div>
               <div>
         <noscript>
@@ -354,6 +355,19 @@
         } else {
             alert("No saved canvas found.");
         }
+    }
+
+    function uploadImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            var img = new Image();
+            img.onload = function() {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(img, 0, 0);
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
     }
 
     function notification(notaName, notaTime) {
