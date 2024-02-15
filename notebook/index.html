@@ -64,14 +64,15 @@
             margin-left: 2.5px;
         }
 
-        textarea {
+        textarea, canvas {
             width: 100%;
             height: 100%;
             font-family: 'Ubuntu', sans-serif;
             background-color: #a1a1a1;
             font-size: 17px;
-            border: none;
             outline: none;
+            width: 99.58%;
+            border: 2px solid black;
         }
         
         @keyframes fadein {
@@ -148,14 +149,34 @@
 <body>
     <div class="menubar">
             <a href="/editers">Quick edit notebook</a>
-            <button onclick="copy()">Copy</button>
-            <button onclick="savedoc()">Download page</button>
-            <button onclick="print()">Print</button>
-            <button onclick="cle()">Clear</button>
+            <div id="textToolbar" style="display: inline-block;">
+              <button onclick="copy()">Copy</button>
+              <button onclick="savedoc()">Download page</button>
+              <button onclick="print()">Print</button>
+              <button onclick="cle()">Clear</button>
+            </div>
+            <div id="drawToolbar" style="display: none;">
+              <button onclick="exportAsPNG()">Export PNG</button>
+              <button onclick="clearCanvas()">Clear Canvas</button>
+              <label for="color">&nbsp;Color:</label>
+              <input type="color" id="color" value="#000000" name="" onchange="changeColor(this.value)">
+              <label for="size">&nbsp;Size:</label>
+              <select id="size" value="2" onchange="changeSize(this.value)">
+                  <option value="2">Much Small</option>
+                  <option value="5">Very Small</option>
+                  <option value="7">Small</option>
+                  <option value="10">Medium</option>
+                  <option value="20">Large</option>
+                  <option value="30">Very Large</option>
+                  <option value="40">Much Larger</option>
+                  <option value="me">I want control</option>
+              </select>
+              <input type="number" id="num" min="1" width="10" style="display: none;" size="5" onchange="changeSizeInput(this.value)">
+            </div>
             <button onclick="settingsPage.showModal()">Settings</button>
             <button onclick="pageTools.showModal()">Page tools</button>
             <button onclick="newnbp();">New Page</button>
-            <button onclick="updateSelectedItem()" id="normSave">Update Page</button>
+            <button onclick="updateSelectedItem()" id="normSave">Save</button>
             <button onclick="downloadFile()">Download file</button>
             <button onclick="Readme.showModal();">Read me</button>
             <span id="file">No file</span><span> - </span><span id="save">Not saved</span>
@@ -167,11 +188,12 @@
         </ul>  
       </div>
     <div id="editor">
-        <textarea type="text" id="text" name="text" placeholder="Edit text here" onkeyup="autoSave();" autofocus></textarea>
         <noscript>
-            <h1>Where are your manners?</h1>
-            <h2>You need javascript to use this</h2>
+          <h1>Where are your manners?</h1>
+          <h2>You need javascript to use this</h2>
         </noscript>
+        <textarea type="text" id="text" name="text" style="display: none;" placeholder="Edit text here" onkeyup="autoSave();" autofocus></textarea>
+        <canvas id="myCanvas"></canvas>
     </div>
     </main>
   
@@ -179,6 +201,7 @@
     <div id="error"></div>
     <dialog id="start" style="text-align: center;">
       <h1>Welcome to Quick Edit Notebook</h1>
+      <p>Now with drawing things</p>
       <p>Quick Edit Notebook is a notebook app powered by HTML 5</p>
       <p>Open a file or make a new notebook to get started</p>
       <button onclick="this.parentElement.close(); newNb();">New Notebook</button>
@@ -195,6 +218,13 @@
     <dialog id="Newp" style="text-align: center;">
         <h1>New page</h1>
         <input type="text" id="name-input" placeholder="Name of page">
+        <form id="type">
+          <p>Select a display:</p>
+          <input type="radio" id="type1" name="type" value="text" checked>
+          <label for="type1">Text</label><br>
+          <input type="radio" id="type2" name="type" value="draw">
+          <label for="type2">Draw</label>
+          </form>
         <br><button onclick="addItem()">Add page</button>
         <button onclick="nonewp();">Close</button>
     </dialog>
@@ -237,18 +267,29 @@
     const oldButton = document.getElementById("old");
     var saveText = document.getElementById("save");
     var text = document.getElementById("text");
+    let typeElements = document.getElementById('type').elements
+    var canvas = document.getElementById('myCanvas');
+    var context = canvas.getContext('2d');
+    var isPainting = false;
+    var lastX, lastY;
+    var color = 'black';
+    var size = 2;
     let sync = false;
     var fileThing;
     let autoSaveTimer = 6;
 
     startPage.showModal();
+
+    var computedStyle = window.getComputedStyle(canvas);
+    canvas.width = parseInt(computedStyle.getPropertyValue('width'), 10);
+    canvas.height = parseInt(computedStyle.getPropertyValue('height'), 10);
 // welcome
     setTimeout(function() {
       notification("Welcome to quick edit notebook beta (Read the read me in the tool bar)", 3000);
 
       let Asavebox = document.getElementById("autosave");
-      Asavebox.checked = (localStorage.getItem("AutosaveBox") === "true")
-      document.getElementById("saveToLocal").checked = (localStorage.getItem("saveToLocalBox") === "true")
+      Asavebox.checked = (localStorage.getItem("AutosaveBox") === "true");
+      document.getElementById("saveToLocal").checked = (localStorage.getItem("saveToLocalBox") === "true");
       UpdateSetting();
 
       if (JSON.parse(localStorage.getItem("nbSave"))) {
@@ -285,11 +326,11 @@
 
     function AStimer() {
     if (autoSaveTimer === 0) {
-        saveText.innerHTML = "Saveing..."
-        autoSaveTimer = autoSaveTimer - 1
+        saveText.innerHTML = "Saveing...";
+        autoSaveTimer = autoSaveTimer - 1;
         updateSelectedItem();
       } else if (autoSaveTimer > 0) {
-        autoSaveTimer = autoSaveTimer - 1
+        autoSaveTimer = autoSaveTimer - 1;
         saveText.innerHTML = "Save in " + autoSaveTimer;
       } else {
         // Wait
@@ -301,7 +342,7 @@
 
     function notification(notaName, notaTime) {
   var x = document.getElementById("notification");
-  x.innerHTML = notaName
+  x.innerHTML = notaName;
   x.className = "show";
   setTimeout(function() {
     x.className = x.className.replace("show", "");
@@ -309,9 +350,9 @@
 }
 
 function error(notaName, notaTime) {
-console.error(notaName)
+console.error(notaName);
   var x = document.getElementById("error");
-  x.innerHTML = notaName
+  x.innerHTML = notaName;
   x.className = "show";
   setTimeout(function() {
     x.className = x.className.replace("show", "");
@@ -320,8 +361,9 @@ console.error(notaName)
 
 let selectedFile = null;
 let selectedData = [];
-let fileName = ""
-let selectedId = ""
+let fileName = "";
+let selectedId = "";
+let selectedType = "text";
 
 function readFile(file) {
   const reader = new FileReader();
@@ -337,7 +379,7 @@ function readFile(file) {
       autoSaveTimer = 6;
       selectedData = data;
       updateItemNames();
-      sync = false
+      sync = false;
       saveText.innerHTML = "Sync disabled";
       
     }
@@ -353,9 +395,10 @@ function readFile(file) {
 function createNewFile() {
   const filename = document.getElementById('new-file-name').value;
   const id = 0;
-  const name = "First page (Use page tools to rename)"
-  const text = ""
-  const data = selectedData ? [...selectedData, {id, name, text}] : [{id, name, text}];
+  const name = "First page (Use page tools to rename)";
+  const text = "";
+  const type = "text";
+  const data = selectedData ? [...selectedData, {id, name, type, text}] : [{id, name, type, text}];
   const json = JSON.stringify(data);
   const blob = new Blob([json], {type: 'application/json'});
   const link = document.createElement('a');
@@ -364,14 +407,21 @@ function createNewFile() {
   link.click();
   newDia.close();
   startPage.showModal();
-  notification("Open the file to continue", 3000)
+  notification("Open the file to continue", 3000);
 }
 
 function addItem() {
   const name = document.getElementById('name-input').value;
-  const text = ""
+  const text = "";
+  let type = "";
   const id = selectedData ? selectedData[selectedData.length - 1].id + 1 : 1;
-  const newItem = {id, name, text};
+  if (typeElements[0].checked == true) {
+    type = "text";
+} else if (typeElements[1].checked == true) {
+    type = "draw";
+} 
+
+  const newItem = {id, name, type, text};
   selectedData.push(newItem);
   document.getElementById('name-input').value = '';
   document.getElementById('text').value = '';
@@ -399,27 +449,37 @@ function deleteSelectedItem() {
 async function updateSelectedItem() {
   let saveToLocal = document.getElementById("saveToLocal");
   const nameInput = document.getElementById('name-input');
-  const textInput = document.getElementById('text');
 
   const itemToUpdate = selectedData.find(item => item.id === selectedId);
 
   if (itemToUpdate) {
-    // const newName = itemToUpdate.name
-    const newText = text.value;
+    if (selectedType == "oldtext" || selectedType == "text") {
+      const textInput = document.getElementById('text');
+  
+      // const newName = itemToUpdate.name
+      const newText = text.value;
 
-    if (newText) {
-      // itemToUpdate.name = newName;
-      itemToUpdate.text = newText;
-      // nameInput.value = newName;
-      textInput.value = newText;
-      // updateItemNames();
-      if (saveToLocal.checked) {
-        const stuffToSave = {"name": fileName, "data": selectedData}
-        localStorage.setItem("nbSave", JSON.stringify(stuffToSave))
+      if (newText) {
+        // itemToUpdate.name = newName;
+        itemToUpdate.text = newText;
+        // nameInput.value = newName;
+        textInput.value = newText;
+        // updateItemNames();
+        if (selectedType == "oldtext") {
+          itemToUpdate.type = "text";
+        }
       }
+    } else if (selectedType == "draw") {
+      var data = canvas.toDataURL();
+      itemToUpdate.text = data;
+    }
+    
+    if (saveToLocal.checked) {
+      const stuffToSave = {"name": fileName, "data": selectedData};
+      localStorage.setItem("nbSave", JSON.stringify(stuffToSave));
     }
 
-    writeFile()
+    writeFile();
   } else {
     error('Error: Page not found', 3000);
     saveText.innerHTML = "Error";
@@ -447,7 +507,8 @@ function renameSelectedItem() {
       updateItemNames();
 
       if (saveToLocal.checked) {
-        localStorage.setItem("nbSave", selectedData)
+        const stuffToSave = {"name": fileName, "data": selectedData};
+        localStorage.setItem("nbSave", JSON.stringify(stuffToSave));
       }
 
       autoSaveTimer = 6;
@@ -462,7 +523,7 @@ const ids = selectedData.map(item => item.id);
 const names = selectedData.map(item => item.name);
 const selectBox = document.getElementById('page-list');
 
-selectBox.innerHTML = ""
+selectBox.innerHTML = "";
 
 for (let i = 0; i < ids.length; i++) {
 let option = document.createElement('li');
@@ -491,23 +552,68 @@ async function writeFile() {
 }
 
 async function setItemSelectedData(id) {
-  await updateSelectedItem()
+  await updateSelectedItem();
   selectedId = id;
   const item = selectedData.find(item => item.id === selectedId);
+  const textTool = document.getElementById("textToolbar");
+  const drawTool = document.getElementById("drawToolbar");
 
-  if (item) {
+  if (item.type == "text") {
+    // Get ready for text
+    textTool.style.display = "inline-block";
+    drawTool.style.display = "none";
+    document.getElementById("text").style.display = "";
+    document.getElementById("myCanvas").style.display = "none";
+
+    selectedType = "text";
     document.getElementById('rename-input').value = item.name;
     document.getElementById('text').value = item.text;
     document.getElementById('file').innerText = item.name;
-    document.title = item.name + " - " + fileName + " - Quick edit notebook"
+    document.title = item.name + " - " + fileName + " - Quick edit notebook";
+    notification(`Selected page: ${item.name}`, 3000);
+  } else if (item.type == "draw") {
+    // Get ready for draw
+    drawTool.style.display = "inline-block";
+    textTool.style.display = "none";
+    document.getElementById("myCanvas").style.display = "";
+    document.getElementById("text").style.display = "none";
+
+    context.clearRect(0, 0, canvas.width, canvas.height); // Clear the context to stop picture roll ovrt
+
+    var savedCanvasData = item.text;
+        if (savedCanvasData) {
+            var img = new Image();
+            img.onload = function() {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(img, 0, 0);
+            };
+            img.src = savedCanvasData;
+        } else {
+          
+        }
+
+    selectedType = "draw";
+    document.getElementById('rename-input').value = item.name;
+    document.getElementById('file').innerText = item.name;
+    document.title = item.name + " - " + fileName + " - Quick edit notebook";
     notification(`Selected page: ${item.name}`, 3000);
   } else {
-    error('Error: Page not found', 3000);
+    if (item.name) {
+      selectedType = "oldtext";
+      document.getElementById('rename-input').value = item.name;
+      document.getElementById('text').value = item.text;
+      document.getElementById('file').innerText = item.name;
+      document.title = item.name + " - " + fileName + " - Quick edit notebook";
+      alert("This page version is not up to date\nIt will be updated when you save it");
+      notification(`Selected page: ${item.name}`, 3000);
+    } else {
+      error('Error: Page not found', 3000);
+    }
   }
 }
 
 function downloadFile() {
-  updateSelectedItem()
+  updateSelectedItem();
   const jsonData = JSON.stringify(selectedData);
   const blob = new Blob([jsonData], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -593,18 +699,18 @@ function cle() {
                 text = document.getElementById("text");
                 text.value = "";
                 text.select();
-                notification("Cleared", 3000)
+                notification("Cleared", 3000);
               }
 
               function savedoc() {
-                var filename = prompt("File name?\nex. filename.fileextension")
+                var filenamey = prompt("File name?\nex. filename.fileextension")
                 let t = document.getElementById("text");
-                if (confirm("You are saving the file as " + filename) == true) {
+                if (confirm("You are saving the file as " + filenamey) == true) {
                   var textFileAsBlob = new Blob([t.value], {
                     type: 'text/plain'
                   });
                   var downloadLink = document.createElement("a");
-                  downloadLink.download = filename;
+                  downloadLink.download = filenamey;
                   downloadLink.innerHTML = "Download File";
                   if (window.webkitURL != null) {
                     // Chrome allows the link to be clicked
@@ -619,9 +725,9 @@ function cle() {
                     document.body.appendChild(downloadLink);
                   }
                   downloadLink.click();
-                  notification("Downloaded", 3000)
+                  notification("Downloaded", 3000);
                 } else {
-                  notification("Cancelled", 30000)
+                  notification("Cancelled", 30000);
                 }
               } 
 
@@ -643,8 +749,62 @@ function cle() {
                 text.select();
                 text.setSelectionRange(0, 99999);
                 navigator.clipboard.writeText(text.value);
-                notification("Copied to clipboard", 3000)
+                notification("Copied to clipboard", 3000);
               }
+
+              // Drawing stuff
+
+              canvas.addEventListener('mousedown', function(e) {
+        isPainting = true;
+        lastX = e.offsetX;
+        lastY = e.offsetY;
+    });
+
+    canvas.addEventListener('mousemove', function(e) {
+        if (isPainting) {
+            var x = e.offsetX;
+            var y = e.offsetY;
+
+            context.strokeStyle = color;
+            context.lineWidth = size;
+            context.lineCap = 'round';
+
+            context.beginPath();
+            context.moveTo(lastX, lastY);
+            context.lineTo(x, y);
+            context.stroke();
+
+            lastX = x;
+            lastY = y;
+        }
+    });
+
+    canvas.addEventListener('mouseup', function() {
+        isPainting = false;
+        autoSave();
+    });
+
+    function clearCanvas() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function changeColor(newColor) {
+        color = newColor;
+    }
+
+    function changeSize(newSize) {
+        console.log(newSize)
+        if (newSize == "me") {
+            document.getElementById("num").style.display = "";
+        } else {
+            document.getElementById("num").style.display = "none";
+            size = newSize;
+        }
+    }
+    
+    function changeSizeInput(newSize) {
+        size = newSize;
+    }
     </script>
 </body>
 </html>
