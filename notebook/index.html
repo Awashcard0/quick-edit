@@ -248,6 +248,10 @@
         <h2>Delete</h2>
         <button onclick="deleteSelectedItem();">Delete Page</button>
         <br>
+        <div id="imgUpload">
+          <h2>Upload png</h2>
+          <input type="file" id="imageLoader" name="imageLoader" accept="image/png" onchange="uploadImage(event); pageTools.close();">
+        </div>
         <button onclick="pageTools.close();">Close</button>
     </dialog>
     <dialog id="Setting" style="text-align: center;">
@@ -564,6 +568,7 @@ async function setItemSelectedData(id) {
     drawTool.style.display = "none";
     document.getElementById("text").style.display = "";
     document.getElementById("myCanvas").style.display = "none";
+    document.getElementById("imgUpload").style.display = "none";
 
     selectedType = "text";
     document.getElementById('rename-input').value = item.name;
@@ -576,6 +581,7 @@ async function setItemSelectedData(id) {
     drawTool.style.display = "inline-block";
     textTool.style.display = "none";
     document.getElementById("myCanvas").style.display = "";
+    document.getElementById("imgUpload").style.display = "";
     document.getElementById("text").style.display = "none";
 
     context.clearRect(0, 0, canvas.width, canvas.height); // Clear the context to stop picture roll ovrt
@@ -804,6 +810,20 @@ function cle() {
     
     function changeSizeInput(newSize) {
         size = newSize;
+    }
+
+    function uploadImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            var img = new Image();
+            img.onload = function() {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(img, 0, 0);
+            };
+            img.src = event.target.result;
+            autoSave();
+        };
+        reader.readAsDataURL(event.target.files[0]);
     }
     </script>
 </body>
