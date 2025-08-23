@@ -1,81 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "cf90fc61d0d64d3cb6c7ea91712fc5ed"}'></script><!-- End Cloudflare Web Analytics -->
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Home thing -->
-    <link rel="stylesheet" href="https://awashcard0.pages.dev/home-thing/style.css">
-    <script src='https://awashcard0.pages.dev/home-thing/script.js'></script>
-    <!-- End home thing -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
-    <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
-    <link href="/favicon.ico" type="image/x-icon" rel="icon">
-    <title>Quick edit notebook</title>
-    <style>
-        body {
-            font-family: 'Ubuntu', sans-serif;
-            margin: 0;
-            height: 100vh;
-            background-color: #777777;
-        }
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Home thing -->
+  <link rel="stylesheet" href="https://awashcard0.pages.dev/home-thing/style.css">
+  <script src='https://awashcard0.pages.dev/home-thing/script.js'></script>
+  <!-- End home thing -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+  <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
+  <link href="/favicon.ico" type="image/x-icon" rel="icon">
+  <title>Quick edit notebook</title>
+  <style>
+    body {
+      font-family: 'Ubuntu', sans-serif;
+      margin: 0;
+      height: 100vh;
+      background-color: #777777;
+      overflow: hidden;
+    }
 
-        main {
-          display: flex;
-          flex-direction: row;
-          height: 97%;
-        }
+    main {
+      display: flex;
+      flex-direction: row;
+      height: 96%;
+    }
 
-        #sidebar {
-            width: 200px;
-            background-color: #8d8d8d;
-            border-right: 2px solid #707070;
-            padding: 10px;
-        }
+    #sidebar {
+    max-width: 250px;
+    background-color: #8d8d8d;
+    border-right: 2px solid #707070;
+    padding: 10px;
+    overflow-y: scroll;
+  }
 
-        #page-list {
-            list-style: none;
-            padding: 0;
-        }
 
-        #page-list li {
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
+    #page-list {
+      list-style: none;
+      padding: 0;
+    }
 
-        #page-list li:hover {
-            background-color: #cacaca;
-        }
+    #page-list li {
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
 
-        #editor {
-            flex: 1;
-        }
+    #page-list li:hover {
+      background-color: #cacaca;
+    }
 
-        .menubar {
-            background-color: #616161;
-            padding: 5px 15px;
-        }
+    #editor {
+      flex: 1;
+    }
 
-        .menubar button, 
-        .menubar input {
-            margin-left: 2.5px;
-        }
+    .menubar {
+      background-color: #616161;
+      padding: 5px 15px;
+    }
 
-        textarea, canvas {
-            width: 100%;
-            height: 100%;
-            font-family: 'Ubuntu', sans-serif;
-            background-color: #a1a1a1;
-            font-size: 17px;
-            outline: none;
-            width: 99.58%;
-            border: 2px solid black;
-        }
-        
-        @keyframes fadein {
+    .menubar button,
+    .menubar input {
+      margin-left: 2.5px;
+    }
+
+    textarea,
+    canvas {
+      width: 100%;
+      height: 100%;
+      font-family: 'Ubuntu', sans-serif;
+      background-color: #a1a1a1;
+      font-size: 17px;
+      outline: none;
+      width: 99.58%;
+      border: 2px solid black;
+    }
+
+    @keyframes fadein {
       from {
         bottom: 0;
         opacity: 0;
@@ -110,7 +114,7 @@
       padding: 16px;
       position: fixed;
       z-index: 1;
-      left: 30%;
+      left: 50%;
       bottom: 30px;
       font-size: 35px;
     }
@@ -144,127 +148,126 @@
       -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
       animation: fadein 0.5s, fadeout 0.5s 2.5s;
     }
-    </style>
+  </style>
 </head>
+
 <body>
-    <div class="menubar">
-            <a href="/editers">Quick edit notebook</a>
-            <div id="textToolbar" style="display: inline-block;">
-              <button onclick="copy()">Copy</button>
-              <button onclick="savedoc()">Download page</button>
-              <button onclick="print()">Print</button>
-              <button onclick="cle()">Clear</button>
-            </div>
-            <div id="drawToolbar" style="display: none;">
-              <button onclick="exportAsPNG()">Export PNG</button>
-              <button onclick="clearCanvas()">Clear Canvas</button>
-              <label for="color">&nbsp;Color:</label>
-              <input type="color" id="color" value="#000000" name="" onchange="changeColor(this.value)">
-              <label for="size">&nbsp;Size:</label>
-              <select id="size" value="2" onchange="changeSize(this.value)">
-                  <option value="2">Much Small</option>
-                  <option value="5">Very Small</option>
-                  <option value="7">Small</option>
-                  <option value="10">Medium</option>
-                  <option value="20">Large</option>
-                  <option value="30">Very Large</option>
-                  <option value="40">Much Larger</option>
-                  <option value="me">I want control</option>
-              </select>
-              <input type="number" id="num" min="1" width="10" style="display: none;" size="5" onchange="changeSizeInput(this.value)">
-            </div>
-            <button onclick="settingsPage.showModal()">Settings</button>
-            <button onclick="pageTools.showModal()">Page tools</button>
-            <button onclick="newnbp();">New Page</button>
-            <button onclick="updateSelectedItem()" id="normSave">Save</button>
-            <button onclick="downloadFile()">Download file</button>
-            <button onclick="Readme.showModal();">Read me</button>
-            <span id="file">No file</span><span> - </span><span id="save">Not saved</span>
-        </div>
-        <main>
-        <div id="sidebar">
-        <ul id="page-list">
-            <li>Open a file to begin</li>
-        </ul>  
-      </div>
-    <div id="editor">
-        <noscript>
-          <h1>Where are your manners?</h1>
-          <h2>You need javascript to use this</h2>
-        </noscript>
-        <textarea type="text" id="text" name="text" style="display: none;" placeholder="Edit text here" onkeyup="autoSave();" autofocus></textarea>
-        <canvas id="myCanvas"></canvas>
+  <div class="menubar">
+    <a href="/editers">Quick edit notebook</a>
+    <div id="textToolbar" style="display: inline-block;">
+      <button onclick="copy()">Copy</button>
+      <button onclick="savedoc()">Download page</button>
+      <button onclick="print()">Print</button>
+      <button onclick="cle()">Clear</button>
     </div>
-    </main>
-  
-    <div id="notification"></div>
-    <div id="error"></div>
-    <dialog id="start" style="text-align: center;">
-      <h1>Welcome to Quick Edit Notebook</h1>
-      <p>Now with drawing things</p>
-      <p>Quick Edit Notebook is a notebook app powered by HTML 5</p>
-      <p>Open a file or make a new notebook to get started</p>
-      <button onclick="this.parentElement.close(); newNb();">New Notebook</button>
-      <button onclick="getTheFile()">Open with file sync</button>
-      <button id="old" onclick="getOld()">Use last notebook</button>
-      Legacy: <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
+    <div id="drawToolbar" style="display: none;">
+      <button onclick="exportAsPNG()">Export PNG</button>
+      <button onclick="clearCanvas()">Clear Canvas</button>
+      <label for="color">&nbsp;Color:</label>
+      <input type="color" id="color" value="#000000" name="" onchange="changeColor(this.value)">
+      <label for="size">&nbsp;Size:</label>
+      <select id="size" value="2" onchange="changeSize(this.value)">
+        <option value="2">Much Small</option>
+        <option value="5">Very Small</option>
+        <option value="7">Small</option>
+        <option value="10">Medium</option>
+        <option value="20">Large</option>
+        <option value="30">Very Large</option>
+        <option value="40">Much Larger</option>
+        <option value="me">I want control</option>
+      </select>
+      <input type="number" id="num" min="1" width="10" style="display: none;" size="5"
+        onchange="changeSizeInput(this.value)">
+    </div>
+    <button onclick="settingsPage.showModal()">Settings</button>
+    <button onclick="pageTools.showModal()">Page tools</button>
+    <button onclick="newnbp();">New Page</button>
+    <button onclick="updateSelectedItem()" id="normSave">Save</button>
+    <button onclick="downloadFile()">Download file</button>
+    <button onclick="Readme.showModal();">Read me</button>
+    <span id="file">No file</span><span> - </span><span id="save">Not saved</span>
+  </div>
+  <main>
+    <div id="sidebar">
+      <ul id="page-list">
+        <li>Open a file to begin</li>
+      </ul>
+    </div>
+    <div id="editor">
+      <noscript>
+        <h1>Where are your manners?</h1>
+        <h2>You need javascript to use this</h2>
+      </noscript>
+      <textarea type="text" id="text" name="text" style="display: none;" placeholder="Edit text here"
+        onkeyup="autoSave();" autofocus></textarea>
+      <canvas id="myCanvas"></canvas>
+    </div>
+  </main>
+
+  <div id="notification"></div>
+  <div id="error"></div>
+  <dialog id="start" style="text-align: center;">
+    <h1>Welcome to Quick Edit Notebook</h1>
+    <p>Now with drawing things</p>
+    <p>Quick Edit Notebook is a notebook app powered by HTML 5</p>
+    <p>Open a file or make a new notebook to get started</p>
+    <button onclick="this.parentElement.close(); newNb();">New Notebook</button>
+    <button onclick="getTheFile()">Open with file sync</button>
+    <button id="old" onclick="getOld()">Use last notebook</button>
+    Legacy: <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
   </dialog>
-    <dialog id="newNotebook" style="text-align: center;">
-        <h1>New notebook</h1>
-        <input type="text" id="new-file-name" placeholder="New file name">
-        <br><button onclick="createNewFile()">Create new notebook</button>
-        <button onclick="nonew(); startPage.showModal()">Back</button>
-    </dialog>
-    <dialog id="Newp" style="text-align: center;">
-        <h1>New page</h1>
-        <input type="text" id="name-input" placeholder="Name of page">
-        <form id="type">
-          <p>Select a display:</p>
-          <input type="radio" id="type1" name="type" value="text" checked>
-          <label for="type1">Text</label><br>
-          <input type="radio" id="type2" name="type" value="draw">
-          <label for="type2">Draw</label>
-          </form>
-        <br><button onclick="addItem()">Add page</button>
-        <button onclick="nonewp();">Close</button>
-    </dialog>
-    <dialog id="Rm" style="text-align: center;">
-        <h1>Read me</h1>
-        <h2>This is very much a beta version and errors <b>will</b> occur. If you find any make a report <a href="https://github.com/Awashcard0/quick-edit/issues/new">here</a></h2>
-        <h2>Known bugs</h2>
-        <p>Some file thing dont work on firefox but I can fix that so... ¯\_(ツ)_/¯</p>
-        <p>Dosnt warn about closeing without saveing</p>
-        <h2>How to</h2>
-        <p>If this is your first time you may want to look at how to use quick edit notebook.</p>
-        <p>If your seeing this I hope you made the file and set it here</p>
-        <p>I would first go to settings and turn on autosave so you dont have to deal with rembering></p>
-        <p>If you think you might deleat the file you shuold turn on save to local storage</p>
-        <p><b>On chrome you need to click the site settings in the top by the url bar and set it so that this site can save data to the device so that your setting will be saved</b></p>
-        <button onclick="Readme.close();">Close</button>
-    </dialog>
-    <dialog id="PageTools" style="text-align: center;">
-        <h1>Page tools</h1>
-        <h2>Rename</h2>
-        <input type="text" id="rename-input" placeholder="Name of page">
-        <button onclick="renameSelectedItem();">Rename</button>
-        <h2>Delete</h2>
-        <button onclick="deleteSelectedItem();">Delete Page</button>
-        <br>
-        <div id="imgUpload">
-          <h2>Upload png</h2>
-          <input type="file" id="imageLoader" name="imageLoader" accept="image/png" onchange="uploadImage(event); pageTools.close();">
-        </div>
-        <button onclick="pageTools.close();">Close</button>
-    </dialog>
-    <dialog id="Setting" style="text-align: center;">
-        <h1>Settings</h1>
-        <input onclick="UpdateSetting();" type="checkbox" id="autosave"><label for="autosave"> Autosave</label>
-        <br><input onclick="UpdateSetting();" type="checkbox" id="saveToLocal"><label for="saveToLocal"> Save to local storage</label>
-        <br><button onclick="if (confirm('You sure?')) {localStorage.removeItem('nbSave')}">Clear local storage</button>
-        <br><button onclick="settingsPage.close();">Close</button>
-    </dialog>
-    <script>
-     const newDia = document.getElementById("newNotebook");
+  <dialog id="newNotebook" style="text-align: center;">
+    <h1>New notebook</h1>
+    <input type="text" id="new-file-name" placeholder="New file name">
+    <br><button onclick="createNewFile()">Create new notebook</button>
+    <button onclick="nonew(); startPage.showModal()">Back</button>
+  </dialog>
+  <dialog id="Newp" style="text-align: center;">
+    <h1>New page</h1>
+    <input type="text" id="name-input" placeholder="Name of page">
+    <form id="type">
+      <p>Select a display:</p>
+      <input type="radio" id="type1" name="type" value="text" checked>
+      <label for="type1">Text</label><br>
+      <input type="radio" id="type2" name="type" value="draw">
+      <label for="type2">Draw</label>
+    </form>
+    <br><button onclick="addItem()">Add page</button>
+    <button onclick="nonewp();">Close</button>
+  </dialog>
+  <dialog id="Rm" style="text-align: center;">
+    <h1>Read me</h1>
+    <h2>This is very much a beta version and errors <b>will</b> occur. If you find any make a report <a
+        href="https://github.com/Awashcard0/quick-edit/issues/new">here</a></h2>
+    <h2>Known bugs</h2>
+    <p>Some file thing don't work on firefox but I can't fix that so... ¯\_(ツ)_/¯</p>
+    <button onclick="Readme.close();">Close</button>
+  </dialog>
+  <dialog id="PageTools" style="text-align: center;">
+    <h1>Page tools</h1>
+    <h2>Rename</h2>
+    <input type="text" id="rename-input" placeholder="Name of page">
+    <button onclick="renameSelectedItem();">Rename</button>
+    <h2>Delete</h2>
+    <button onclick="deleteSelectedItem();">Delete Page</button>
+    <br>
+    <div id="imgUpload">
+      <h2>Upload png</h2>
+      <input type="file" id="imageLoader" name="imageLoader" accept="image/png"
+        onchange="uploadImage(event); pageTools.close();">
+    </div>
+    <button onclick="pageTools.close();">Close</button>
+  </dialog>
+  <dialog id="Setting" style="text-align: center;">
+    <h1>Settings</h1>
+    <input onclick="UpdateSetting();" type="checkbox" id="autosave"><label for="autosave"> Autosave</label>
+    <br><input onclick="UpdateSetting();" type="checkbox" id="saveToLocal"><label for="saveToLocal"> Save to local
+      storage</label>
+    <br><button onclick="if (confirm('You sure?')) {localStorage.removeItem('nbSave')}">Clear local storage</button>
+    <br><button onclick="settingsPage.close();">Close</button>
+  </dialog>
+  <script>
+    const newDia = document.getElementById("newNotebook");
     const newDiap = document.getElementById("Newp");
     const Readme = document.getElementById("Rm");
     const pageTools = document.getElementById("PageTools");
@@ -282,24 +285,29 @@
     var size = 2;
     let sync = false;
     var fileThing;
-    let autoSaveTimer = 6;
+    let autoSaveTimer = -1;
+    let volatileData = false;
 
     startPage.showModal();
 
     var computedStyle = window.getComputedStyle(canvas);
     canvas.width = parseInt(computedStyle.getPropertyValue('width'), 10);
     canvas.height = parseInt(computedStyle.getPropertyValue('height'), 10);
-// welcome
-    setTimeout(function() {
-      notification("Welcome to quick edit notebook beta (Read the read me in the tool bar)", 3000);
+    // welcome
+    setTimeout(function () {
+      notification("Welcome to Quick Edit Notebook", 3000);
 
-      let Asavebox = document.getElementById("autosave");
-      Asavebox.checked = (localStorage.getItem("AutosaveBox") === "true");
+      if (localStorage.getItem("hasVisited") !== "true") {
+        localStorage.setItem("AutosaveBox", true);
+        localStorage.setItem("hasVisited", true);
+      }
+
+      document.getElementById("autosave").checked = (localStorage.getItem("AutosaveBox") === "true");
       document.getElementById("saveToLocal").checked = (localStorage.getItem("saveToLocalBox") === "true");
       UpdateSetting();
 
       if (JSON.parse(localStorage.getItem("nbSave"))) {
-        
+
       } else {
         oldButton.setAttribute("disabled", "true");
       }
@@ -319,514 +327,515 @@
     }
 
     function autoSave() {
+      volatileData = true;
       let Asavebox = document.getElementById("autosave");
       if (Asavebox.checked) {
-        if (!sync) {
-          updateSelectedItem();
-        }   
-        autoSaveTimer = 6;       
+        autoSaveTimer = 5;
       } else {
         // not auto save
       }
     }
 
-    function AStimer() {
-    if (autoSaveTimer === 0) {
+    setInterval(() => {
+      if (autoSaveTimer === 0) {
         saveText.innerHTML = "Saveing...";
         autoSaveTimer = autoSaveTimer - 1;
         updateSelectedItem();
       } else if (autoSaveTimer > 0) {
-        autoSaveTimer = autoSaveTimer - 1;
         saveText.innerHTML = "Save in " + autoSaveTimer;
-      } else {
-        // Wait
+        autoSaveTimer = autoSaveTimer - 1;
       }
-      setTimeout(() => {
-        AStimer();
-      }, 1000);
-    }
+    }, 1000);
+
+    window.addEventListener('beforeunload', function (e) {
+      if (volatileData) {
+        e.preventDefault();
+        e.returnValue = 'Your notebook may not be saved.';
+      }
+    });
 
     function notification(notaName, notaTime) {
-  var x = document.getElementById("notification");
-  x.innerHTML = notaName;
-  x.className = "show";
-  setTimeout(function() {
-    x.className = x.className.replace("show", "");
-  }, notaTime);
-}
-
-function error(notaName, notaTime) {
-console.error(notaName);
-  var x = document.getElementById("error");
-  x.innerHTML = notaName;
-  x.className = "show";
-  setTimeout(function() {
-    x.className = x.className.replace("show", "");
-  }, notaTime);
-}
-
-let selectedFile = null;
-let selectedData = [];
-let fileName = "";
-let selectedId = "";
-let selectedType = "text";
-
-function readFile(file) {
-  const reader = new FileReader();
-
-  reader.onload = event => {
-    const data = JSON.parse(event.target.result);
-    const name = file.name;
-    fileName = name.split(".")[0].split(" (")[0];
-    notification(`Loaded file: ${fileName}, To load a new reload the page`, 5000);
-    document.getElementById("json-file-input").style.display = "none";
-
-    if (!selectedData || selectedData.length < data.length) {
-      autoSaveTimer = 6;
-      selectedData = data;
-      updateItemNames();
-      sync = false;
-      saveText.innerHTML = "Sync disabled";
-      
+      var x = document.getElementById("notification");
+      x.innerHTML = notaName;
+      x.className = "show";
+      setTimeout(function () {
+        x.className = x.className.replace("show", "");
+      }, notaTime);
     }
-  };
 
-  reader.onerror = error => error(`Error with reader: ${error}`);
+    function error(notaName, notaTime) {
+      console.error(notaName);
+      var x = document.getElementById("error");
+      x.innerHTML = notaName;
+      x.className = "show";
+      setTimeout(function () {
+        x.className = x.className.replace("show", "");
+      }, notaTime);
+    }
 
-  reader.readAsText(file);
+    let selectedFile = null;
+    let selectedData = [];
+    let fileName = "";
+    let selectedId = "";
+    let selectedType = "text";
 
-  startPage.close();
-}
+    function readFile(file) {
+      const reader = new FileReader();
 
-function createNewFile() {
-  const filename = document.getElementById('new-file-name').value;
-  const id = 0;
-  const name = "First page (Use page tools to rename)";
-  const text = "";
-  const type = "text";
-  const data = selectedData ? [...selectedData, {id, name, type, text}] : [{id, name, type, text}];
-  const json = JSON.stringify(data);
-  const blob = new Blob([json], {type: 'application/json'});
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = `${filename}.qenotebook`;
-  link.click();
-  newDia.close();
-  startPage.showModal();
-  notification("Open the file to continue", 3000);
-}
+      reader.onload = event => {
+        const data = JSON.parse(event.target.result);
+        const name = file.name;
+        fileName = name.split(".")[0].split(" (")[0];
+        notification(`Loaded file: ${fileName}, To load a new reload the page`, 5000);
+        document.getElementById("json-file-input").style.display = "none";
 
-function addItem() {
-  const name = document.getElementById('name-input').value;
-  const text = "";
-  let type = "";
-  const id = selectedData ? selectedData[selectedData.length - 1].id + 1 : 1;
-  if (typeElements[0].checked == true) {
-    type = "text";
-} else if (typeElements[1].checked == true) {
-    type = "draw";
-} 
+        if (!selectedData || selectedData.length < data.length) {
+          autoSaveTimer = 5;
+          selectedData = data;
+          updateItemNames();
+          sync = false;
+          saveText.innerHTML = "Sync disabled";
 
-  const newItem = {id, name, type, text};
-  selectedData.push(newItem);
-  document.getElementById('name-input').value = '';
-  document.getElementById('text').value = '';
-  updateItemNames();
-  newDiap.close();
-  setItemSelectedData(id);
-  autoSaveTimer = 6;   
-}
-
-function deleteSelectedItem() {
-    if (confirm("This action cannot be undone!")) {
-      pageTools.close();
-  const index = selectedData.findIndex(item => item.id === selectedId);
-
-  if (index >= 0) {
-    selectedData.splice(index, 1);
-    updateItemNames();
-    autoSaveTimer = 6;   
-  } else {
-    error('Error: Page not found', 3000);
-  }
-}
-}
-
-async function updateSelectedItem() {
-  let saveToLocal = document.getElementById("saveToLocal");
-  const nameInput = document.getElementById('name-input');
-
-  const itemToUpdate = selectedData.find(item => item.id === selectedId);
-
-  if (itemToUpdate) {
-    if (selectedType == "oldtext" || selectedType == "text") {
-      const textInput = document.getElementById('text');
-  
-      // const newName = itemToUpdate.name
-      const newText = text.value;
-
-      if (newText) {
-        // itemToUpdate.name = newName;
-        itemToUpdate.text = newText;
-        // nameInput.value = newName;
-        textInput.value = newText;
-        // updateItemNames();
-        if (selectedType == "oldtext") {
-          itemToUpdate.type = "text";
         }
+      };
+
+      reader.onerror = error => error(`Error with reader: ${error}`);
+
+      reader.readAsText(file);
+
+      startPage.close();
+    }
+
+    function createNewFile() {
+      const filename = document.getElementById('new-file-name').value;
+      const id = 0;
+      const name = "First page (Use page tools to rename)";
+      const text = "This is a page with text";
+      const type = "text";
+      const data = selectedData ? [...selectedData, { id, name, type, text }] : [{ id, name, type, text }];
+      const json = JSON.stringify(data);
+      const blob = new Blob([json], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `${filename}.qenotebook`;
+      link.click();
+      newDia.close();
+      startPage.showModal();
+      notification("Open the file to continue", 3000);
+    }
+
+    function addItem() {
+      const name = document.getElementById('name-input').value;
+      const text = "";
+      let type = "";
+      const id = selectedData ? selectedData[selectedData.length - 1].id + 1 : 1;
+      if (typeElements[0].checked == true) {
+        type = "text";
+      } else if (typeElements[1].checked == true) {
+        type = "draw";
       }
-    } else if (selectedType == "draw") {
-      var data = canvas.toDataURL();
-      itemToUpdate.text = data;
-    }
-    
-    if (saveToLocal.checked) {
-      const stuffToSave = {"name": fileName, "data": selectedData};
-      localStorage.setItem("nbSave", JSON.stringify(stuffToSave));
-    }
 
-    writeFile();
-  } else {
-    error('Error: Page not found', 3000);
-    saveText.innerHTML = "Error";
-  }
-}
-
-function renameSelectedItem() {
-  pageTools.close();
-  let saveToLocal = document.getElementById("saveToLocal");
-  const nameInput = document.getElementById('rename-input');
-  const textInput = document.getElementById('text');
-
-
-  const itemToUpdate = selectedData.find(item => item.id === selectedId);
-
-  if (itemToUpdate) {
-    const newName = nameInput.value;
-    const newText = itemToUpdate.text;
-
-    if (newName && newText) {
-      itemToUpdate.name = newName;
-      itemToUpdate.text = newText;
-      nameInput.value = newName;
-      textInput.value = newText;
+      const newItem = { id, name, type, text };
+      selectedData.push(newItem);
+      document.getElementById('name-input').value = '';
+      document.getElementById('text').value = '';
       updateItemNames();
-
-      if (saveToLocal.checked) {
-        const stuffToSave = {"name": fileName, "data": selectedData};
-        localStorage.setItem("nbSave", JSON.stringify(stuffToSave));
-      }
-
-      autoSaveTimer = 6;
+      newDiap.close();
+      setItemSelectedData(id);
+      autoSaveTimer = 5;
     }
-  } else {
-    error('Error: Page not found', 3000);
-  }
-}
 
-function updateItemNames() {
-const ids = selectedData.map(item => item.id);
-const names = selectedData.map(item => item.name);
-const selectBox = document.getElementById('page-list');
+    function deleteSelectedItem() {
+      if (confirm("This action cannot be undone!")) {
+        pageTools.close();
+        const index = selectedData.findIndex(item => item.id === selectedId);
 
-selectBox.innerHTML = "";
-
-for (let i = 0; i < ids.length; i++) {
-let option = document.createElement('li');
-option.innerHTML = names[i];
-option.setAttribute("onclick", `setItemSelectedData(${ids[i]});`);
-// console.log(option)
-selectBox.appendChild(option);
-}
-
-writeFile();
-}
-
-async function writeFile() {
-  if (sync) {
-      const writable = await fileThing.createWritable();
-      const encoder = new TextEncoder();
-      const encodedData = encoder.encode(JSON.stringify(selectedData));
-
-      await writable.write(encodedData);
-      
-      // Close the file and write the contents to disk.
-      await writable.close();
-      // Write the contents of the file to the stream.
-      saveText.innerHTML = "Saved to disk";
-    }
-}
-
-async function setItemSelectedData(id) {
-  await updateSelectedItem();
-  selectedId = id;
-  const item = selectedData.find(item => item.id === selectedId);
-  const textTool = document.getElementById("textToolbar");
-  const drawTool = document.getElementById("drawToolbar");
-
-  if (item.type == "text") {
-    // Get ready for text
-    textTool.style.display = "inline-block";
-    drawTool.style.display = "none";
-    document.getElementById("text").style.display = "";
-    document.getElementById("myCanvas").style.display = "none";
-    document.getElementById("imgUpload").style.display = "none";
-
-    selectedType = "text";
-    document.getElementById('rename-input').value = item.name;
-    document.getElementById('text').value = item.text;
-    document.getElementById('file').innerText = item.name;
-    document.title = item.name + " - " + fileName + " - Quick edit notebook";
-    notification(`Selected page: ${item.name}`, 3000);
-  } else if (item.type == "draw") {
-    // Get ready for draw
-    drawTool.style.display = "inline-block";
-    textTool.style.display = "none";
-    document.getElementById("myCanvas").style.display = "";
-    document.getElementById("imgUpload").style.display = "";
-    document.getElementById("text").style.display = "none";
-
-    context.clearRect(0, 0, canvas.width, canvas.height); // Clear the context to stop picture roll ovrt
-
-    var savedCanvasData = item.text;
-        if (savedCanvasData) {
-            var img = new Image();
-            img.onload = function() {
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                context.drawImage(img, 0, 0);
-            };
-            img.src = savedCanvasData;
+        if (index >= 0) {
+          selectedData.splice(index, 1);
+          updateItemNames();
+          autoSaveTimer = 5;
         } else {
-          
+          error('Error: Page not found', 3000);
+        }
+      }
+    }
+
+    async function updateSelectedItem() {
+      let saveToLocal = document.getElementById("saveToLocal");
+      const nameInput = document.getElementById('name-input');
+
+      const itemToUpdate = selectedData.find(item => item.id === selectedId);
+
+      if (itemToUpdate) {
+        if (selectedType == "oldtext" || selectedType == "text") {
+          const textInput = document.getElementById('text');
+
+          // const newName = itemToUpdate.name
+          const newText = text.value;
+
+          if (newText) {
+            // itemToUpdate.name = newName;
+            itemToUpdate.text = newText;
+            // nameInput.value = newName;
+            textInput.value = newText;
+            // updateItemNames();
+            if (selectedType == "oldtext") {
+              itemToUpdate.type = "text";
+            }
+          }
+        } else if (selectedType == "draw") {
+          var data = canvas.toDataURL();
+          itemToUpdate.text = data;
         }
 
-    selectedType = "draw";
-    document.getElementById('rename-input').value = item.name;
-    document.getElementById('file').innerText = item.name;
-    document.title = item.name + " - " + fileName + " - Quick edit notebook";
-    notification(`Selected page: ${item.name}`, 3000);
-  } else {
-    if (item.name) {
-      selectedType = "oldtext";
-      document.getElementById('rename-input').value = item.name;
-      document.getElementById('text').value = item.text;
-      document.getElementById('file').innerText = item.name;
-      document.title = item.name + " - " + fileName + " - Quick edit notebook";
-      alert("This page version is not up to date\nIt will be updated when you save it");
-      notification(`Selected page: ${item.name}`, 3000);
-    } else {
-      error('Error: Page not found', 3000);
+        if (saveToLocal.checked) {
+          const stuffToSave = { "name": fileName, "data": selectedData };
+          localStorage.setItem("nbSave", JSON.stringify(stuffToSave));
+        }
+
+        writeFile();
+      } else {
+        error('Error: Page not found', 3000);
+        saveText.innerHTML = "Error";
+      }
     }
-  }
-}
 
-function downloadFile() {
-  updateSelectedItem();
-  const jsonData = JSON.stringify(selectedData);
-  const blob = new Blob([jsonData], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
+    async function renameSelectedItem() {
+      pageTools.close();
+      await updateSelectedItem();
+      let saveToLocal = document.getElementById("saveToLocal");
+      const nameInput = document.getElementById('rename-input');
+      const textInput = document.getElementById('text');
 
-  const a = document.createElement('a');
-  a.download = `${fileName}.qenotebook`;
-  a.href = url;
-  a.click();
 
-  URL.revokeObjectURL(url);
-}
+      const itemToUpdate = selectedData.find(item => item.id === selectedId);
 
-async function getTheFile() {
-  const pickerOpts = {
-    types: [
-      {
-        description: "Quick edit notebook",
-        accept: {
-          'text/json': ['.qenotebook'],
-        },
-      },
-    ],
-    excludeAcceptAllOption: true,
-    multiple: false,
-  };
+      if (itemToUpdate) {
+        const newName = nameInput.value;
+        const newText = itemToUpdate.text;
 
-  // open file picker
-  const [fileHandle] = await window.showOpenFilePicker(pickerOpts);
+        if (newName && newText) {
+          itemToUpdate.name = newName;
+          itemToUpdate.text = newText;
+          nameInput.value = newName;
+          textInput.value = newText;
+          updateItemNames();
+          setItemSelectedData(selectedId);
 
-  fileThing = fileHandle;
-  // get file contents
-  const fileData = await fileHandle.getFile();
-  const textThatGot = await fileData.text();
-  
-    fileName = fileHandle.name.split(".")[0].split(" (")[0];
-    notification(`Loaded file: ${fileName}, To load a new reload the page`, 5000);
-    document.getElementById("json-file-input").style.display = "none";
+          if (saveToLocal.checked) {
+            const stuffToSave = { "name": fileName, "data": selectedData };
+            localStorage.setItem("nbSave", JSON.stringify(stuffToSave));
+          }
+        }
+      } else {
+        error('Error: Page not found', 3000);
+      }
+    }
 
-    if (!selectedData || selectedData.length < textThatGot.length) {
-      selectedData = JSON.parse(textThatGot);
-      autoSaveTimer = 6;
-      updateItemNames();
-      sync = true;
-      saveText.innerHTML = "Sync enabled";
+    function updateItemNames() {
+      const ids = selectedData.map(item => item.id);
+      const names = selectedData.map(item => item.name);
+      const selectBox = document.getElementById('page-list');
+
+      selectBox.innerHTML = "";
+
+      for (let i = 0; i < ids.length; i++) {
+        let option = document.createElement('li');
+        option.innerHTML = names[i];
+        option.setAttribute("onclick", `setItemSelectedData(${ids[i]});`);
+        // console.log(option)
+        selectBox.appendChild(option);
+      }
+
       writeFile();
     }
-    AStimer();
-    startPage.close();
-}
+
+    async function writeFile() {
+      if (sync) {
+        const writable = await fileThing.createWritable();
+        const encoder = new TextEncoder();
+        const encodedData = encoder.encode(JSON.stringify(selectedData));
+
+        await writable.write(encodedData);
+
+        // Close the file and write the contents to disk.
+        await writable.close();
+        // Write the contents of the file to the stream.
+        saveText.innerHTML = "Saved to disk";
+        volatileData = false;
+      } else {
+        saveText.innerHTML = "Auto Save Error";
+        saveText.title = "The file can't be autosaved in legacy mode. Open the file with sync to autosave"
+      }
+    }
+
+    async function setItemSelectedData(id) {
+      await updateSelectedItem();
+      selectedId = id;
+      const item = selectedData.find(item => item.id === selectedId);
+      const textTool = document.getElementById("textToolbar");
+      const drawTool = document.getElementById("drawToolbar");
+
+      if (item.type == "text") {
+        // Get ready for text
+        textTool.style.display = "inline-block";
+        drawTool.style.display = "none";
+        document.getElementById("text").style.display = "";
+        document.getElementById("myCanvas").style.display = "none";
+        document.getElementById("imgUpload").style.display = "none";
+
+        selectedType = "text";
+        document.getElementById('rename-input').value = item.name;
+        document.getElementById('text').value = item.text;
+        document.getElementById('file').innerText = item.name;
+        document.title = item.name + " - " + fileName + " - Quick edit notebook";
+        notification(`Selected page: ${item.name}`, 3000);
+      } else if (item.type == "draw") {
+        // Get ready for draw
+        drawTool.style.display = "inline-block";
+        textTool.style.display = "none";
+        document.getElementById("myCanvas").style.display = "";
+        document.getElementById("imgUpload").style.display = "";
+        document.getElementById("text").style.display = "none";
+
+        context.clearRect(0, 0, canvas.width, canvas.height); // Clear the context to stop picture roll ovrt
+
+        var savedCanvasData = item.text;
+        if (savedCanvasData) {
+          var img = new Image();
+          img.onload = function () {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(img, 0, 0);
+          };
+          img.src = savedCanvasData;
+        }
+
+        selectedType = "draw";
+        document.getElementById('rename-input').value = item.name;
+        document.getElementById('file').innerText = item.name;
+        document.title = item.name + " - " + fileName + " - Quick edit notebook";
+        notification(`Selected page: ${item.name}`, 3000);
+      } else {
+        if (item.name) {
+          selectedType = "oldtext";
+          document.getElementById('rename-input').value = item.name;
+          document.getElementById('text').value = item.text;
+          document.getElementById('file').innerText = item.name;
+          document.title = item.name + " - " + fileName + " - Quick edit notebook";
+          alert("This page version is not up to date\nIt will be updated when you save it");
+          notification(`Selected page: ${item.name}`, 3000);
+        } else {
+          error('Error: Page not found', 3000);
+        }
+      }
+    }
+
+    function downloadFile() {
+      updateSelectedItem();
+      const jsonData = JSON.stringify(selectedData);
+      const blob = new Blob([jsonData], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.download = `${fileName}.qenotebook`;
+      a.href = url;
+      a.click();
+
+      URL.revokeObjectURL(url);
+      volatileData = false;
+    }
+
+    async function getTheFile() {
+      const pickerOpts = {
+        types: [
+          {
+            description: "Quick edit notebook",
+            accept: {
+              'text/json': ['.qenotebook'],
+            },
+          },
+        ],
+        excludeAcceptAllOption: true,
+        multiple: false,
+      };
+
+      // open file picker
+      const [fileHandle] = await window.showOpenFilePicker(pickerOpts);
+
+      fileThing = fileHandle;
+      // get file contents
+      const fileData = await fileHandle.getFile();
+      const textThatGot = await fileData.text();
+
+      fileName = fileHandle.name.split(".")[0].split(" (")[0];
+      notification(`Loaded file: ${fileName}, To load a new reload the page`, 5000);
+      document.getElementById("json-file-input").style.display = "none";
+
+      if (!selectedData || selectedData.length < textThatGot.length) {
+        selectedData = JSON.parse(textThatGot);
+        updateItemNames();
+        sync = true;
+        saveText.innerHTML = "Sync enabled";
+        writeFile();
+      }
+      startPage.close();
+    }
 
 
-function getOld() {
-  let data = JSON.parse(localStorage.getItem("nbSave"));
-  const jsonData = JSON.stringify(data.data);
-  const blob = new Blob([jsonData], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
+    function getOld() {
+      let data = JSON.parse(localStorage.getItem("nbSave"));
+      const jsonData = JSON.stringify(data.data);
+      const blob = new Blob([jsonData], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
 
-  const a = document.createElement('a');
-  a.download = `${data.name}.qenotebook`;
-  a.href = url;
-  a.click();
+      const a = document.createElement('a');
+      a.download = `${data.name}.qenotebook`;
+      a.href = url;
+      a.click();
 
-  URL.revokeObjectURL(url);
-}
+      URL.revokeObjectURL(url);
+    }
 
-function newNb() {
-    newDia.showModal();
-}
+    function newNb() {
+      newDia.showModal();
+    }
 
-function nonew() {
-    newDia.close();
-}
+    function nonew() {
+      newDia.close();
+    }
 
-function newnbp() {
-    newDiap.showModal();
-}
+    function newnbp() {
+      newDiap.showModal();
+    }
 
-function nonewp() {
-    newDiap.close();
-}
+    function nonewp() {
+      newDiap.close();
+    }
 
-function cle() {
-                text = document.getElementById("text");
-                text.value = "";
-                text.select();
-                notification("Cleared", 3000);
-              }
+    function cle() {
+      text = document.getElementById("text");
+      text.value = "";
+      text.select();
+      notification("Cleared", 3000);
+    }
 
-              function savedoc() {
-                var filenamey = prompt("File name?\nex. filename.fileextension")
-                let t = document.getElementById("text");
-                if (confirm("You are saving the file as " + filenamey) == true) {
-                  var textFileAsBlob = new Blob([t.value], {
-                    type: 'text/plain'
-                  });
-                  var downloadLink = document.createElement("a");
-                  downloadLink.download = filenamey;
-                  downloadLink.innerHTML = "Download File";
-                  if (window.webkitURL != null) {
-                    // Chrome allows the link to be clicked
-                    // without actually adding it to the DOM.
-                    downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
-                  } else {
-                    // Firefox requires the link to be added to the DOM
-                    // before it can be clicked.
-                    downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-                    downloadLink.onclick = destroyClickedElement;
-                    downloadLink.style.display = "none";
-                    document.body.appendChild(downloadLink);
-                  }
-                  downloadLink.click();
-                  notification("Downloaded", 3000);
-                } else {
-                  notification("Cancelled", 30000);
-                }
-              } 
+    function savedoc() {
+      var filenamey = prompt("File name?\nex. filename.fileextension")
+      let t = document.getElementById("text");
+      if (confirm("You are saving the file as " + filenamey) == true) {
+        var textFileAsBlob = new Blob([t.value], {
+          type: 'text/plain'
+        });
+        var downloadLink = document.createElement("a");
+        downloadLink.download = filenamey;
+        downloadLink.innerHTML = "Download File";
+        if (window.webkitURL != null) {
+          // Chrome allows the link to be clicked
+          // without actually adding it to the DOM.
+          downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+        } else {
+          // Firefox requires the link to be added to the DOM
+          // before it can be clicked.
+          downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+          downloadLink.onclick = destroyClickedElement;
+          downloadLink.style.display = "none";
+          document.body.appendChild(downloadLink);
+        }
+        downloadLink.click();
+        notification("Downloaded", 3000);
+      } else {
+        notification("Cancelled", 30000);
+      }
+    }
 
-              function print() {
+    function print() {
       childWindow = window.open('/print', 'childWindow', 'location=yes, menubar=yes, toolbar=yes');
       childWindow.document.open();
       childWindow.document.write(' <html> <head> <title> Print - Quick edit - quick-edit.pages.dev </title> </head> <body> ');
-          childWindow.document.write(document.getElementById('text').value.replace(/\n/gi, ' <br> '));
-              
-                childWindow.print(); 
-                setTimeout(function() {
-                  childWindow.document.close();
-                  childWindow.close();
-                }, 1500);
-              }
+      childWindow.document.write(document.getElementById('text').value.replace(/\n/gi, ' <br> '));
 
-              function copy() {
-                text = document.getElementById("text");
-                text.select();
-                text.setSelectionRange(0, 99999);
-                navigator.clipboard.writeText(text.value);
-                notification("Copied to clipboard", 3000);
-              }
+      childWindow.print();
+      setTimeout(function () {
+        childWindow.document.close();
+        childWindow.close();
+      }, 1500);
+    }
 
-              // Drawing stuff
+    function copy() {
+      text = document.getElementById("text");
+      text.select();
+      text.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(text.value);
+      notification("Copied to clipboard", 3000);
+    }
 
-              canvas.addEventListener('mousedown', function(e) {
-        isPainting = true;
-        lastX = e.offsetX;
-        lastY = e.offsetY;
+    // Drawing stuff
+
+    canvas.addEventListener('mousedown', function (e) {
+      isPainting = true;
+      lastX = e.offsetX;
+      lastY = e.offsetY;
     });
 
-    canvas.addEventListener('mousemove', function(e) {
-        if (isPainting) {
-            var x = e.offsetX;
-            var y = e.offsetY;
+    canvas.addEventListener('mousemove', function (e) {
+      if (isPainting) {
+        var x = e.offsetX;
+        var y = e.offsetY;
 
-            context.strokeStyle = color;
-            context.lineWidth = size;
-            context.lineCap = 'round';
+        context.strokeStyle = color;
+        context.lineWidth = size;
+        context.lineCap = 'round';
 
-            context.beginPath();
-            context.moveTo(lastX, lastY);
-            context.lineTo(x, y);
-            context.stroke();
+        context.beginPath();
+        context.moveTo(lastX, lastY);
+        context.lineTo(x, y);
+        context.stroke();
 
-            lastX = x;
-            lastY = y;
-        }
+        lastX = x;
+        lastY = y;
+      }
     });
 
-    canvas.addEventListener('mouseup', function() {
-        isPainting = false;
-        autoSave();
+    canvas.addEventListener('mouseup', function () {
+      isPainting = false;
+      autoSave();
     });
 
     function clearCanvas() {
-        context.clearRect(0, 0, canvas.width, canvas.height);
+      context.clearRect(0, 0, canvas.width, canvas.height);
     }
 
     function changeColor(newColor) {
-        color = newColor;
+      color = newColor;
     }
 
     function changeSize(newSize) {
-        console.log(newSize)
-        if (newSize == "me") {
-            document.getElementById("num").style.display = "";
-        } else {
-            document.getElementById("num").style.display = "none";
-            size = newSize;
-        }
-    }
-    
-    function changeSizeInput(newSize) {
+      console.log(newSize)
+      if (newSize == "me") {
+        document.getElementById("num").style.display = "";
+      } else {
+        document.getElementById("num").style.display = "none";
         size = newSize;
+      }
+    }
+
+    function changeSizeInput(newSize) {
+      size = newSize;
     }
 
     function uploadImage(event) {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            var img = new Image();
-            img.onload = function() {
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                context.drawImage(img, 0, 0);
-            };
-            img.src = event.target.result;
-            autoSave();
+      var reader = new FileReader();
+      reader.onload = function (event) {
+        var img = new Image();
+        img.onload = function () {
+          context.drawImage(img, 0, 0);
         };
-        reader.readAsDataURL(event.target.files[0]);
+        img.src = event.target.result;
+        autoSave();
+      };
+      reader.readAsDataURL(event.target.files[0]);
     }
-    </script>
+  </script>
 </body>
+
 </html>
