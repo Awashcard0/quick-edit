@@ -31,12 +31,12 @@
     }
 
     #sidebar {
-    max-width: 250px;
-    background-color: #8d8d8d;
-    border-right: 2px solid #707070;
-    padding: 10px;
-    overflow-y: scroll;
-  }
+      max-width: 250px;
+      background-color: #8d8d8d;
+      border-right: 2px solid #707070;
+      padding: 10px;
+      overflow-y: scroll;
+    }
 
 
     #page-list {
@@ -75,7 +75,6 @@
       background-color: #a1a1a1;
       font-size: 17px;
       outline: none;
-      width: 99.58%;
       border: 2px solid black;
     }
 
@@ -313,6 +312,9 @@
       }
     }, 250);
 
+    window.addEventListener('resize', updateCanvasSize);
+
+
     function UpdateSetting() {
       let Asavebox = document.getElementById("autosave");
       let normSave = document.getElementById("normSave");
@@ -547,6 +549,7 @@
         selectBox.appendChild(option);
       }
 
+      updateCanvasSize();
       writeFile();
     }
 
@@ -834,6 +837,20 @@
         autoSave();
       };
       reader.readAsDataURL(event.target.files[0]);
+    }
+
+    function updateCanvasSize() {
+      var data = canvas.toDataURL();
+
+      canvas.width = parseInt(computedStyle.getPropertyValue('width'), 10);
+      canvas.height = parseInt(computedStyle.getPropertyValue('height'), 10);
+
+      var img = new Image();
+      img.onload = function () {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(img, 0, 0);
+      };
+      img.src = data;
     }
   </script>
 </body>
