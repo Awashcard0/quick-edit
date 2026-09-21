@@ -19,6 +19,48 @@ var fileThing;
 let autoSaveTimer = -1;
 let volatileData = false;
 
+function applyTheme(theme) {
+	document.documentElement.dataset.theme = theme;
+	const toggle = document.getElementById("themeToggle");
+	const isDark = theme === "dark";
+	toggle.textContent = isDark ? "Light mode" : "Dark mode";
+	toggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+	toggle.title = isDark ? "Switch to light mode" : "Switch to dark mode";
+}
+
+function toggleTheme() {
+	const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+	localStorage.setItem("notebookTheme", nextTheme);
+	applyTheme(nextTheme);
+}
+
+function toggleAutosave() {
+	const autosave = document.getElementById("autosave");
+	autosave.checked = !autosave.checked;
+	UpdateSetting();
+	updateAutosaveLabel();
+}
+
+function updateAutosaveLabel() {
+	const toggle = document.getElementById("autosaveToggle");
+	const autosave = document.getElementById("autosave");
+	toggle.textContent = autosave.checked ? "Auto save: on" : "Auto save: off";
+}
+
+document.querySelectorAll(".tab").forEach(tab => {
+	tab.addEventListener("click", () => {
+		document.querySelectorAll(".tab").forEach(item => {
+			const active = item === tab;
+			item.classList.toggle("active", active);
+			item.setAttribute("aria-selected", active);
+		});
+		document.querySelectorAll(".tab-panel").forEach(panel => {
+			panel.hidden = panel.id !== tab.dataset.tab;
+		});
+	});
+});
+
+applyTheme(localStorage.getItem("notebookTheme") || "light");
 startPage.showModal();
 
 var computedStyle = window.getComputedStyle(canvas);
@@ -36,6 +78,7 @@ setTimeout(function () {
 	document.getElementById("autosave").checked = (localStorage.getItem("AutosaveBox") === "true");
 	document.getElementById("saveToLocal").checked = (localStorage.getItem("saveToLocalBox") === "true");
 	UpdateSetting();
+	updateAutosaveLabel();
 
 	if (JSON.parse(localStorage.getItem("nbSave"))) {
 
@@ -51,8 +94,14 @@ function UpdateSetting() {
 	let Asavebox = document.getElementById("autosave");
 	let normSave = document.getElementById("normSave");
 	let saveToLocal = document.getElementById("saveToLocal");
+	if (!Asavebox || !saveToLocal) {
+		return;
+	}
 	localStorage.setItem("AutosaveBox", Asavebox.checked);
 	localStorage.setItem("saveToLocalBox", saveToLocal.checked);
+	if (!normSave) {
+		return;
+	}
 	if (Asavebox.checked) {
 		normSave.style.display = "none";
 	} else {
@@ -308,6 +357,9 @@ function updateItemNames() {
 	for (let i = 0; i < ids.length; i++) {
 		let option = document.createElement('li');
 		option.innerHTML = names[i];
+		option.className = ids[i] === selectedId ? "active" : "";
+		option.setAttribute("role", "button");
+		option.setAttribute("tabindex", "0");
 		option.setAttribute("onclick", `setItemSelectedData(${ids[i]});`);
 		// console.log(option)
 		selectBox.appendChild(option);
@@ -339,6 +391,9 @@ async function writeFile() {
 async function setItemSelectedData(id) {
 	await updateSelectedItem();
 	selectedId = id;
+	document.querySelectorAll("#page-list li").forEach(page => {
+		page.classList.toggle("active", page.getAttribute("onclick") === `setItemSelectedData(${id});`);
+	});
 	const item = selectedData.find(item => item.id === selectedId);
 	const textTool = document.getElementById("textToolbar");
 	const drawTool = document.getElementById("drawToolbar");

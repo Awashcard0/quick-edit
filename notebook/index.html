@@ -11,71 +11,327 @@
   <!-- End home thing -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
   <link href="/favicon.ico" type="image/x-icon" rel="icon">
   <title>Quick edit notebook</title>
   <style>
+    :root {
+      --primary: #6750a4;
+      --primary-dark: #4f378b;
+      --on-primary: #ffffff;
+      --surface: #fffbfe;
+      --surface-container: #f3edf7;
+      --surface-variant: #e7e0ec;
+      --outline: #79747e;
+      --on-surface: #1d1b20;
+      --on-surface-muted: #625f67;
+      --error-color: #b3261e;
+      --shadow: 0 2px 8px rgba(29, 27, 32, 0.14);
+    }
+
+    [data-theme="dark"] {
+      --primary: #d0bcff;
+      --primary-dark: #b69df8;
+      --on-primary: #381e72;
+      --surface: #141218;
+      --surface-container: #211f26;
+      --surface-variant: #49454f;
+      --outline: #938f99;
+      --on-surface: #e6e1e5;
+      --on-surface-muted: #cac4d0;
+      --error-color: #f2b8b5;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Ubuntu', sans-serif;
+      font-family: 'Roboto', sans-serif;
       margin: 0;
       height: 100vh;
-      background-color: #777777;
+      color: var(--on-surface);
+      background-color: var(--surface);
       overflow: hidden;
     }
 
     main {
       display: flex;
       flex-direction: row;
-      height: 96%;
+      height: calc(100vh - 160px);
+      min-height: 0;
     }
 
     #sidebar {
-      max-width: 250px;
-      background-color: #8d8d8d;
-      border-right: 2px solid #707070;
-      padding: 10px;
-      overflow-y: scroll;
+      width: 280px;
+      flex: 0 0 280px;
+      background-color: var(--surface-container);
+      border-right: 1px solid var(--surface-variant);
+      padding: 24px 16px;
+      overflow-y: auto;
     }
 
+    #sidebar::before {
+      content: "PAGES";
+      display: block;
+      color: var(--on-surface-muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      margin: 0 12px 12px;
+    }
 
     #page-list {
       list-style: none;
       padding: 0;
+      margin: 0;
     }
 
     #page-list li {
-      margin-bottom: 10px;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+      padding: 0 16px;
+      border-radius: 24px;
+      color: var(--on-surface-muted);
+      font-size: 0.95rem;
+      font-weight: 500;
       cursor: pointer;
+      transition: background-color 160ms ease, color 160ms ease;
     }
 
-    #page-list li:hover {
-      background-color: #cacaca;
+    #page-list li:hover,
+    #page-list li:focus-visible {
+      background-color: var(--surface-variant);
+      color: var(--on-surface);
+      outline: none;
+    }
+
+    #page-list li.active {
+      background-color: #eaddff;
+      color: #21005d;
+    }
+
+    [data-theme="dark"] #page-list li.active {
+      background-color: #4f378b;
+      color: #eaddff;
     }
 
     #editor {
       flex: 1;
+      min-width: 0;
+      min-height: 0;
+      padding: 20px;
+      background: var(--surface);
     }
 
     .menubar {
-      background-color: #616161;
-      padding: 5px 15px;
+      min-height: 160px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      grid-template-rows: 48px 40px 72px;
+      align-items: center;
+      column-gap: 24px;
+      padding: 0 24px;
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--surface-variant);
+      box-shadow: var(--shadow);
+      position: relative;
+      z-index: 1;
     }
 
-    .menubar button,
-    .menubar input {
-      margin-left: 2.5px;
+    .menubar > a {
+      grid-row: 1;
+      color: var(--primary);
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .notebook-title {
+      grid-column: 2;
+      grid-row: 1;
+      color: var(--on-surface-muted);
+      font-size: 0.9rem;
+    }
+
+    .toolbar-status {
+      grid-column: 3;
+      grid-row: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--on-surface-muted);
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .ribbon {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+      overflow-x: auto;
+    }
+
+    .tab-strip {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      display: flex;
+      align-items: end;
+      gap: 4px;
+      border-bottom: 1px solid var(--surface-variant);
+    }
+
+    .tab {
+      min-height: 40px;
+      padding: 0 18px;
+      border-radius: 10px 10px 0 0;
+      color: var(--on-surface-muted);
+    }
+
+    .tab.active {
+      color: var(--primary);
+      background: var(--surface-container);
+      box-shadow: inset 0 -3px 0 var(--primary);
+    }
+
+    .tab-panel {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tab-panel[hidden] {
+      display: none;
+    }
+
+    .ribbon-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      padding-right: 12px;
+      margin-right: 8px;
+      border-right: 1px solid var(--surface-variant);
+      white-space: nowrap;
+    }
+
+    .ribbon-group:last-child {
+      border-right: 0;
+      margin-left: auto;
+      margin-right: 0;
+      padding-right: 0;
+    }
+
+    .ribbon-label {
+      align-self: end;
+      margin: 0 8px 5px;
+      color: var(--on-surface-muted);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    button,
+    select,
+    input[type="text"],
+    input[type="number"] {
+      font: inherit;
+    }
+
+    button {
+      min-height: 40px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 20px;
+      color: var(--primary);
+      background: transparent;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    button:hover,
+    button:focus-visible {
+      background-color: var(--surface-container);
+      outline: none;
+    }
+
+    button:active {
+      box-shadow: inset 0 2px 4px rgba(29, 27, 32, 0.12);
+    }
+
+    #normSave,
+    #drawToolbar button:first-child,
+    #start button:first-of-type,
+    #newNotebook button:first-of-type,
+    #Newp button:first-of-type {
+      color: var(--on-primary);
+      background-color: var(--primary);
+    }
+
+    #normSave:hover,
+    #drawToolbar button:first-child:hover,
+    #start button:first-of-type:hover,
+    #newNotebook button:first-of-type:hover,
+    #Newp button:first-of-type:hover {
+      background-color: var(--primary-dark);
+    }
+
+    #textToolbar,
+    #drawToolbar {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 2px;
+    }
+
+    #drawToolbar[style*="display: none"],
+    #textToolbar[style*="display: none"] {
+      display: none !important;
+    }
+
+    #file {
+      color: var(--on-surface);
+      font-weight: 500;
+    }
+
+    #save {
+      color: var(--on-surface-muted);
+      font-size: 0.88rem;
     }
 
     textarea,
     canvas {
       width: 100%;
       height: 100%;
-      font-family: 'Ubuntu', sans-serif;
-      background-color: #a1a1a1;
-      font-size: 17px;
+      display: block;
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--surface);
+      color: var(--on-surface);
+      font-size: 1rem;
+      line-height: 1.6;
       outline: none;
-      border: 2px solid black;
+      border: 1px solid var(--surface-variant);
+      border-radius: 16px;
+      padding: 24px;
+      resize: none;
+      box-shadow: var(--shadow);
+    }
+
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(103, 80, 164, 0.2), var(--shadow);
+    }
+
+    canvas {
+      padding: 0;
     }
 
     @keyframes fadein {
@@ -104,22 +360,20 @@
 
     #notification {
       visibility: hidden;
-      min-width: 100px;
-      margin-left: -100px;
-      background-color: #333;
-      color: #fff;
+      max-width: min(420px, calc(100vw - 32px));
+      background-color: #322f35;
+      color: #f5eff7;
       text-align: center;
-      border-radius: 2px;
-      padding: 16px;
+      border-radius: 4px;
+      padding: 14px 20px;
       position: fixed;
-      z-index: 1;
+      z-index: 10;
       left: 50%;
       bottom: 30px;
-      font-size: 35px;
+      font-size: 0.95rem;
     }
 
     #notification.show {
-      border-radius: 25px;
       visibility: visible;
       -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
       animation: fadein 0.5s, fadeout 0.5s 2.5s;
@@ -127,25 +381,121 @@
 
     #error {
       visibility: hidden;
-      min-width: 100px;
-      margin-left: -100px;
-      background-color: #fd2a2a;
-      color: #fff;
+      max-width: min(420px, calc(100vw - 32px));
+      background-color: var(--error-color);
+      color: #ffffff;
       text-align: center;
-      border-radius: 2px;
-      padding: 16px;
+      border-radius: 4px;
+      padding: 14px 20px;
       position: fixed;
-      z-index: 1;
+      z-index: 10;
       left: 50%;
       bottom: 30px;
-      font-size: 35px;
+      font-size: 0.95rem;
+    }
+
+    [data-theme="dark"] #error {
+      color: #601410;
     }
 
     #error.show {
-      border-radius: 25px;
       visibility: visible;
       -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
       animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    dialog {
+      width: min(520px, calc(100vw - 32px));
+      padding: 28px;
+      border: 0;
+      border-radius: 28px;
+      color: var(--on-surface);
+      background: var(--surface);
+      box-shadow: 0 12px 32px rgba(29, 27, 32, 0.24);
+    }
+
+    dialog::backdrop {
+      background: rgba(29, 27, 32, 0.42);
+    }
+
+    [data-theme="dark"] dialog::backdrop {
+      background: rgba(0, 0, 0, 0.62);
+    }
+
+    dialog h1 {
+      margin: 0 0 12px;
+      color: var(--on-surface);
+      font-size: 1.7rem;
+    }
+
+    dialog h2 {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    dialog input[type="text"],
+    dialog input[type="file"],
+    dialog input[type="number"],
+    dialog select {
+      width: 100%;
+      min-height: 48px;
+      margin: 8px 0 16px;
+      padding: 0 14px;
+      border: 1px solid var(--outline);
+      border-radius: 4px;
+      background: var(--surface);
+      color: var(--on-surface);
+    }
+
+    dialog input:focus,
+    dialog select:focus {
+      border-color: var(--primary);
+      outline: 2px solid rgba(103, 80, 164, 0.2);
+    }
+
+    @media (max-width: 800px) {
+      main {
+        height: calc(100vh - 192px);
+      }
+
+      .menubar {
+        min-height: 192px;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: 48px 40px 104px;
+        padding: 0 16px;
+      }
+
+      .menubar > a {
+        grid-column: 1;
+      }
+
+      .notebook-title {
+        display: none;
+      }
+
+      .toolbar-status {
+        grid-column: 2;
+      }
+
+      .ribbon {
+        align-items: flex-start;
+        padding-top: 8px;
+        flex-wrap: wrap;
+        align-content: flex-start;
+      }
+
+      .tab-strip {
+        overflow-x: auto;
+      }
+
+      #sidebar {
+        width: 190px;
+        flex-basis: 190px;
+      }
+
+      #editor {
+        padding: 12px;
+      }
     }
   </style>
 </head>
@@ -153,45 +503,78 @@
 <body>
   <div class="menubar">
     <a href="/editers">Quick edit notebook</a>
-    <div id="textToolbar" style="display: inline-block;">
-      <button onclick="copy()">Copy</button>
-      <button onclick="savedoc()">Download page</button>
-      <button onclick="print()">Print</button>
-      <button onclick="cle()">Clear</button>
+    <span class="notebook-title">Notebook workspace</span>
+    <div class="toolbar-status">
+      <span id="file">No file</span><span>·</span><span id="save">Not saved</span>
     </div>
-    <div id="drawToolbar" style="display: none;">
-      <button onclick="exportAsPNG()">Export PNG</button>
-      <button onclick="clearCanvas()">Clear Canvas</button>
-      <label for="color">&nbsp;Color:</label>
-      <input type="color" id="color" value="#000000" name="" onchange="changeColor(this.value)">
-      <label for="size">&nbsp;Size:</label>
-      <select id="size" value="2" onchange="changeSize(this.value)">
-        <option value="2">Much Small</option>
-        <option value="5">Very Small</option>
-        <option value="7">Small</option>
-        <option value="10">Medium</option>
-        <option value="20">Large</option>
-        <option value="30">Very Large</option>
-        <option value="40">Much Larger</option>
-        <option value="me">I want control</option>
-      </select>
-      <input type="number" id="num" min="1" width="10" style="display: none;" size="5"
-        onchange="changeSizeInput(this.value)">
+    <nav class="tab-strip" aria-label="Notebook tools">
+      <button class="tab active" type="button" data-tab="fileTab" aria-selected="true">File</button>
+      <button class="tab" type="button" data-tab="homeTab" aria-selected="false">Home</button>
+      <button class="tab" type="button" data-tab="pageTab" aria-selected="false">Page</button>
+      <button class="tab" type="button" data-tab="settingsTab" aria-selected="false">Settings</button>
+    </nav>
+    <div class="ribbon">
+      <div id="fileTab" class="tab-panel" role="tabpanel">
+        <span class="ribbon-label">File</span>
+        <div class="ribbon-group">
+          <button onclick="downloadFile()">Export</button>
+          <button onclick="savedoc()">Download</button>
+        </div>
+      </div>
+      <div id="homeTab" class="tab-panel" role="tabpanel" hidden>
+        <span class="ribbon-label">Home</span>
+        <div class="ribbon-group">
+        <div id="textToolbar" style="display: inline-block;">
+          <button onclick="copy()">Copy</button>
+          <button onclick="print()">Print</button>
+          <button onclick="cle()">Clear</button>
+        </div>
+        <div id="drawToolbar" style="display: none;">
+          <button onclick="exportAsPNG()">Export PNG</button>
+          <button onclick="clearCanvas()">Clear Canvas</button>
+          <label for="color">&nbsp;Color:</label>
+          <input type="color" id="color" value="#000000" name="" onchange="changeColor(this.value)">
+          <label for="size">&nbsp;Size:</label>
+          <select id="size" value="2" onchange="changeSize(this.value)">
+            <option value="2">Much Small</option>
+            <option value="5">Very Small</option>
+            <option value="7">Small</option>
+            <option value="10">Medium</option>
+            <option value="20">Large</option>
+            <option value="30">Very Large</option>
+            <option value="40">Much Larger</option>
+            <option value="me">I want control</option>
+          </select>
+          <input type="number" id="num" min="1" width="10" style="display: none;" size="5"
+            onchange="changeSizeInput(this.value)">
+        </div>
+        </div>
+      </div>
+      <div id="pageTab" class="tab-panel" role="tabpanel" hidden>
+        <span class="ribbon-label">Page</span>
+        <div class="ribbon-group">
+          <button onclick="newnbp();">New page</button>
+          <button onclick="pageTools.showModal()">Rename</button>
+          <button onclick="deleteSelectedItem();">Delete</button>
+        </div>
+      </div>
+      <div id="settingsTab" class="tab-panel" role="tabpanel" hidden>
+        <span class="ribbon-label">Settings</span>
+        <div class="ribbon-group">
+          <button id="themeToggle" type="button" onclick="toggleTheme()" aria-label="Switch to dark mode"
+            title="Switch to dark mode">Dark mode</button>
+          <button id="autosaveToggle" type="button" onclick="toggleAutosave()">Auto save</button>
+          <button onclick="settingsPage.showModal()">More settings</button>
+        </div>
+      </div>
     </div>
-    <button onclick="settingsPage.showModal()">Settings</button>
-    <button onclick="pageTools.showModal()">Page tools</button>
-    <button onclick="newnbp();">New Page</button>
-    <button onclick="updateSelectedItem()" id="normSave">Save</button>
-    <button onclick="downloadFile()">Download file</button>
-    <button onclick="Readme.showModal();">Read me</button>
-    <span id="file">No file</span><span> - </span><span id="save">Not saved</span>
   </div>
   <main>
-    <div id="sidebar">
+    <aside id="sidebar">
       <ul id="page-list">
         <li>Open a file to begin</li>
       </ul>
-    </div>
+    </aside>
     <div id="editor">
       <noscript>
         <h1>Where are your manners?</h1>
@@ -248,7 +631,7 @@
     <input type="text" id="rename-input" placeholder="Name of page">
     <button onclick="renameSelectedItem();">Rename</button>
     <h2>Delete</h2>
-    <button onclick="deleteSelectedItem();">Delete Page</button>
+    <button onclick="deleteSelectedItem();">Delete</button>
     <br>
     <div id="imgUpload">
       <h2>Upload png</h2>
