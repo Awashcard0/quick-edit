@@ -23,7 +23,7 @@ function applyTheme(theme) {
 	document.documentElement.dataset.theme = theme;
 	const toggle = document.getElementById("themeToggle");
 	const isDark = theme === "dark";
-	toggle.textContent = isDark ? "Light mode" : "Dark mode";
+	toggle.innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">${isDark ? "light_mode" : "dark_mode"}</span>${isDark ? "Light mode" : "Dark mode"}`;
 	toggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
 	toggle.title = isDark ? "Switch to light mode" : "Switch to dark mode";
 }
@@ -44,7 +44,7 @@ function toggleAutosave() {
 function updateAutosaveLabel() {
 	const toggle = document.getElementById("autosaveToggle");
 	const autosave = document.getElementById("autosave");
-	toggle.textContent = autosave.checked ? "Auto save: on" : "Auto save: off";
+	toggle.innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">autorenew</span>${autosave.checked ? "Auto save: on" : "Auto save: off"}`;
 }
 
 document.querySelectorAll(".tab").forEach(tab => {
