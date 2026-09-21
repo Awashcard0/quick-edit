@@ -9,7 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
-  <link href="/favicon.ico" type="image/x-icon" rel="icon">
+  <script src="../deps/tiny-mde.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="../deps/tiny-mde.min.css" />
   <title>Quick edit notebook</title>
   <style>
     :root {
@@ -511,14 +512,12 @@
     </nav>
     <div class="ribbon">
       <div id="fileTab" class="tab-panel" role="tabpanel">
-        <span class="ribbon-label">File</span>
         <div class="ribbon-group">
           <button onclick="downloadFile()">Export</button>
           <button onclick="savedoc()">Download</button>
         </div>
       </div>
       <div id="homeTab" class="tab-panel" role="tabpanel" hidden>
-        <span class="ribbon-label">Home</span>
         <div class="ribbon-group">
         <div id="textToolbar" style="display: inline-block;">
           <button onclick="copy()">Copy</button>
@@ -547,7 +546,6 @@
         </div>
       </div>
       <div id="pageTab" class="tab-panel" role="tabpanel" hidden>
-        <span class="ribbon-label">Page</span>
         <div class="ribbon-group">
           <button onclick="newnbp();">New page</button>
           <button onclick="pageTools.showModal()">Rename</button>
@@ -555,7 +553,6 @@
         </div>
       </div>
       <div id="settingsTab" class="tab-panel" role="tabpanel" hidden>
-        <span class="ribbon-label">Settings</span>
         <div class="ribbon-group">
           <button id="themeToggle" type="button" onclick="toggleTheme()" aria-label="Switch to dark mode"
             title="Switch to dark mode">Dark mode</button>
