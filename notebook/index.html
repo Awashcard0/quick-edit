@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,500,0,0" rel="stylesheet">
   <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
   <script src="../deps/tiny-mde.min.js"></script>
   <link rel="stylesheet" type="text/css" href="../deps/tiny-mde.min.css" />
@@ -253,6 +254,18 @@
       font-weight: 500;
       cursor: pointer;
       transition: background-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    button .material-symbols-outlined {
+      margin-right: 6px;
+      font-size: 1.15rem;
+      line-height: 0;
+      vertical-align: -0.22em;
+    }
+
+    .tab .material-symbols-outlined {
+      margin-right: 5px;
+      font-size: 1.1rem;
     }
 
     button:hover,
@@ -505,28 +518,32 @@
       <span id="file">No file</span><span>·</span><span id="save">Not saved</span>
     </div>
     <nav class="tab-strip" aria-label="Notebook tools">
-      <button class="tab active" type="button" data-tab="fileTab" aria-selected="true">File</button>
-      <button class="tab" type="button" data-tab="homeTab" aria-selected="false">Home</button>
-      <button class="tab" type="button" data-tab="pageTab" aria-selected="false">Page</button>
-      <button class="tab" type="button" data-tab="settingsTab" aria-selected="false">Settings</button>
+      <button class="tab active" type="button" data-tab="fileTab" aria-selected="true"><span
+          class="material-symbols-outlined" aria-hidden="true">folder</span>File</button>
+      <button class="tab" type="button" data-tab="homeTab" aria-selected="false"><span
+          class="material-symbols-outlined" aria-hidden="true">home</span>Home</button>
+      <button class="tab" type="button" data-tab="pageTab" aria-selected="false"><span
+          class="material-symbols-outlined" aria-hidden="true">description</span>Page</button>
+      <button class="tab" type="button" data-tab="settingsTab" aria-selected="false"><span
+          class="material-symbols-outlined" aria-hidden="true">settings</span>Settings</button>
     </nav>
     <div class="ribbon">
       <div id="fileTab" class="tab-panel" role="tabpanel">
         <div class="ribbon-group">
-          <button onclick="downloadFile()">Export</button>
-          <button onclick="savedoc()">Download</button>
+          <button onclick="downloadFile()"><span class="material-symbols-outlined" aria-hidden="true">ios_share</span>Export</button>
+          <button onclick="savedoc()"><span class="material-symbols-outlined" aria-hidden="true">download</span>Download</button>
         </div>
       </div>
       <div id="homeTab" class="tab-panel" role="tabpanel" hidden>
         <div class="ribbon-group">
         <div id="textToolbar" style="display: inline-block;">
-          <button onclick="copy()">Copy</button>
-          <button onclick="print()">Print</button>
-          <button onclick="cle()">Clear</button>
+          <button onclick="copy()"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span>Copy</button>
+          <button onclick="print()"><span class="material-symbols-outlined" aria-hidden="true">print</span>Print</button>
+          <button onclick="cle()"><span class="material-symbols-outlined" aria-hidden="true">delete_sweep</span>Clear</button>
         </div>
         <div id="drawToolbar" style="display: none;">
-          <button onclick="exportAsPNG()">Export PNG</button>
-          <button onclick="clearCanvas()">Clear Canvas</button>
+          <button onclick="exportAsPNG()"><span class="material-symbols-outlined" aria-hidden="true">image</span>Export PNG</button>
+          <button onclick="clearCanvas()"><span class="material-symbols-outlined" aria-hidden="true">ink_eraser</span>Clear Canvas</button>
           <label for="color">&nbsp;Color:</label>
           <input type="color" id="color" value="#000000" name="" onchange="changeColor(this.value)">
           <label for="size">&nbsp;Size:</label>
@@ -547,17 +564,19 @@
       </div>
       <div id="pageTab" class="tab-panel" role="tabpanel" hidden>
         <div class="ribbon-group">
-          <button onclick="newnbp();">New page</button>
-          <button onclick="pageTools.showModal()">Rename</button>
-          <button onclick="deleteSelectedItem();">Delete</button>
+          <button onclick="newnbp();"><span class="material-symbols-outlined" aria-hidden="true">note_add</span>New page</button>
+          <button onclick="pageTools.showModal()"><span class="material-symbols-outlined" aria-hidden="true">edit</span>Rename</button>
+          <button onclick="deleteSelectedItem();"><span class="material-symbols-outlined" aria-hidden="true">delete</span>Delete</button>
         </div>
       </div>
       <div id="settingsTab" class="tab-panel" role="tabpanel" hidden>
         <div class="ribbon-group">
           <button id="themeToggle" type="button" onclick="toggleTheme()" aria-label="Switch to dark mode"
-            title="Switch to dark mode">Dark mode</button>
-          <button id="autosaveToggle" type="button" onclick="toggleAutosave()">Auto save</button>
-          <button onclick="settingsPage.showModal()">More settings</button>
+            title="Switch to dark mode"><span class="material-symbols-outlined" aria-hidden="true">dark_mode</span>Dark mode</button>
+          <button id="autosaveToggle" type="button" onclick="toggleAutosave()"><span class="material-symbols-outlined"
+              aria-hidden="true">autorenew</span>Auto save</button>
+          <button onclick="settingsPage.showModal()"><span class="material-symbols-outlined"
+              aria-hidden="true">tune</span>More settings</button>
         </div>
       </div>
     </div>
