@@ -222,6 +222,7 @@ function readFile(file) {
 
 function createNewFile() {
 	const filename = document.getElementById('new-file-name').value;
+	const filename = filename == null ? "default" : filename;
 	const id = 0;
 	const name = "First page (Use page tools to rename)";
 	const text = "This is a page with text";
