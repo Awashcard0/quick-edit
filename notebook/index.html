@@ -532,8 +532,8 @@
     <div class="ribbon">
       <div id="fileTab" class="tab-panel" role="tabpanel" hidden>
         <div class="ribbon-group">
-          <button onclick="downloadFile()"><span class="material-symbols-outlined" aria-hidden="true">ios_share</span>Export</button>
-          <button onclick="savedoc()"><span class="material-symbols-outlined" aria-hidden="true">download</span>Download</button>
+          <button onclick="downloadFile()"><span class="material-symbols-outlined" aria-hidden="true">ios_share</span>Download Notebook</button>
+          <button onclick="savedoc()"><span class="material-symbols-outlined" aria-hidden="true">download</span>Download Page</button>
         </div>
       </div>
       <div id="homeTab" class="tab-panel" role="tabpanel">
@@ -597,7 +597,7 @@
         <h2>You need javascript to use this</h2>
       </noscript>
       <textarea type="text" id="text" name="text" style="display: none;" placeholder="Edit text here"
-        onchange="autoSave();" autofocus></textarea>
+        oninput="autoSave();" autofocus></textarea>
       <canvas id="myCanvas" style="display: none;"></canvas>
       <div id="tinymde"></div>
     </div>
