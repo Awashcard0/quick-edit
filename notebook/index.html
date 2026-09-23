@@ -282,7 +282,8 @@
     #drawToolbar button:first-child,
     #start button:first-of-type,
     #newNotebook button:first-of-type,
-    #Newp button:first-of-type {
+    #Newp button:first-of-type,
+    #PageTools button:first-of-type {
       color: var(--on-primary);
       background-color: var(--primary);
     }
@@ -291,7 +292,8 @@
     #drawToolbar button:first-child:hover,
     #start button:first-of-type:hover,
     #newNotebook button:first-of-type:hover,
-    #Newp button:first-of-type:hover {
+    #Newp button:first-of-type:hover,
+    #PageTools button:first-of-type:hover {
       background-color: var(--primary-dark);
     }
 
@@ -318,7 +320,7 @@
     }
 
     textarea,
-    canvas {
+    canvas, #tinymde {
       width: 100%;
       height: 100%;
       display: block;
@@ -518,9 +520,9 @@
       <span id="file">No file</span><span>·</span><span id="save">Not saved</span>
     </div>
     <nav class="tab-strip" aria-label="Notebook tools">
-      <button class="tab active" type="button" data-tab="fileTab" aria-selected="true"><span
+      <button class="tab" type="button" data-tab="fileTab" aria-selected="false"><span
           class="material-symbols-outlined" aria-hidden="true">folder</span>File</button>
-      <button class="tab" type="button" data-tab="homeTab" aria-selected="false"><span
+      <button class="tab active" type="button" data-tab="homeTab" aria-selected="true"><span
           class="material-symbols-outlined" aria-hidden="true">home</span>Home</button>
       <button class="tab" type="button" data-tab="pageTab" aria-selected="false"><span
           class="material-symbols-outlined" aria-hidden="true">description</span>Page</button>
@@ -528,38 +530,40 @@
           class="material-symbols-outlined" aria-hidden="true">settings</span>Settings</button>
     </nav>
     <div class="ribbon">
-      <div id="fileTab" class="tab-panel" role="tabpanel">
+      <div id="fileTab" class="tab-panel" role="tabpanel" hidden>
         <div class="ribbon-group">
           <button onclick="downloadFile()"><span class="material-symbols-outlined" aria-hidden="true">ios_share</span>Export</button>
           <button onclick="savedoc()"><span class="material-symbols-outlined" aria-hidden="true">download</span>Download</button>
         </div>
       </div>
-      <div id="homeTab" class="tab-panel" role="tabpanel" hidden>
+      <div id="homeTab" class="tab-panel" role="tabpanel">
         <div class="ribbon-group">
-        <div id="textToolbar" style="display: inline-block;">
-          <button onclick="copy()"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span>Copy</button>
-          <button onclick="print()"><span class="material-symbols-outlined" aria-hidden="true">print</span>Print</button>
-          <button onclick="cle()"><span class="material-symbols-outlined" aria-hidden="true">delete_sweep</span>Clear</button>
-        </div>
-        <div id="drawToolbar" style="display: none;">
-          <button onclick="exportAsPNG()"><span class="material-symbols-outlined" aria-hidden="true">image</span>Export PNG</button>
-          <button onclick="clearCanvas()"><span class="material-symbols-outlined" aria-hidden="true">ink_eraser</span>Clear Canvas</button>
-          <label for="color">&nbsp;Color:</label>
-          <input type="color" id="color" value="#000000" name="" onchange="changeColor(this.value)">
-          <label for="size">&nbsp;Size:</label>
-          <select id="size" value="2" onchange="changeSize(this.value)">
-            <option value="2">Much Small</option>
-            <option value="5">Very Small</option>
-            <option value="7">Small</option>
-            <option value="10">Medium</option>
-            <option value="20">Large</option>
-            <option value="30">Very Large</option>
-            <option value="40">Much Larger</option>
-            <option value="me">I want control</option>
-          </select>
-          <input type="number" id="num" min="1" width="10" style="display: none;" size="5"
-            onchange="changeSizeInput(this.value)">
-        </div>
+          <div id="textToolbar" style="display: inline-block;">
+            <button onclick="copy()"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span>Copy</button>
+            <button onclick="print()"><span class="material-symbols-outlined" aria-hidden="true">print</span>Print</button>
+            <button onclick="cle()"><span class="material-symbols-outlined" aria-hidden="true">delete_sweep</span>Clear</button>
+          </div>
+          <div id="drawToolbar" style="display: none;">
+            <button onclick="exportAsPNG()"><span class="material-symbols-outlined" aria-hidden="true">image</span>Export PNG</button>
+            <button onclick="clearCanvas()"><span class="material-symbols-outlined" aria-hidden="true">ink_eraser</span>Clear Canvas</button>
+            <label for="color">&nbsp;Color:</label>
+            <input type="color" id="color" value="#000000" name="" onchange="changeColor(this.value)">
+            <label for="size">&nbsp;Size:</label>
+            <select id="size" value="2" onchange="changeSize(this.value)">
+              <option value="2">Much Small</option>
+              <option value="5">Very Small</option>
+              <option value="7">Small</option>
+              <option value="10">Medium</option>
+              <option value="20">Large</option>
+              <option value="30">Very Large</option>
+              <option value="40">Much Larger</option>
+              <option value="me">I want control</option>
+            </select>
+            <input type="number" id="num" min="1" width="10" style="display: none;" size="5"
+              onchange="changeSizeInput(this.value)">
+          </div>
+          <div id="mdToolbar" style="display: none;">
+          </div>
         </div>
       </div>
       <div id="pageTab" class="tab-panel" role="tabpanel" hidden>
@@ -593,8 +597,9 @@
         <h2>You need javascript to use this</h2>
       </noscript>
       <textarea type="text" id="text" name="text" style="display: none;" placeholder="Edit text here"
-        onkeyup="autoSave();" autofocus></textarea>
-      <canvas id="myCanvas"></canvas>
+        onchange="autoSave();" autofocus></textarea>
+      <canvas id="myCanvas" style="display: none;"></canvas>
+      <div id="tinymde"></div>
     </div>
   </main>
 
@@ -602,12 +607,10 @@
   <div id="error"></div>
   <dialog id="start" style="text-align: center;">
     <h1>Welcome to Quick Edit Notebook</h1>
-    <p>Now with drawing things</p>
-    <p>Quick Edit Notebook is a notebook app powered by HTML 5</p>
     <p>Open a file or make a new notebook to get started</p>
-    <button onclick="this.parentElement.close(); newNb();">New Notebook</button>
     <button onclick="getTheFile()">Open with file sync</button>
-    <button id="old" onclick="getOld()">Use last notebook</button>
+    <button onclick="this.parentElement.close(); newNb();">New Notebook</button>
+    <button id="old" onclick="getLast()">Use last notebook</button>
     Legacy: <input accept=".qenotebook" type="file" id="json-file-input" onchange="readFile(event.target.files[0])">
   </dialog>
   <dialog id="newNotebook" style="text-align: center;">
@@ -620,11 +623,13 @@
     <h1>New page</h1>
     <input type="text" id="name-input" placeholder="Name of page">
     <form id="type">
-      <p>Select a display:</p>
+      <p>Select a Type:</p>
       <input type="radio" id="type1" name="type" value="text" checked>
       <label for="type1">Text</label><br>
       <input type="radio" id="type2" name="type" value="draw">
       <label for="type2">Draw</label>
+      <input type="radio" id="type3" name="type" value="md">
+      <label for="type3">Markdown</label>
     </form>
     <br><button onclick="addItem()">Add page</button>
     <button onclick="nonewp();">Close</button>
@@ -638,12 +643,9 @@
     <button onclick="Readme.close();">Close</button>
   </dialog>
   <dialog id="PageTools" style="text-align: center;">
-    <h1>Page tools</h1>
-    <h2>Rename</h2>
+    <h1>Rename</h1>
     <input type="text" id="rename-input" placeholder="Name of page">
     <button onclick="renameSelectedItem();">Rename</button>
-    <h2>Delete</h2>
-    <button onclick="deleteSelectedItem();">Delete</button>
     <br>
     <div id="imgUpload">
       <h2>Upload png</h2>

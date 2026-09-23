@@ -19,6 +19,10 @@ var fileThing;
 let autoSaveTimer = -1;
 let volatileData = false;
 
+var tinyMDE = new TinyMDE.Editor({ element: "tinymde" });
+var tinyMDECommandBar = new TinyMDE.CommandBar({element: 'mdToolbar', editor: tinyMDE});
+
+
 function applyTheme(theme) {
 	document.documentElement.dataset.theme = theme;
 	const toggle = document.getElementById("themeToggle");
@@ -108,6 +112,20 @@ function UpdateSetting() {
 		normSave.style.display = "";
 	}
 }
+
+tinyMDE.addEventListener('change', e => {
+	autoSave(); 
+    // document.getElementById('wc').innerHTML = `${e.content.length} characters, ${e.content.split(/\s+/).length} words`; 
+});
+
+tinyMDE.addEventListener('keydown', e => {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    
+    // Inserts 4 spaces cleanly at the cursor position
+    tinyMDE.pasteString('    ');
+  }
+});
 
 function autoSave() {
 	volatileData = true;
@@ -247,6 +265,8 @@ function addItem() {
 		type = "text";
 	} else if (typeElements[1].checked == true) {
 		type = "draw";
+	} else if (typeElements[2].checked == true) {
+		type = "md";
 	}
 
 	const newItem = { id, name, type, text };
@@ -300,6 +320,9 @@ async function updateSelectedItem() {
 		} else if (selectedType == "draw") {
 			var data = canvas.toDataURL();
 			itemToUpdate.text = data;
+		} else if (selectedType == "md") {
+			const newText = tinyMDE.getContent();
+			itemToUpdate.text = newText;
 		}
 
 		if (saveToLocal.checked) {
@@ -309,8 +332,6 @@ async function updateSelectedItem() {
 
 		writeFile();
 	} else {
-		console.log(itemToUpdate)
-		error('Error: Page not found', 3000);
 		saveText.innerHTML = "Sync disabled";
 	}
 }
@@ -397,12 +418,15 @@ async function setItemSelectedData(id) {
 	const item = selectedData.find(item => item.id === selectedId);
 	const textTool = document.getElementById("textToolbar");
 	const drawTool = document.getElementById("drawToolbar");
+	const mdTool = document.getElementById("mdToolbar");
 
 	if (item.type == "text") {
 		// Get ready for text
 		textTool.style.display = "inline-block";
 		drawTool.style.display = "none";
+		mdTool.style.display = "none";
 		document.getElementById("text").style.display = "";
+		document.getElementById("tinymde").style.display = "none";
 		document.getElementById("myCanvas").style.display = "none";
 		document.getElementById("imgUpload").style.display = "none";
 
@@ -416,10 +440,11 @@ async function setItemSelectedData(id) {
 		// Get ready for draw
 		drawTool.style.display = "inline-block";
 		textTool.style.display = "none";
+		mdTool.style.display = "none";
 		document.getElementById("myCanvas").style.display = "";
 		document.getElementById("imgUpload").style.display = "";
 		document.getElementById("text").style.display = "none";
-
+		document.getElementById("tinymde").style.display = "none";
 		context.clearRect(0, 0, canvas.width, canvas.height); // Clear the context to stop picture roll ovrt
 
 		var savedCanvasData = item.text;
@@ -434,6 +459,21 @@ async function setItemSelectedData(id) {
 
 		selectedType = "draw";
 		document.getElementById('rename-input').value = item.name;
+		document.getElementById('file').innerText = item.name;
+		document.title = item.name + " - " + fileName + " - Quick edit notebook";
+		notification(`Selected page: ${item.name}`, 3000);
+	} else if (item.type == "md") {
+		drawTool.style.display = "none";
+		textTool.style.display = "none";
+		mdTool.style.display = "inline-block";
+		document.getElementById("text").style.display = "none";
+		document.getElementById("tinymde").style.display = "";
+		document.getElementById("myCanvas").style.display = "none";
+		document.getElementById("imgUpload").style.display = "none";
+
+		selectedType = "md";
+		document.getElementById('rename-input').value = item.name;
+		tinyMDE.setContent(item.text);
 		document.getElementById('file').innerText = item.name;
 		document.title = item.name + " - " + fileName + " - Quick edit notebook";
 		notification(`Selected page: ${item.name}`, 3000);
@@ -504,7 +544,7 @@ async function getTheFile() {
 }
 
 
-function getOld() {
+function getLast() {
 	let data = JSON.parse(localStorage.getItem("nbSave"));
 	const jsonData = JSON.stringify(data.data);
 	const blob = new Blob([jsonData], { type: 'application/json' });
