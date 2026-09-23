@@ -18,6 +18,7 @@
       --primary: #6750a4;
       --primary-dark: #4f378b;
       --on-primary: #ffffff;
+      --primary-disabled: #9e89c5;
       --surface: #fffbfe;
       --surface-container: #f3edf7;
       --surface-variant: #e7e0ec;
@@ -295,6 +296,15 @@
     #Newp button:first-of-type:hover,
     #PageTools button:first-of-type:hover {
       background-color: var(--primary-dark);
+    }
+
+    #normSave:disabled,
+    #drawToolbar button:first-child:disabled,
+    #start button:first-of-type:disabled,
+    #newNotebook button:first-of-type:disabled,
+    #Newp button:first-of-type:disabled,
+    #PageTools button:first-of-type:disabled {
+      background-color: var(--primary-disabled);
     }
 
     #textToolbar,
